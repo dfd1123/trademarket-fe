@@ -1,14 +1,14 @@
 import {useEffect, useState} from 'react';
-import logo from './logo.svg'
-import './App.css'
+// import { Provider } from 'react-redux';
 import RouterView from '@/router';
 import socketService from '@/modules/SocketService';
+import {TransactionInputType} from '@/types/TransactionType';
 
 function App() {
   useEffect(() => {
     socketService.init();
 
-    const input = {
+    const input : TransactionInputType = {
       Header: {
         function: 'A',
         termtype: 'HTS',
@@ -23,9 +23,8 @@ function App() {
     };
 
     setTimeout(() => {
-      // @ts-ignore
       socketService.liveSend(input)
-    }, 2000)
+    }, 2000);
   }, [])
   return (
     <>
