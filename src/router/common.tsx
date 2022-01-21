@@ -1,5 +1,5 @@
 import {Navigate} from 'react-router-dom';
-import {Route} from '@/types/route';
+import {Route} from '@/types/Route';
 import NotFound from '@/views/pages/NotFound';
 import ErrorPage from '@/views/pages/ErrorPage';
 import Home from '@/views/pages/Home';
@@ -18,7 +18,7 @@ const commonRoutes = {
   };
  */
 
-const commonRoutes : Route[] = [
+const common : Route[] = [
   {
     path: '/',
     element: <Home />
@@ -33,4 +33,4 @@ const commonRoutes : Route[] = [
   }
 ];
 
-export default commonRoutes;
+export default common;
