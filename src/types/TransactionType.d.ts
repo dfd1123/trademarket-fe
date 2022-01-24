@@ -9,3 +9,9 @@ export interface TransactionInputType {
     };
     Input1: Record<string, any>;
 }
+
+export interface CommonTransactionOutputType {
+    Header: any;
+    Output?: any,
+    Output1?: any,
+}
