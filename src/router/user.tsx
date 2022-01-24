@@ -10,6 +10,7 @@ const user : Route[] = [
   },
   {
     path: '/test2',
+    meta:{ test:11 },
     element: <Test2 />
   }
 ];
