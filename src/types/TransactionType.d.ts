@@ -1,6 +1,6 @@
 export interface TransactionInputType {
     Header: {
-        function: 'D' | 'A';
+        function: 'D' | 'A' | 'U';
         termtype: 'HTS';
         trcode: string;
         trid?: string;

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Link, Outlet} from 'react-router-dom';
-import socketService from '@/modules/SocketService';
+import { WebSocketContext } from '@/provider/WebSocketProvider';
+import { TransactionInputType } from '@/types/TransactionType';
 
 
 function Test2() {
+  const ws = useContext(WebSocketContext);
+
   const registerSubmit = async () => {
-    const params = {
+    const params : TransactionInputType = {
       Header: { function: 'D', termtype: 'HTS', trcode: 't113B' },
       Input1: {
         szCustNo: "dfd1123@naver.com",
@@ -19,9 +22,7 @@ function Test2() {
       },
     };
 
-    // @ts-ignore
-    const res = await socketService.asyncSend(params);
-    console.log(res);
+     ws.sendInput(params);
   }
   return (
     <div>

@@ -5,6 +5,9 @@ import './index.css';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from "@/assets/styles/global-styles";
 import { black } from "@/assets/styles/theme";
+import WebSocketProvider from '@/provider/WebSocketProvider';
+import { Provider } from 'react-redux';
+import store from '@/store';
 import App from '@/App'
 
 ReactDOM.render(
@@ -12,7 +15,11 @@ ReactDOM.render(
     <ThemeProvider theme={black}>
       <GlobalStyle />
       <BrowserRouter>
-        <App />
+        <Provider store={store}>
+        <WebSocketProvider>
+          <App />
+        </WebSocketProvider>
+        </Provider>
       </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>,
