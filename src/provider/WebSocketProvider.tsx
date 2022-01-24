@@ -1,6 +1,7 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { batch, useDispatch } from 'react-redux';
 import { updatePriceData } from '@/store/realTime/realTimePrice';
+import { updateAsyncData } from '@/store/asyncData/asyncData';
 import { TransactionInputType } from '@/types/TransactionType';
 
 export interface TrdWebSocket extends WebSocket {
@@ -9,7 +10,7 @@ export interface TrdWebSocket extends WebSocket {
   sendInput: (input: TransactionInputType) => undefined | void;
 }
 
-const WebSocketContext = React.createContext<any>(window.ws || {sendInput:(input: TransactionInputType) => { window.location.reload(); }});
+const WebSocketContext = React.createContext<TrdWebSocket | {sendInput: (input: TransactionInputType) => undefined | void;}>(window.ws || {sendInput:(input: TransactionInputType) => { window.location.reload(); }});
 export { WebSocketContext };
 
 export default function WebSocketProvider({
@@ -43,11 +44,15 @@ export default function WebSocketProvider({
 
     ws.onmessage = ({ data }: { data: MessageEvent['data'] }): any => {
       data = JSON.parse(data);
-
-      switch (data.Header.trcode) {
-        case '91':
-          return dispatch(updatePriceData(data));
-      }
+    
+      batch(() => {
+        switch (data.Header.trcode) {
+            case '91':
+              return dispatch(updatePriceData(data));
+            default:
+                return dispatch(updateAsyncData(data));
+          }
+      });
     };
 
     ws.sendInput = (input: TransactionInputType) => {

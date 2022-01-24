@@ -1,4 +1,3 @@
-import {useContext, useEffect} from 'react';
 import { useTypedSelector } from '@/store';
 import {getRealTimePrice} from '@/store/realTime/realTimePrice';
 import { RealTimePriceState } from '@/store/realTime/types/realTimePrice';

@@ -35,7 +35,7 @@ export const getRealTimePrice = (symbol : keyof RealTimePriceState) : Selector<s
     console.log(state);
     return state.realTimePrice[symbol]
 }, coin => {
-    return coin ? coin.szClose : '0';
+    return coin ? coin.szClose : '';
 })
 
 export default realTimePrice.reducer;

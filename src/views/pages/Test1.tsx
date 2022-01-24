@@ -1,12 +1,11 @@
 import React from 'react';
 import {Link, Outlet} from 'react-router-dom';
-import { useTypedSelector } from '@/store';
-import useRealTimePriceReq from '@/hooks/realTime/useRealTimePriceReq';
+import useReqRealTimePrice from '@/hooks/realTime/useReqRealTimePrice';
 import useGetRealTimePrice from '@/hooks/realTime/useGetRealTimePrice';
 
 
 function Test1() {
-  useRealTimePriceReq();
+  useReqRealTimePrice();
 
   const test = useGetRealTimePrice('BTCUSDT');
 

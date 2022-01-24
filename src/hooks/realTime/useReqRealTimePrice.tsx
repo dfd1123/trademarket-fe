@@ -3,7 +3,7 @@ import {WebSocketContext} from '@/provider/WebSocketProvider';
 import { TransactionInputType } from '@/types/TransactionType';
 
 
-const useRealTimePriceReq = () => {
+const useReqRealTimePrice = () => {
     const ws = useContext(WebSocketContext);
     const input : TransactionInputType = {
         Header: {
@@ -25,12 +25,12 @@ const useRealTimePriceReq = () => {
         ws.sendInput(disConnectInput);
         setTimeout(() => {
             ws.sendInput(input);
-        }, 100);
+        }, 5);
 
         return () => {
             ws.sendInput(disConnectInput);
         }
-    })
+    }, []);
 }
 
-export default useRealTimePriceReq;
+export default useReqRealTimePrice;
