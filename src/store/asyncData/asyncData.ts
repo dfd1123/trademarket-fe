@@ -14,10 +14,13 @@ const asyncData = createSlice({
         resetSpecificState(state, action: PayloadAction<{trcode: string}>){
             const trcode : string = action.payload.trcode;
             state[trcode] = undefined;
+        },
+        resetAllState(state, action){
+            state = {};
         }
     }
 });
 
-export const { updateAsyncData, resetSpecificState } = asyncData.actions;
+export const { updateAsyncData, resetSpecificState, resetAllState } = asyncData.actions;
 
 export default asyncData.reducer;

@@ -32,7 +32,6 @@ const realTimePrice = createSlice({
 export const { updatePriceData } = realTimePrice.actions;
 
 export const getRealTimePrice = (symbol : keyof RealTimePriceState) : Selector<string> => createSelector((state: RootState) => {
-    console.log(state);
     return state.realTimePrice[symbol]
 }, coin => {
     return coin ? coin.szClose : '';

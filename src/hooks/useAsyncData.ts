@@ -4,13 +4,13 @@ import { resetSpecificState } from '@/store/asyncData/asyncData';
 import { TransactionInputType } from '@/types/TransactionType';
 import { WebSocketContext } from '@/provider/WebSocketProvider';
 
-const asyncData = (input : TransactionInputType) => {
+const useAsyncData = (input : TransactionInputType) => {
   const { trcode } = input.Header;
   const ws = useContext(WebSocketContext);
   const dispatch = useDispatch();
 
-  const fetchData = () => {
-    trcode && ws.sendInput(input);
+  const fetchData = (newInput = input) => {
+    trcode && ws.sendInput(newInput);
   };
 
   useEffect(() => {
@@ -22,4 +22,4 @@ const asyncData = (input : TransactionInputType) => {
   return { resultKey: trcode || '', fetchData };
 };
 
-export default asyncData;
+export default useAsyncData;
