@@ -1,19 +1,27 @@
 import { DefaultTheme } from "styled-components";
 
-const black: DefaultTheme = {
+const dark: DefaultTheme = {
+  name: 'dark',
   basicWidth: "320px",
+  header: {
+    color: "#fff"
+  },
   color: {
     main: "#000",
     sub: "#fff"
   }
 };
 
-const white: DefaultTheme = {
+const light: DefaultTheme = {
+  name: 'light',
   basicWidth: "320px",
+  header: {
+    color: "#000"
+  },
   color: {
     main: "#FFF",
     sub: "#000"
   }
 };
 
-export { black, white };
+export { dark, light };
