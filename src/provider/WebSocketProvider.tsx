@@ -54,7 +54,7 @@ export default function WebSocketProvider({
       if (event.wasClean) {
         console.log("web socket 커넥션 종료됨");
       } else {
-        window.location.reload();
+        if(ws.connect) window.location.reload();
         console.log("web socket 커넥션 error", event);
       }
     };
