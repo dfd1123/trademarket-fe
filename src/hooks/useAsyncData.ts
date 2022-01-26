@@ -9,7 +9,7 @@ const useAsyncData = (input : TransactionInputType) => {
   const ws = useContext(WebSocketContext);
   const dispatch = useDispatch();
 
-  const fetchData = (newInput = input) => {
+  const fetchData = (newInput : TransactionInputType | undefined = input) => {
     trcode && ws.sendInput(newInput);
   };
 

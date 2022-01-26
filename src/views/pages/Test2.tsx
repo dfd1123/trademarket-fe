@@ -19,14 +19,14 @@ function Test2() {
   const {registerRes, registerFetchData} = userService.register(input);
 
   const [tsInp, setTsInp] = useState({
-    email:'',
-    name:''
+    email: '',
+    name: ''
   });
 
-  const handleChange = (target) => (e) => {
+  const handleChange = (target : string) => (e: { target: { value: any; }; }) => {
         setTsInp({
             ...tsInp,
-            [target]: e.target.value,
+            [target]: e.target?.value,
         });
     };
 

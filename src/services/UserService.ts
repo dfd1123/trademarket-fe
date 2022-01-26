@@ -14,8 +14,9 @@ class UserService {
     const {resultKey: registerTrCode, fetchData} = useAsyncData(input);
     const registerRes = useTypedSelector(state => state.asyncData[registerTrCode]);
 
-    const registerFetchData = (params : RegisterInput) => {
-      fetchData(params);
+    const registerFetchData = (params : RegisterInput | undefined = undefined) => {
+      if(params) input.Input1 = params;
+      fetchData(input);
     };
 
     useEffect(() => {

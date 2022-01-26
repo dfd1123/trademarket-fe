@@ -42,9 +42,9 @@ export default function WebSocketProvider({
       if (!ws) return;
       ws.connect = true;
       console.log("web socket Connected!", ws);
-      ws.waitSendList.forEach((input) => {
+      ws.waitSendList.forEach((input, index) => {
         ws && ws.sendInput(input);
-        ws.waitSendList.shift();
+        if(ws.waitSendList.length === index + 1) ws.waitSendList = [];
       });
 
       setInterval(() => ws.send("{'event':'ping'}"), 50000);
@@ -54,6 +54,7 @@ export default function WebSocketProvider({
       if (event.wasClean) {
         console.log("web socket 커넥션 종료됨");
       } else {
+        window.location.reload();
         console.log("web socket 커넥션 error", event);
       }
     };
