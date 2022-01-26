@@ -5,7 +5,7 @@ import darkLogo from "@/assets/img/logo/imcosun-logo.svg";
 import PcGnb from "@/views/components/layouts/PcGnb";
 import {YellowButton} from "@/views/components/common/Button";
 
-function Header({ theme }: { theme: DefaultTheme }) {
+const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const logoText = true;
   const logoImage = theme.name === "dark" ? darkLogo : darkLogo; // TODO:: whiteLogo 만들기
 
@@ -26,7 +26,7 @@ function Header({ theme }: { theme: DefaultTheme }) {
       </div>
     </StyleHeader>
   );
-}
+})
 
 const StyleHeader = styled.header`
   position: relative;

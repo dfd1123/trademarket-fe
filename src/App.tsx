@@ -11,16 +11,11 @@ function App() {
 
   const {pathname} = useLocation();
   const whiteThemeList = ['/test1'];
-  const [theme, setTheme] = useState(whiteThemeList.includes(pathname) ? light : dark);
-
-  useEffect(() => {
-    setTheme(whiteThemeList.includes(pathname) ? light : dark);
-  }, [pathname]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={whiteThemeList.includes(pathname) ? light : dark}>
       <GlobalStyle />
-      <Header theme={theme} />
+      <Header theme={whiteThemeList.includes(pathname) ? light : dark} />
       <RouterView />
     </ThemeProvider>
   )
