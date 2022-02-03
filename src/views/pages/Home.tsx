@@ -1,14 +1,14 @@
 import React from 'react';
 import {Link, Outlet} from 'react-router-dom';
-
+import {BasicButton} from '@/views/components/common/Button';
 
 function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <button>
+      <BasicButton>
         <Link to='/test1'>테스트1</Link>
-      </button>
+      </BasicButton>
     </div>
   );
 }

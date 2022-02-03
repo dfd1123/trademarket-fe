@@ -11,7 +11,7 @@ export default function RouterView() {
     {path: '*', element: <Navigate to='/404' />},
   ]);
 
-  return <>{routing}</>;
+  return <div id="wrapper">{routing}</div>;
 }
 
 

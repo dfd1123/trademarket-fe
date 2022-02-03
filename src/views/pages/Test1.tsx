@@ -1,18 +1,17 @@
-import React, { useContext } from 'react';
 import {Link, Outlet} from 'react-router-dom';
 import realTime from '@/services/RealTimeService';
 import useGetRealTimePrice from '@/hooks/useGetRealTimePrice';
 import useModal from '@/hooks/useModal';
 import TestModal from '@/views/components/common/modal/Test';
-import { ModalContext } from '@/provider/ModalProvider';
+import {BasicButton} from '@/views/components/common/Button';
 
 
 function Test1() {
   realTime.coinPrice();
-  const {open} = useContext(ModalContext);
+  const {openModal} = useModal();
 
   const openTestModal = () => {
-    open(TestModal);
+    openModal(TestModal);
   }
 
   const test = useGetRealTimePrice('BTCUSDT');
@@ -21,10 +20,10 @@ function Test1() {
     <div>
       <h1>TEST1</h1>
       <p>{test}</p>
-      <button>
+      <BasicButton>
         <Link to='/test2'>테스트2</Link>
-      </button>
-      <button onClick={openTestModal}>모달 테스트</button>
+      </BasicButton>
+      <BasicButton onClick={openTestModal}>모달 테스트</BasicButton>
     </div>
   );
 }

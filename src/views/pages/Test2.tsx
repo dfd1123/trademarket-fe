@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Link, Outlet} from 'react-router-dom';
 import userService from '@/services/UserService';
 import {RegisterInput} from '@/types/services/User';
-
+import {BasicButton} from '@/views/components/common/Button';
 
 function Test2() {
   const input: RegisterInput = {
@@ -42,10 +42,10 @@ function Test2() {
         <input type="text" value={tsInp.email} onChange={handleChange('email')} />
         <input type="text" value={tsInp.name}  onChange={handleChange('name')} />
       </div>
-      <button>
+      <BasicButton>
         <Link to='/test1'>테스트1</Link>
-      </button>
-      <button onClick={registerSubmit}>회원가입 테스트</button>
+      </BasicButton>
+      <BasicButton onClick={registerSubmit}>회원가입 테스트</BasicButton>
     </div>
   );
 }

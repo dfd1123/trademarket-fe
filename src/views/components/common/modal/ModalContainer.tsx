@@ -1,25 +1,38 @@
-import React, { useState, useContext, useEffect } from 'react';
-import useModal from '@/hooks/useModal';
 import Component from '@/views/components/common/Component';
 import Portal from '@/views/components/common//Portal';
-import { ModalContext, ModalType } from '@/provider/ModalProvider';
+import useModal from '@/hooks/useModal';
+import { useTypedSelector } from '@/store';
+import styled from 'styled-components';
 
 const ModalContainer = () => {
-    const {modals, close, resolve} = useContext(ModalContext);
-    const [conModals, setConModals] = useState<ModalType[]>([]);
+  const { closeModal, resolveModal } = useModal();
+  const modals = useTypedSelector((state) => state.modalSlice.modals);
 
-    console.log(modals);
+  return (
+    <Portal elementId="modal-root">
+      <ModalContainerStyle>
+        {modals.map((modal) => (
+          <Component
+            is={modal.component}
+            key={modal.id}
+            props={{
+              ...modal.props,
+              nonModal: modal.nonModal,
+              close: () => { console.log('awdawdawd'); closeModal(modal.id); },
+              resolve: <T extends {}>(result: T) => resolveModal(modal, result),
+            }}
+          />
+        ))}
+      </ModalContainerStyle>
+    </Portal>
+  );
+};
 
-    useEffect(() => {
-        setConModals(modals);
-        console.log('awdawdawd', conModals);
-    }, [modals.length])
-
-    return (
-        <Portal elementId="modal-root">
-         { modals && modals.length > 0 ? modals.map(modal => <Component is={modal.component} key={modal.id} props={{...modal.props, close: close(modal.id), resolve: <T extends {}>(result: T) => resolve(modal.id, result)}} />) : 'ff' }
-        </Portal>
-    );
-}
+const ModalContainerStyle = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+`;
 
 export default ModalContainer;

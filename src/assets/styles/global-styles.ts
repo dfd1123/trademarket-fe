@@ -2,6 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import { normalize } from "styled-normalize";
 import { reset } from 'styled-reset';
 import NotoSansFont from '@/assets/font/NotoSans/font.css';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -31,11 +32,44 @@ const GlobalStyle = createGlobalStyle`
 
   button{
     border:0;
+    padding: 0;
+    background-color:transparent;
     cursor:pointer;
   }
 
   a, button {
     -webkit-tap-highlight-color: transparent !important;
+  }
+
+  #root{
+    height:100%;
+  }
+
+  #wrapper{
+    min-height:100%;
+    margin-top:-74px;
+    margin-bottom: -300px;
+    padding-top:74px;
+    padding-bottom: 300px;
+    >div{
+
+    }
+  }
+
+  #modal-root{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:5000;
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    #wrapper{
+      margin-top:-43px;
+      margin-bottom: -225px;
+      padding-top:43px;
+      padding-bottom: 225px;
+    }
   }
 `;
 
