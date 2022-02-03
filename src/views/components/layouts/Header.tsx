@@ -4,7 +4,7 @@ import styled, { DefaultTheme } from 'styled-components';
 import darkLogo from '@/assets/img/logo/imcosun-logo.svg';
 import PcGnb from '@/views/components/layouts/PcGnb';
 import { YellowButton } from '@/views/components/common/Button';
-import MobileGnb, {StyledMobileGnb} from '@/views/components/layouts/MobileGnb';
+import MobileGnb from '@/views/components/layouts/MobileGnb';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import useModal from '@/hooks/useModal';
 
