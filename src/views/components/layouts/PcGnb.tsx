@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import gnbList from "@/data/gnbList";
 import styled, { DefaultTheme } from "styled-components";
+import { TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
 
 function PcGnb({ theme }: { theme: DefaultTheme }) {
   return (
     <StyledPcGnb className="gnb-cont">
       {gnbList.map((mainGnb) => {
         return (
-          <li className={(!mainGnb.path ? "drop " : " ") + mainGnb.id}>
+          <li className={(!mainGnb.path ? "drop " : " ") + mainGnb.id} key={`main-gnb-${mainGnb.name}`}>
             {mainGnb.path ? (
               <Link to={mainGnb.path}>{mainGnb.name}</Link>
             ) : (
@@ -19,7 +20,7 @@ function PcGnb({ theme }: { theme: DefaultTheme }) {
                 <ul>
                   {mainGnb.children.map((subGnb) => {
                       return (
-                        <li>
+                        <li key={`drop-menu-${subGnb.name}`}>
                           <Link to={subGnb.path}>{subGnb.name}</Link>
                         </li>
                       );
@@ -115,6 +116,10 @@ const StyledPcGnb = styled.ul`
         }
       }
     }
+  }
+
+  @media (max-width: ${TABLET_SIZE}){
+      display:none;
   }
 `;
 

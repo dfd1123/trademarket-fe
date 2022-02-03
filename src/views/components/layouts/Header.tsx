@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import styled, { DefaultTheme } from "styled-components";
 import darkLogo from "@/assets/img/logo/imcosun-logo.svg";
 import PcGnb from "@/views/components/layouts/PcGnb";
-import {YellowButton} from "@/views/components/common/Button";
+import { YellowButton } from "@/views/components/common/Button";
+import { TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
 
 const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const logoText = true;
@@ -26,7 +27,7 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
       </div>
     </StyleHeader>
   );
-})
+});
 
 const StyleHeader = styled.header`
   position: relative;
@@ -45,8 +46,11 @@ const StyleHeader = styled.header`
 
     span {
       font-size: 40px;
-      color: ${props => props.theme.header.color};
-      ${props => props.theme.name === 'dark' ? 'text-shadow: 0 0 5px rgba(0, 0, 0, 0.7)' : ''};
+      color: ${(props) => props.theme.header.color};
+      ${(props) =>
+        props.theme.name === "dark"
+          ? "text-shadow: 0 0 5px rgba(0, 0, 0, 0.7)"
+          : ""};
     }
     img {
       width: 100%;
@@ -54,18 +58,34 @@ const StyleHeader = styled.header`
     }
   }
 
-  .btn-cont{
+  .btn-cont {
     position: absolute;
-    right:0;
-    top:0;
+    right: 0;
+    top: 0;
     z-index: 1;
     display: flex;
     align-items: center;
-    height:100%;
-    .btn-login{
-      width:120px;
-      height:32px;
-      font-weight:700;
+    height: 100%;
+    .btn-login {
+      width: 120px;
+      height: 32px;
+      font-weight: 700;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    height:43px;
+
+    .logo {
+      justify-content: left;
+      width: 100px;
+      span {
+        font-size: 27px;
+      }
+    }
+
+    .btn-cont {
+      display: none;
     }
   }
 `;
