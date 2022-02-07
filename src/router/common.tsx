@@ -8,7 +8,7 @@ import Home from '@/views/pages/Home';
 /*
 const commonRoutes = {
     path: '/',
-    element: <MainLayout />,
+    element: <Outlet />,
     children: [
       {path: '*', element: <Navigate to='/404' />},
       {path: '/', element: <MainView />},

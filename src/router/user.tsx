@@ -6,12 +6,15 @@ import Test2 from '@/views/pages/Test2';
 const user : Route[] = [
   {
     path: '/test1',
-    element: <Test1 />
+    element: <Test1 />,
+    meta: {
+      headerHide: true
+    }
   },
   {
     path: '/test2',
-    meta:{ test:11 },
-    element: <Test2 />
+    element: <Test2 />,
+    isAuth: true
   }
 ];
 

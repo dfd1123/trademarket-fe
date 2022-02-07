@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const ModalContainer = () => {
   const { closeModal, resolveModal } = useModal();
-  const modals = useTypedSelector((state) => state.modalSlice.modals);
+  const modals = useTypedSelector((state) => state.modalSlice.modals, (a, b) => JSON.stringify(a) === JSON.stringify(b));
 
   return (
     <Portal elementId="modal-root">
@@ -18,7 +18,7 @@ const ModalContainer = () => {
             props={{
               ...modal.props,
               nonModal: modal.nonModal,
-              close: () => { console.log('awdawdawd'); closeModal(modal.id); },
+              close: () => closeModal(modal.id),
               resolve: <T extends {}>(result: T) => resolveModal(modal, result),
             }}
           />
