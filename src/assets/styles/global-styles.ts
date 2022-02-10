@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { normalize } from "styled-normalize";
+import { createGlobalStyle } from 'styled-components';
+import { normalize } from 'styled-normalize';
 import { reset } from 'styled-reset';
 import NotoSansFont from '@/assets/font/NotoSans/font.css';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
@@ -51,6 +51,12 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: -300px;
     padding-top:74px;
     padding-bottom: 300px;
+
+    &.hide-{
+      &header{ margin-top:0; padding-top:0; }
+      &footer{ margin-bottom:0; padding-bottom:0; }
+    }
+
     >div{
 
     }
@@ -69,6 +75,11 @@ const GlobalStyle = createGlobalStyle`
       margin-bottom: -225px;
       padding-top:43px;
       padding-bottom: 225px;
+
+      &.hide-{
+        &header{ margin-top:0; padding-top:0; }
+        &footer{ margin-bottom:0; padding-bottom:0; }
+      }
     }
   }
 `;

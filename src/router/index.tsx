@@ -35,11 +35,14 @@ export default function RouterView() {
     {path: '*', element: <Navigate to='/404' />},
   ]);
 
-  const {routeInfo} = getCurrentRouteInfo(routing);
+  const {routeInfo, meta} = getCurrentRouteInfo(routing);
 
   dispatch(setRouteInfo({routeInfo}));
 
-  return <div id={`wrapper`}>{routing}</div>;
+  const headerHide = meta.headerHide ? 'hide-header' : '';
+  const footerHide = meta.headerHide ? 'hide-footer' : '';
+
+  return <div id={`wrapper`} className={`${headerHide} ${footerHide}`}>{routing}</div>;
 }
 
 

@@ -42,7 +42,7 @@ const useModal = (): ModalHookReturn => {
     nonModal = Boolean(nonModal);
     scrollFreeze(nonModal);
 
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const modal: ModalType = {
         id: -1,
         props,
@@ -60,7 +60,7 @@ const useModal = (): ModalHookReturn => {
     dispatch(removeModal({ id, scrollRelease }));
   };
 
-  const resolveModal = <T extends {}>(modal: ModalType, result: T): void => {
+  const resolveModal = (modal: ModalType, result: any): void => {
     modal.resolve(result);
     closeModal(modal.id);
   };

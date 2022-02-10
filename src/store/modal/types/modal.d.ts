@@ -5,7 +5,7 @@ export interface ModalType {
   props?: any;
   nonModal?: boolean;
   component: FunctionComponent;
-  resolve: (value: unknown) => void;
+  resolve: (value: any) => void;
   reject: (reason?: any) => void;
 }
 
@@ -14,5 +14,5 @@ export interface ModalComponentPropsType {
     className?: string;
     nonModal?: boolean;
     close?: () => void,
-    resolve?: (result: unknown) => void
+    resolve?: (result: any) => void
 }

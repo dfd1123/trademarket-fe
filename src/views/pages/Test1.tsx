@@ -10,8 +10,10 @@ function Test1() {
   realTime.coinPrice();
   const {openModal} = useModal();
 
-  const openTestModal = () => {
-    openModal(TestModal);
+  const openTestModal = async() => {
+    const result = await openModal(TestModal);
+
+    console.log(result);
   }
 
   const test = useGetRealTimePrice('BTCUSDT');

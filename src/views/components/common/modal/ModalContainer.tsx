@@ -19,7 +19,7 @@ const ModalContainer = () => {
               ...modal.props,
               nonModal: modal.nonModal,
               close: () => closeModal(modal.id),
-              resolve: <T extends {}>(result: T) => resolveModal(modal, result),
+              resolve: (result: any) => resolveModal(modal, result),
             }}
           />
         ))}
