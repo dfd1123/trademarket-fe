@@ -7,40 +7,40 @@ import { YellowButton } from '@/views/components/common/Button';
 import MobileGnb from '@/views/components/layouts/MobileGnb';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import useModal from '@/hooks/useModal';
+import useRouteMeta from '@/hooks/useRouteMeta';
 
 const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const logoText = true;
   const logoImage = theme.name === 'dark' ? darkLogo : darkLogo; // TODO:: whiteLogo 만들기
+  const headerHide = useRouteMeta('headerHide');
   const {openModal} = useModal();
 
   const mobileMenuOpen = () => {
     openModal(MobileGnb);
   }
 
-  return (
-    <StyleHeader theme={theme}>
-      <div className="logo">
-        <Link to="/">
-          {!logoText && logoImage ? (
-            <img src={logoImage} alt="logo" />
-          ) : (
-            <span>LOGO</span>
-          )}
-        </Link>
-      </div>
-      <PcGnb theme={theme} />
-      <div className="btn-cont">
-        <YellowButton className="btn-login">Login</YellowButton>
-        <button className="btn-mobile-menu" onClick={mobileMenuOpen}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="5" width="18" height="2" fill="#FFFFFF"></rect>
-            <rect x="3" y="11" width="18" height="2" fill="#FFFFFF"></rect>
-            <rect x="3" y="17" width="12" height="2" fill="#FFFFFF"></rect>
-          </svg>
-        </button>
-      </div>
-    </StyleHeader>
-  );
+  return headerHide ? (<></>) : (<StyleHeader theme={theme}>
+    <div className="logo">
+      <Link to="/">
+        {!logoText && logoImage ? (
+          <img src={logoImage} alt="logo" />
+        ) : (
+          <span>LOGO</span>
+        )}
+      </Link>
+    </div>
+    <PcGnb theme={theme} />
+    <div className="btn-cont">
+      <YellowButton className="btn-login">Login</YellowButton>
+      <button className="btn-mobile-menu" onClick={mobileMenuOpen}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="5" width="18" height="2" fill="#FFFFFF"></rect>
+          <rect x="3" y="11" width="18" height="2" fill="#FFFFFF"></rect>
+          <rect x="3" y="17" width="12" height="2" fill="#FFFFFF"></rect>
+        </svg>
+      </button>
+    </div>
+  </StyleHeader>);
 });
 
 const StyleHeader = styled.header`

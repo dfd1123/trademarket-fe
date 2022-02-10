@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import Logo from '@/assets/img/logo/footer-imcosun-logo.svg';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useRouteMeta from '@/hooks/useRouteMeta';
 
 const Footer = () => {
   const logoText = true;
   const logoImage = Logo;
+  const footerHide = useRouteMeta('footerHide');
 
-  return (
+  return footerHide ? (<></>) : (
     <StyledFooter>
       <div className="ft-cont">
         <div className="logo">

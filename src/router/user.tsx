@@ -8,13 +8,15 @@ const user : Route[] = [
     path: '/test1',
     element: <Test1 />,
     meta: {
-      headerHide: true
+      theme: 'dark'
     }
   },
   {
     path: '/test2',
     element: <Test2 />,
-    isAuth: true
+    meta:{
+      isAuth: true
+    }
   }
 ];
 

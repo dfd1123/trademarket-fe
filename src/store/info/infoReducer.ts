@@ -1,52 +1,58 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { dark, light } from '@/assets/styles/theme';
 import { DefaultTheme } from 'styled-components';
-import { Route } from "@/types/Route";
+import { Route, ReduceRoute } from '@/types/Route';
+interface StateType {
+  routeInfo:
+    | ReduceRoute
+    | {
+        path: null;
+        element: null;
+        meta: {
+          theme: DefaultTheme;
+          headerHide: boolean;
+          footerHide: boolean;
+          isAuth: boolean;
+        };
+      };
+}
 
-const initialState: {theme: DefaultTheme, headerHide: boolean, footerHide: boolean, routeInfo: Route | null} = {
-  theme: dark,
-  headerHide: false,
-  footerHide: false,
-  routeInfo: null
+const initialState: StateType = {
+  routeInfo: {
+    path: null,
+    element: null,
+    meta: {
+      theme: light,
+      headerHide: false,
+      footerHide: false,
+      isAuth: false
+    },
+  },
 };
 
 const infoSlice = createSlice({
   name: 'infoSlice',
   initialState,
   reducers: {
-    headerHide(state, action: PayloadAction<{headerHide: boolean}>){
-      const {headerHide} = action.payload;
-      state.headerHide = headerHide;
-    },
-    footerHide(state, action: PayloadAction<{footerHide: boolean}>){
-      const {footerHide} = action.payload;
-      state.headerHide = footerHide;
-    },
-    changeTheme(state, action: PayloadAction<{theme: DefaultTheme}>) {
-        const {theme} = action.payload;
-        state.theme = theme;
-    },
-    setRouteInfo(state, action : PayloadAction<{routeInfo: Route}>){
-      const {routeInfo} = action.payload;
+    setRouteInfo(state, action: PayloadAction<{ routeInfo: Route | null }>) {
+      const { routeInfo } = action.payload;
 
-      let theme = light;
-      let headerHide = false;
-      let footerHide = false;
+      if (!routeInfo) return;
 
-      if(routeInfo.meta){
-        theme = routeInfo.meta.theme === 'dark' ? dark : light;
-        headerHide = Boolean(routeInfo.meta.headerHide);
-        footerHide =  Boolean(routeInfo.meta.footerHide);
+      if (routeInfo.meta) {
+        state.routeInfo.meta.theme =
+          routeInfo.meta.theme === 'dark' ? dark : light;
+
+        state.routeInfo.meta.headerHide = Boolean(routeInfo.meta.headerHide);
+        state.routeInfo.meta.footerHide = Boolean(routeInfo.meta.footerHide);
+        state.routeInfo.meta.isAuth = Boolean(routeInfo.meta.isAuth);
       }
 
-      state.routeInfo = routeInfo;
-      state.theme = theme;
-      state.headerHide = headerHide;
-      state.footerHide = footerHide;
-    }
+      state.routeInfo = { ...routeInfo, meta: state.routeInfo.meta };
+    },
   },
 });
 
-export const { changeTheme, headerHide, footerHide, setRouteInfo } = infoSlice.actions;
+export const { setRouteInfo } = infoSlice.actions;
 
 export default infoSlice.reducer;

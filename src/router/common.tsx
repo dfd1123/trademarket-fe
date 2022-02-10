@@ -25,11 +25,19 @@ const common : Route[] = [
   },
   {
     path: '/404',
-    element: <NotFound />
+    element: <NotFound />,
+    meta:{
+      headerHide: true,
+      footerHide: true
+    }
   },
   {
     path: '/500',
-    element: <ErrorPage />
+    element: <ErrorPage />,
+    meta:{
+      headerHide: true,
+      footerHide: true
+    }
   }
 ];
 

@@ -7,42 +7,39 @@ import { Route, RouteMeta } from "@/types/Route";
 
 export default function RouterView() {
   const dispatch = useDispatch();
-  const authMiddleware = (routes : Route[]) => {
+
+  const middleware = (routes : Route[]) => {
     return routes.map(route => {
       let newElement = route.element;
-      if(route.isAuth) {
+      if(route.meta && route.meta.isAuth) {
         newElement = <Navigate to='/login' /> ;
       }
       return {...route, element: newElement};
     })
   };
 
-  const routes = authMiddleware([
-    ...common,
-    ...user,
-  ]);
-
   const getCurrentRouteInfo = (currentComponent : React.ReactElement<any, string | React.JSXElementConstructor<any>> | null) : {routeInfo: Route | null, meta: RouteMeta} => {
     if(!currentComponent) return {routeInfo: null, meta: {}};
     const routeInfo = routes.find(route => currentComponent.props.value.matches[0].route.path === route.path);
-    if(routeInfo){
-      dispatch(setRouteInfo({routeInfo}));
-    }
 
     return {routeInfo : routeInfo ?? null, meta: routeInfo?.meta ?? {}};
   }
+
+  const routes = middleware([
+    ...common,
+    ...user,
+  ]);
 
   const routing = useRoutes([
     ...routes,
     {path: '*', element: <Navigate to='/404' />},
   ]);
 
-  const {routeInfo, meta} = getCurrentRouteInfo(routing);
+  const {routeInfo} = getCurrentRouteInfo(routing);
 
-  const headerHideClass = meta.headerHide ? 'hide-header' : '';
-  const footerHideClass = meta.footerHide ? 'hide-footer' : '';
+  dispatch(setRouteInfo({routeInfo}));
 
-  return <div id={`wrapper`} className={`${headerHideClass} ${footerHideClass}`}>{routing}</div>;
+  return <div id={`wrapper`}>{routing}</div>;
 }
 
 
