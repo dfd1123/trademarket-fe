@@ -25,7 +25,7 @@ const initialState: StateType = {
       theme: light,
       headerHide: false,
       footerHide: false,
-      isAuth: false
+      isAuth: false,
     },
   },
 };
@@ -39,6 +39,13 @@ const infoSlice = createSlice({
 
       if (!routeInfo) return;
 
+      const basicMeta = {
+        theme: light,
+        headerHide: false,
+        footerHide: false,
+        isAuth: false,
+      };
+
       if (routeInfo.meta) {
         state.routeInfo.meta.theme =
           routeInfo.meta.theme === 'dark' ? dark : light;
@@ -46,6 +53,8 @@ const infoSlice = createSlice({
         state.routeInfo.meta.headerHide = Boolean(routeInfo.meta.headerHide);
         state.routeInfo.meta.footerHide = Boolean(routeInfo.meta.footerHide);
         state.routeInfo.meta.isAuth = Boolean(routeInfo.meta.isAuth);
+      } else {
+        state.routeInfo.meta = basicMeta;
       }
 
       state.routeInfo = { ...routeInfo, meta: state.routeInfo.meta };

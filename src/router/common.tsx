@@ -3,6 +3,7 @@ import {Route} from '@/types/Route';
 import NotFound from '@/views/pages/NotFound';
 import ErrorPage from '@/views/pages/ErrorPage';
 import Home from '@/views/pages/Home';
+import CommonComponents from '@/views/pages/CommonComponents';
 
 // ex
 /*
@@ -22,6 +23,14 @@ const common : Route[] = [
   {
     path: '/',
     element: <Home />
+  },
+  {
+    path: '/common', 
+    element: <CommonComponents />,
+    meta:{
+      headerHide: true,
+      footerHide: true
+    }
   },
   {
     path: '/404',

@@ -13,6 +13,6 @@ export interface ModalComponentPropsType {
     children?: React.ReactNode;
     className?: string;
     nonModal?: boolean;
-    close?: () => void,
-    resolve?: (result: any) => void
+    close?: () => void;
+    resolve?: (result: any) => void;
 }
