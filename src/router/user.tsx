@@ -3,6 +3,7 @@ import {Route} from '@/types/Route';
 import Test1 from '@/views/pages/Test1';
 import Test2 from '@/views/pages/Test2';
 
+
 const user : Route[] = [
   {
     path: '/test1',
@@ -17,7 +18,7 @@ const user : Route[] = [
     meta:{
       isAuth: true
     }
-  }
+  },
 ];
 
 export default user;

@@ -4,6 +4,7 @@ import NotFound from '@/views/pages/NotFound';
 import ErrorPage from '@/views/pages/ErrorPage';
 import Home from '@/views/pages/Home';
 import CommonComponents from '@/views/pages/CommonComponents';
+import BusinessInfo from '@/views/pages/kmf/BusinessInfo';
 
 // ex
 /*
@@ -31,6 +32,15 @@ const common : Route[] = [
       headerHide: true,
       footerHide: true
     }
+  },
+  {
+    path: '/info', 
+    element: <BusinessInfo />,
+    meta:{
+      // isAuth: true,
+      headerHide: true,
+      footerHide: true,
+    },
   },
   {
     path: '/404',
