@@ -1,8 +1,8 @@
-import { createGlobalStyle } from 'styled-components';
-import { normalize } from 'styled-normalize';
-import { reset } from 'styled-reset';
-import NotoSansFont from '@/assets/font/NotoSans/font.css';
-import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import { createGlobalStyle } from "styled-components";
+import { normalize } from "styled-normalize";
+import { reset } from "styled-reset";
+import NotoSansFont from "@/assets/font/NotoSans/font.css";
+import { TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -44,6 +44,29 @@ const GlobalStyle = createGlobalStyle`
 
   a, button {
     -webkit-tap-highlight-color: transparent !important;
+  }
+
+  input{
+    box-sizing: border-box;
+  }
+
+  /* IE의 경우 */
+  input::-ms-clear,
+  input::-ms-reveal{
+      display:none;
+  }
+  /* 크롬의 경우 */
+  input::-webkit-search-decoration,
+  input::-webkit-search-cancel-button,
+  input::-webkit-search-results-button,
+  input::-webkit-search-results-decoration{
+      display:none;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
   }
 
   #root{
