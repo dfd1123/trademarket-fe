@@ -17,15 +17,23 @@ export default KmfFooter;
 
 const Container = styled.footer`
   width: 100%;
-  height: 84px;
+  height: 128px;
   border-top: 1px solid #cacaca;
   display: flex;
   justify-content: space-evenly;
   font-size: 0.8rem;
   background-color: #f0f0f0;
   padding-top: 14px;
+  & > :not(:last-child) {
+    border-right: 1px solid #cecece;
+  }
 `;
 
 const LinkButton = styled.div`
   height: 100%;
+  width: 100%;
+  padding: 0 10px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
