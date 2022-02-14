@@ -7,8 +7,8 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   reset?: boolean;
-  enter?: () => void;
-  change?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: () => void;
+  onChange?: (value : unknown, name?: any) => void;
 }
 
 const TextInput = ({
@@ -16,21 +16,22 @@ const TextInput = ({
   className,
   type = "text",
   name,
-  value,
+  value = '',
   placeholder = "",
   readOnly = false,
   disabled = false,
   tabIndex = 0,
   reset = false,
-  enter,
-  change,
+  onEnter,
+  onChange,
+  onClick
 }: PropsType) => {
   const isSearch = type === "search";
   const input = useRef<HTMLInputElement>(null);
   const [focus, setFocus] = useState(false);
 
   const handleEnter = () => {
-    if (enter) enter();
+    if (onEnter) onEnter();
   };
 
   const toggleFocus = (status: boolean) => {
@@ -44,7 +45,8 @@ const TextInput = ({
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (change) change(e);
+    const {value, name} = e.target;
+    if (onChange) onChange(value, name);
   };
 
   const handleReset = () => {
@@ -52,16 +54,13 @@ const TextInput = ({
   };
 
   return (
-    <div
-      className={`${className} ${isSearch ? "search" : ""} ${
-        focus ? "focus" : ""
-      } ${reset ? "reset" : ""}`}
-    >
+    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(value) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
       <div className="inp-cont">
         <input
           ref={input}
           type={type}
           name={name}
+          value={value}
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}
@@ -70,6 +69,7 @@ const TextInput = ({
           onChange={handleValueChange}
           onFocus={() => toggleFocus(true)}
           onBlur={() => toggleFocus(false)}
+          onClick={onClick}
         />
         <div className="btn-cont">
           {value && reset ? (
@@ -210,7 +210,7 @@ export const MerterialInput = styled(BasicInput)`
     }
   }
 
-  &.focus {
+  &.focus-value {
     label {
       height: auto;
       font-size: 0.5em;

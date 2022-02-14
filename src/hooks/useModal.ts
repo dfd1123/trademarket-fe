@@ -11,7 +11,7 @@ interface ModalHookReturn {
     options?: {
       props?: any;
       nonModal?: boolean;
-      duplicateCheck: boolean;
+      duplicateCheck?: boolean;
     }
   ) => Promise<any>;
   closeModal: (id: number) => void;
@@ -33,7 +33,7 @@ const useModal = (): ModalHookReturn => {
   const openModal = (
     component: FunctionComponent,
     options: { props?: any; nonModal?: boolean; duplicateCheck?: boolean } = {
-      props: null,
+      props: {},
       nonModal: false,
       duplicateCheck: false,
     }
