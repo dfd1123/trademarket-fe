@@ -1,8 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { Link, Outlet } from 'react-router-dom';
-import { BasicButton } from '@/views/components/common/Button';
 import styled from 'styled-components';
 import TextInput, {MerterialInput} from '@/views/components/common/input/TextInput';
+import Calender from '@/views/components/common/Calender';
+
 function CommonComponents() {
 
     const initialInputs = {
@@ -37,6 +37,9 @@ function CommonComponents() {
           <TextInput label="검색" name="search" type="search" value={search} reset={true} change={handleChangeInput}  /><br /><br />
           <MerterialInput label="나이" name="age" value={age} change={handleChangeInput}  /><br /><br />
           <MerterialInput label="주소" name="address" type="address" value={address} reset={true} change={handleChangeInput}  />
+      </div>
+      <div>
+        <Calender />
       </div>
     </CommonComponentsStyle>
   );
