@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+// import Search from '@/assets/img/kmf/search.svg';
+// import { ReactComponent as SearchSvg } from '@/assets/img/kmf/search.svg';
+import Search from '@/assets/img/kmf/search.svg';
 
 const KmfFooter = () => {
   return (
     <Container>
+      <div>
+        <Search />
+      </div>
       <LinkButton>공지사항</LinkButton>
       <LinkButton>사업안내</LinkButton>
       <LinkButton>회원검색</LinkButton>

@@ -88,7 +88,7 @@ const Header = styled.header`
   height: 10%;
   width: 100%;
   font-size: 2rem;
-  background-color: #18a0fb;
+  background-color: #1574BD ;
   color: white;
   padding: 20px 0;
 `;
@@ -97,7 +97,7 @@ const CalendarWrapper = styled(Calendar)`
   width: 100%;
   border: none;
   .react-calendar__navigation {
-    background-color: #18a0fb;
+    background-color: #1574BD;
     & > * {
       color: white;
     }
@@ -108,7 +108,7 @@ const CalendarWrapper = styled(Calendar)`
     .react-calendar__navigation__prev-button {
       order: 1;
       &:enabled {
-        background-color: #18a0fb;
+        background-color: #1574BD;
       }
       &:active {
         background-color: #59bdff;
@@ -116,7 +116,7 @@ const CalendarWrapper = styled(Calendar)`
     }
     .react-calendar__navigation__next-button {
       &:enabled {
-        background-color: #18a0fb;
+        background-color: #1574BD;
       }
       &:active {
         background-color: #59bdff;
