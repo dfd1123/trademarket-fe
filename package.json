@@ -21,6 +21,7 @@
     "dotenv": "^14.1.0",
     "js-cookie": "^3.0.1",
     "react": "^17.0.2",
+    "react-calendar": "^3.7.0",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
     "react-ripples": "^2.2.1",
@@ -31,13 +32,20 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.33",
+    "@types/react-calendar": "^3.4.5",
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "prettier": "^2.5.1",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
     "typescript": "^4.4.4",
     "vite": "^2.7.2",
     "vite-plugin-html-env": "^1.0.3",
+    "vite-plugin-react-svg": "^0.2.0",
     "websocket-as-promised": "^2.0.1",
     "wscb": "^0.4.91"
   }
