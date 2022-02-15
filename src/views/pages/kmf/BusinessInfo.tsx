@@ -6,7 +6,9 @@ import Calendar, { MonthView } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import KmfFooter from '../../components/common/kmf/KmfFooter';
-import ContentSupportLink from '@/views/components/common/kmf/ContentSupportLink';
+import KmfHeader from '@/views/components/common/kmf/KmfHeader'
+import {KmfListWrapper, KmfLinkedList} from '@/views/components/common/kmf/';
+
 
 interface TileContentProps {
   dotColor: string;
@@ -31,7 +33,8 @@ function BusinessInfo() {
 
   return (
     <Container>
-      <Header>사업안내</Header>
+      {/* <Header>사업안내</Header> */}
+      <KmfHeader headerText={"사업안내"} />
       <CalendarWrapper
         locale={locale}
         calendarType="US"
@@ -55,9 +58,9 @@ function BusinessInfo() {
       />
       <CurrentMonth>{moment().format('YYYY.MM')}</CurrentMonth>
       <SupportListWrapper>
-        <ContentSupportLink />
-        <ContentSupportLink />
-        <ContentSupportLink />
+        <KmfListWrapper imgUrl='img/kmf/arrow.png' children={<KmfLinkedList title='Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt. Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt.' to="/info" />}/>
+        <KmfListWrapper imgUrl='img/kmf/arrow.png' children={<KmfLinkedList title='2월 콘텐츠창작 지원사업' to="/info" />}/>
+ 
       </SupportListWrapper>
       <KmfFooter />
     </Container>
@@ -81,16 +84,6 @@ const Dot = styled.div<{color: string}>`
   background-color: ${props => props.color};
   padding: 1px;
   margin: 0 1px 0 1px;
-`;
-
-const Header = styled.header`
-  text-align: center;
-  height: 10%;
-  width: 100%;
-  font-size: 2rem;
-  background-color: #1574BD ;
-  color: white;
-  padding: 20px 0;
 `;
 
 const CalendarWrapper = styled(Calendar)`
@@ -153,7 +146,8 @@ const CurrentMonth = styled.div`
 
 const SupportListWrapper = styled.ul`
   overflow-y: auto;
-  height: 100%;
+  max-height: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
 `;

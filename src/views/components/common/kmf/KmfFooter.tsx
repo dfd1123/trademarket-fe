@@ -1,15 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-// import Search from '@/assets/img/kmf/search.svg';
-// import { ReactComponent as SearchSvg } from '@/assets/img/kmf/search.svg';
-import Search from '@/assets/img/kmf/search.svg';
 
 const KmfFooter = () => {
   return (
     <Container>
-      <div>
-        <Search />
-      </div>
       <LinkButton>공지사항</LinkButton>
       <LinkButton>사업안내</LinkButton>
       <LinkButton>회원검색</LinkButton>
@@ -22,8 +16,9 @@ const KmfFooter = () => {
 export default KmfFooter;
 
 const Container = styled.footer`
+  margin-top: auto;
   width: 100%;
-  height: 128px;
+  min-height: 64px;
   border-top: 1px solid #cacaca;
   display: flex;
   justify-content: space-evenly;

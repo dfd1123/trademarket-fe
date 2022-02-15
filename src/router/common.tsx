@@ -5,6 +5,7 @@ import ErrorPage from '@/views/pages/ErrorPage';
 import Home from '@/views/pages/Home';
 import CommonComponents from '@/views/pages/CommonComponents';
 import BusinessInfo from '@/views/pages/kmf/BusinessInfo';
+import Reference from '@/views/pages/kmf/Reference';
 
 // ex
 /*
@@ -36,6 +37,15 @@ const common : Route[] = [
   {
     path: '/info', 
     element: <BusinessInfo />,
+    meta:{
+      // isAuth: true,
+      headerHide: true,
+      footerHide: true,
+    },
+  },
+  {
+    path: '/ref', 
+    element: <Reference />,
     meta:{
       // isAuth: true,
       headerHide: true,
