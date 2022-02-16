@@ -11,7 +11,7 @@ function Test1() {
   const {openModal} = useModal();
 
   const openTestModal = async() => {
-    const result = await openModal(TestModal);
+    const result = await openModal(TestModal, {animation:{in: false, class: 'fade', duration:20000}});
 
     console.log(result);
   }

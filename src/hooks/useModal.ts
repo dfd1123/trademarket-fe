@@ -5,14 +5,21 @@ import { addModal, removeModal, resetModal } from '@/store/modal/modal';
 import { ModalType } from '@/store/modal/types/modal';
 import { useTypedSelector } from '@/store';
 
+interface ModalOption {
+  props?: any;
+      nonModal?: boolean;
+      duplicateCheck?: boolean;
+      animation:{
+        in: boolean;
+        class: string;
+        duration?: number;
+      }
+}
+
 interface ModalHookReturn {
   openModal: (
     component: FunctionComponent,
-    options?: {
-      props?: any;
-      nonModal?: boolean;
-      duplicateCheck?: boolean;
-    }
+    options?: ModalOption,
   ) => Promise<any>;
   closeModal: (id: number) => void;
   resolveModal: (modal: ModalType, result: any) => void;
@@ -32,13 +39,18 @@ const useModal = (): ModalHookReturn => {
 
   const openModal = (
     component: FunctionComponent,
-    options: { props?: any; nonModal?: boolean; duplicateCheck?: boolean } = {
+    options: ModalOption = {
       props: {},
+      animation:{
+        in: false,
+        class:'',
+        duration: 200000
+      },
       nonModal: false,
       duplicateCheck: false,
     }
   ): Promise<unknown> => {
-    let { props, nonModal, duplicateCheck } = options;
+    let { props, nonModal, animation, duplicateCheck } = options;
     nonModal = Boolean(nonModal);
     scrollFreeze(nonModal);
 
@@ -48,6 +60,7 @@ const useModal = (): ModalHookReturn => {
         props,
         component,
         nonModal,
+        animation,
         resolve,
         reject,
       };
