@@ -50,7 +50,11 @@ const TextInput = ({
   };
 
   const handleReset = () => {
-    if (input.current) input.current.value = "";
+    if (input.current) {
+      input.current.value = "";
+      const {value, name} = input.current;
+      if (onChange) onChange("", name);
+    }
   };
 
   return (
