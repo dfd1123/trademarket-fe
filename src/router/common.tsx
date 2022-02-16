@@ -5,6 +5,7 @@ import Home from '@/views/pages/Home';
 import CommonComponents from '@/views/pages/CommonComponents';
 import BusinessInfo from '@/views/pages/businessInfo/BusinessInfo';
 import ReferenceRoom from '@/views/pages/refrenceRoom/ReferenceRoom';
+import MyPage from '@/views/pages/myPage/MyPage';
 
 // ex
 /*
@@ -45,6 +46,15 @@ const common : Route[] = [
   {
     path: '/ref', 
     element: <ReferenceRoom />,
+    meta:{
+      // isAuth: true,
+      headerHide: true,
+      footerHide: true,
+    },
+  },
+  {
+    path: '/mypage', 
+    element: <MyPage />,
     meta:{
       // isAuth: true,
       headerHide: true,
