@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 interface KmfLinkedListProps {
   date?: string;
   title: string;
-  type: string;
+  type?: string;
   to?: string;
 }
 
 const KmfLinkedList = ({ title, date, type = 'none', to }: KmfLinkedListProps) => {
-
+    to = to ?? window.location.href;
   return (
     <Container>
       <Link to={to}>

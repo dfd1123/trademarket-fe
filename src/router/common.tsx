@@ -1,11 +1,10 @@
-import {Navigate} from 'react-router-dom';
 import {Route} from '@/types/Route';
 import NotFound from '@/views/pages/NotFound';
 import ErrorPage from '@/views/pages/ErrorPage';
 import Home from '@/views/pages/Home';
 import CommonComponents from '@/views/pages/CommonComponents';
-import BusinessInfo from '@/views/pages/kmf/BusinessInfo';
-import Reference from '@/views/pages/kmf/Reference';
+import BusinessInfo from '@/views/pages/businessInfo/BusinessInfo';
+import ReferenceRoom from '@/views/pages/refrenceRoom/ReferenceRoom';
 
 // ex
 /*
@@ -45,7 +44,7 @@ const common : Route[] = [
   },
   {
     path: '/ref', 
-    element: <Reference />,
+    element: <ReferenceRoom />,
     meta:{
       // isAuth: true,
       headerHide: true,

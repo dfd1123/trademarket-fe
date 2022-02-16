@@ -1,29 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 // https://github.com/wojtekmaj/react-calendar
-import Calendar, { MonthView } from 'react-calendar';
+import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-// import moment from 'moment';
-import KmfFooter from '../../components/common/kmf/KmfFooter';
-import KmfHeader from '@/views/components/common/kmf/KmfHeader'
-import { KmfListWrapper, KmfLinkedList } from '@/views/components/common/kmf/';
 import { dateFormat } from '@/utils/dateUtils';
-
-
-interface TileContentProps {
-  dotColor: string;
-}
-
-const TileContent = ({ dotColor } :TileContentProps) => {
-  return (
-    <TileContentContainer>
-      <Dot color={dotColor}></Dot>
-      <Dot color={dotColor}></Dot>
-      <Dot color={dotColor}></Dot>
-    </TileContentContainer>
-  )
-}
+import KmfFooter from '@/views/components/layouts/KmfFooter';
+import KmfHeader from '@/views/components/layouts/KmfHeader';
+import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
+import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
+import TileContent from '@/views/components/businessInfo/TileContet';
 
 function BusinessInfo() {
   const [date, setDate] = useState<Date>(new Date());
@@ -34,10 +19,10 @@ function BusinessInfo() {
   };
 
   return (
-    <Container>
+    <ContainerStyle>
       {/* <Header>사업안내</Header> */}
       <KmfHeader headerText={"사업안내"} />
-      <CalendarWrapper
+      <CalendarWrapperStyle
         locale={locale}
         calendarType="US"
         defaultView="month"
@@ -48,7 +33,7 @@ function BusinessInfo() {
         onChange={() => console.log('date')}
         // 요기에 스타일링을 해서 가로로 들어가게 하면 됩니다. 일정이 없더라도 빈 공간을 만들거나 타일의 크기를 fix 할것.
         // tileContent={({ activeStartDate, date, view }) => view === 'month' && date.getDay() === 0 ?
-        tileContent={({ activeStartDate, date, view }) => view === 'month' && dateFormat(date, 'yyyy-MM-dd') === dateFormat(new Date(), 'yyyy-MM-dd') ?
+        tileContent={({ date, view }) => view === 'month' && dateFormat(date, 'yyyy-MM-dd') === dateFormat(new Date(), 'yyyy-MM-dd') ?
           <>
             <TileContent dotColor={'red'} />
           </>
@@ -58,37 +43,22 @@ function BusinessInfo() {
           </>
         }
       />
-      <CurrentMonth>{dateFormat(date, 'yyyy.MM')}</CurrentMonth>
-      <SupportListWrapper>
-        <KmfListWrapper imgUrl='img/kmf/arrow.png' children={<KmfLinkedList title='Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt. Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt.' to="/info" />}/>
-        <KmfListWrapper imgUrl='img/kmf/arrow.png' children={<KmfLinkedList title='2월 콘텐츠창작 지원사업' to="/info" />}/>
- 
-      </SupportListWrapper>
+      <CurrentMonthStyle>{dateFormat(date, 'yyyy.MM')}</CurrentMonthStyle>
+      <SupportListWrapperStyle>
+          <KmfListWrapper>
+              <KmfLinkedList title='Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt. Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt.' to="/info" />
+          </KmfListWrapper>
+          <KmfListWrapper>
+              <KmfLinkedList title='2월 콘텐츠창작 지원사업' to="/info" />
+          </KmfListWrapper>
+
+      </SupportListWrapperStyle>
       <KmfFooter />
-    </Container>
+    </ContainerStyle>
   );
 }
 
-export default BusinessInfo;
-
-const TileContentContainer = styled.div`
-  width: 100%;
-  height: 8px;
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-`;
-
-const Dot = styled.div<{color: string}>`
-  height: 6px;
-  width: 6px;
-  border-radius: 3px;
-  background-color: ${props => props.color};
-  padding: 1px;
-  margin: 0 1px 0 1px;
-`;
-
-const CalendarWrapper = styled(Calendar)`
+const CalendarWrapperStyle = styled(Calendar)`
   width: 100%;
   border: none;
   .react-calendar__navigation {
@@ -133,23 +103,25 @@ const CalendarWrapper = styled(Calendar)`
   }
 `;
 
-const Container = styled.div`
+const ContainerStyle = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
 `;
 
-const CurrentMonth = styled.div`
+const CurrentMonthStyle = styled.div`
   width: 100%;
   height: 2rem;
   padding: 20px 20px;
   border-top: 2px solid #eeeeee;
 `;
 
-const SupportListWrapper = styled.ul`
+const SupportListWrapperStyle = styled.ul`
   overflow-y: auto;
   max-height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 `;
+
+export default BusinessInfo;

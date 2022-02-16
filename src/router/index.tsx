@@ -4,6 +4,15 @@ import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
 import user from '@/router/user';
 import common from '@/router/common';
+import businessInfo from "@/router/businessInfo";
+import referenceRoom from "@/router/referenceRoom";
+
+const routeList : Route[] = [
+    ...user,
+    ...common,
+    ...businessInfo,
+    ...referenceRoom
+];
 
 export default function RouterView() {
   const dispatch = useDispatch();
@@ -37,10 +46,7 @@ export default function RouterView() {
   /**
    * @description middleware 검증 후 route 배열 정보를 routes 변수에 저장
    */
-  const routes = middleware([
-    ...common,
-    ...user,
-  ]);
+  const routes = middleware(routeList);
 
   /**
    * @description useRoutes 훅을 사용하여 현재 routing 될 컴포넌트 정보를 routing 변수에 저장

@@ -1,23 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
-interface ContentSupportLinkProps {
+interface PropsType {
+  imgUrl?: string;
   children: React.ReactNode;
-  imgUrl: string;
 }
 
-const KmfListWrapper = ({ children, imgUrl}: ContentSupportLinkProps) => {
+const KmfListWrapper = ({children, imgUrl = "img/kmf/arrow.png"}: PropsType) => {
   return (
     <>
-      <Container imgUrl={imgUrl}>{children}</Container>
+      <ContainerStyle imgUrl={imgUrl}>{children}</ContainerStyle>
     </>
   );
 };
 
 export default KmfListWrapper;
 
-const Container = styled.li<{ imgUrl?: string }>`
+const ContainerStyle = styled.li<{ imgUrl?: string }>`
   width: 100%;
   text-decoration: none;
   font-size: 14px;
