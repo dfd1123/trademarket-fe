@@ -8,16 +8,18 @@ interface KmfLinkedListProps {
   title: string;
   type?: string;
   to?: string;
+  fontColor?: string;
+  fontSize?: string;
 }
 
-const KmfLinkedList = ({ title, date, type = 'none', to }: KmfLinkedListProps) => {
+const KmfLinkedList = ({ title, date, type = 'none', to, fontColor="#000", fontSize="14px" }: KmfLinkedListProps) => {
     to = to ?? window.location.href;
   return (
     <Container>
-      <Link to={to}>
+      <LinkContainerStyle to={to}>
         {date && <DateViewer>{date}</DateViewer>}
-        <Title>{ title}</Title>
-      </Link>
+        <Title fontColor={fontColor} fontSize={fontSize} >{ title}</Title>
+      </LinkContainerStyle>
     </Container>
   );
 };
@@ -27,9 +29,10 @@ export default KmfLinkedList
 const Container = styled.div`
   width: 100%;
   padding: 10px 0;
+  height: 100%;
 `;
 
-const Title = styled.p`
+const Title = styled.p<{fontColor: string, fontSize: string}>`
   font-size: 14px;
   font-weight: 400;
   width: 80%;
@@ -39,10 +42,19 @@ const Title = styled.p`
   text-overflow: ellipsis !important;
   -webkit-box-orient: vertical !important;
   -webkit-line-clamp: 2 !important;
+  color: ${props => props.fontColor};
+  font-size: ${props => props.fontSize};
 `;
 
 const DateViewer = styled.div`
   color: #828282;
   font-size: 12px;
   margin-bottom: 12px;
+`;
+
+const LinkContainerStyle = styled(Link)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 `;
