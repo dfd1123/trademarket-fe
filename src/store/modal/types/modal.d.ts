@@ -3,6 +3,11 @@ import { FunctionComponent } from 'react';
 export interface ModalType {
   id: number;
   props?: any;
+  animation:{
+    in: boolean;
+    class: string;
+    duration?: number;
+  };
   nonModal?: boolean;
   component: FunctionComponent;
   resolve: (value: any) => void;
