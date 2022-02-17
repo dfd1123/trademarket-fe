@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { NoBorderButton, YellowButton } from '@/views/components/common/Button';
 import { FullScreenModalStyle } from '@/views/components/common/modal/ModalTemplate';
 import Gnb from '@/views/components/layouts/Gnb';
-import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import { ModalComponentPropsType } from '@/store/modal/types/modal';
 
 const MobileGnb = ({ close, className }: ModalComponentPropsType) => {
