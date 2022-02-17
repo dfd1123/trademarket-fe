@@ -26,7 +26,9 @@ const ToastComponent = ({ toast }: PropsType) => {
 
     setTimeout(() => {
       close();
-    }, (toast.duration ?? 0) + animationDuration * 2);
+    }, (toast.duration ?? 0) + animationDuration);
+
+    return () => closeToast(toast.id);
   }, []);
 
   return (
