@@ -103,7 +103,7 @@ const ToastComponentStyle = styled.div<{
       &.toast {
         border-radius: 20px;
         padding: 10px 20px;
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(0, 0, 0, 0.8) !important;
 
         &.warning {
           color: #fff;

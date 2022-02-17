@@ -4,6 +4,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import realTimePrice from '@/store/realTime/realTimePrice';
 import asyncData from '@/store/asyncData/asyncData';
 import modalSlice from '@/store/modal/modal';
+import dialogSlice from '@/store/modal/dialog';
 import toastSlice from '@/store/modal/toast';
 import infoReducer from '@/store/info/infoReducer';
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   realTimePrice,
   asyncData,
   modalSlice,
+  dialogSlice,
   toastSlice,
   infoReducer
 });

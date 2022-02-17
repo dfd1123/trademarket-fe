@@ -4,6 +4,7 @@ import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
 import user from '@/router/user';
 import common from '@/router/common';
+import { useEffect } from "react";
 
 export default function RouterView() {
   const dispatch = useDispatch();
@@ -55,7 +56,10 @@ export default function RouterView() {
   /**
    * @description 현재 라우팅 되는 route 정보를 redux에 mutate
    */
-  dispatch(setRouteInfo({routeInfo}));
+
+  useEffect(() => {
+    dispatch(setRouteInfo({routeInfo}));
+  }, []);
 
   const headerHide = meta.headerHide ? 'hide-header' : '';
   const footerHide = meta.headerHide ? 'hide-footer' : '';
