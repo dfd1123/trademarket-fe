@@ -29,7 +29,7 @@ const ReferenceRoom = () => {
       <span className="item-cnt">총 {list.length} 건</span>
       <div className="list-holder">
         {list.map(item => (
-          <KmfListWrapper imgUrl={item.ar_file ? 'img/kmf/download.png' : ''}>
+          <KmfListWrapper key={`ref-${item.ar_id}`} imgUrl={item.ar_file ? 'img/kmf/download.png' : ''}>
             <KmfLinkedList
               title={item.ar_title}
               to="/info"

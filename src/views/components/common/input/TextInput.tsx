@@ -20,7 +20,6 @@ const TextInput = ({
   placeholder = "",
   readOnly = false,
   disabled = false,
-  tabIndex = 0,
   reset = false,
   onEnter,
   onChange,
@@ -80,7 +79,6 @@ const TextInput = ({
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}
-          tabIndex={tabIndex}
           onKeyPress={handleKeyPress}
           onChange={handleValueChange}
           onFocus={() => toggleFocus(true)}
