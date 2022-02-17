@@ -1,7 +1,6 @@
-import { FunctionComponent, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
-import { addModal, removeModal, resetModal } from '@/store/modal/modal';
+import { addModal, removeModal } from '@/store/modal/modal';
 import { ModalType } from '@/store/modal/types/modal';
 import { useTypedSelector } from '@/store';
 
@@ -27,15 +26,11 @@ interface ModalHookReturn {
     component: FunctionComponent,
     onlyLastCheck?: boolean
   ) => boolean;
+  scrollRelease:() => void;
 }
 
 const useModal = (): ModalHookReturn => {
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    dispatch(resetModal({scrollRelease}));
-  }, [pathname]);
 
   const openModal = (
     component: FunctionComponent,
@@ -98,7 +93,7 @@ const useModal = (): ModalHookReturn => {
     document.body.style.overflow = '';
   };
 
-  return { openModal, closeModal, resolveModal, checkModal };
+  return { openModal, closeModal, resolveModal, checkModal, scrollRelease };
 };
 
 export default useModal;
