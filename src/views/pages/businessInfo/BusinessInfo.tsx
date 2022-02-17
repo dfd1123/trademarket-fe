@@ -45,13 +45,12 @@ function BusinessInfo() {
       />
       <CurrentMonthStyle>{dateFormat(date, 'yyyy.MM')}</CurrentMonthStyle>
       <SupportListWrapperStyle>
-          <KmfListWrapper>
-              <KmfLinkedList title='Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt. Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt.' to="/info" />
-          </KmfListWrapper>
-          <KmfListWrapper>
-              <KmfLinkedList title='2월 콘텐츠창작 지원사업' to="/info" />
-          </KmfListWrapper>
-
+        <KmfListWrapper>
+            <KmfLinkedList title='Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt. Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt.' to="/info" />
+        </KmfListWrapper>
+        <KmfListWrapper>
+            <KmfLinkedList title='2월 콘텐츠창작 지원사업' to="/info" />
+        </KmfListWrapper>
       </SupportListWrapperStyle>
       <KmfFooter />
     </ContainerStyle>
@@ -122,6 +121,7 @@ const SupportListWrapperStyle = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding: 8px 16px;
 `;
 
 export default BusinessInfo;

@@ -22,7 +22,7 @@ const Container = styled.footer`
   border-top: 1px solid #cacaca;
   display: flex;
   justify-content: space-evenly;
-  font-size: 0.8rem;
+  font-size: 10px;
   background-color: #f0f0f0;
   padding-top: 14px;
   & > :not(:last-child) {
