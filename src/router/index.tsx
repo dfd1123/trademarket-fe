@@ -1,13 +1,14 @@
-import { useEffect } from "react";
-import { useRoutes, Navigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import auth from '@/router/auth';
+import businessInfo from "@/router/businessInfo";
+import common from '@/router/common';
+import referenceRoom from "@/router/referenceRoom";
+import test from '@/router/test';
+import cookieService from "@/services/CookieService";
 import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
-import test from '@/router/test';
-import auth from '@/router/auth';
-import common from '@/router/common';
-import businessInfo from "@/router/businessInfo";
-import referenceRoom from "@/router/referenceRoom";
+import { useEffect } from "react";
+import { useDispatch } from 'react-redux';
+import { Navigate, useRoutes } from "react-router-dom";
 
 const routeList : Route[] = [
     ...test,
@@ -28,7 +29,8 @@ export default function RouterView() {
     return routes.map(route => {
       let newElement = route.element;
       if(route.meta){
-        if(route.meta.isAuth) {
+        const accessToken = cookieService.getAccessToken();
+        if(route.meta.isAuth && !accessToken) {
           newElement = <Navigate to='/login' /> ;
         }
       }
