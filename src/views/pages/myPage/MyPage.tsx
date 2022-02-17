@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import KmfFooter from '@/views/components/layouts/KmfFooter';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
-import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
-import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
+// import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
+// import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
 import { dateFormat } from '@/utils/dateUtils';
 import Switch, { SwitchProps } from '@mui/material/Switch';
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -16,7 +16,7 @@ const MyPage = () => {
   const {openModal} = useModal();
 
   const openTestModal = async() => {
-    const result = await openModal(KmfModal);
+    const result = await openModal(KmfModal,{props: {title: 'sdas', content: 'dadfasfasfas', subTitle: 'ssss', subContent: 'asdfasdfasfasf'}});
 
     console.log(result);
   }
@@ -26,39 +26,43 @@ const MyPage = () => {
       <KmfHeader headerText="마이페이지" />
       <PushSettingStyle>
         <PushTextStyle>알림설정</PushTextStyle>
-      <SwitchStyle
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
-        label=""
-      />
+        <SwitchStyle
+          control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+          label=""
+        />
       </PushSettingStyle>
-      <BasicButton onClick={openTestModal} >modal test</BasicButton>
       <ListWrapperStyle>
-        <KmfListWrapper>
-          <KmfLinkedList title="프로필 관리" to="/info" fontColor='#353535'  />
-        </KmfListWrapper>
-        <KmfListWrapper>
-          <KmfLinkedList title="비밀번호 변경" to="/info" fontColor='#353535' />
-        </KmfListWrapper>
-        <KmfListWrapper>
-          <KmfLinkedList title="서비스 이용약관" to="/info" fontColor='#353535' />
-        </KmfListWrapper>
-        <KmfListWrapper>
-          <KmfLinkedList title="개인정보 수집 및 활용지침" to="/info" fontColor='#353535' />
-        </KmfListWrapper>
-        <KmfListWrapper>
-          <KmfLinkedList title="로그아웃" to="/info" fontColor='#353535' />
-        </KmfListWrapper>
-        <KmfListWrapper>
-          <KmfLinkedList title="회원탈퇴" to="/info" fontColor='#353535' />
-        </KmfListWrapper>
-        <KmfListWrapper>
-          <KmfLinkedList title="앱버전" to="/info" fontColor='#353535' />
-        </KmfListWrapper>
+          {/* link */}
+          <ModalButton onClick={openTestModal}>프로필 관리</ModalButton>
+          {/* link */}
+          <ModalButton onClick={openTestModal}>비밀번호 변경</ModalButton>
+          {/* link */}
+          <ModalButton onClick={openTestModal}>서비스 이용약관</ModalButton>
+          {/* link */}
+          <ModalButton onClick={openTestModal}>개인정보 수집 및 활용지칩</ModalButton>
+          <ModalButton onClick={openTestModal}>로그아웃</ModalButton>
+          <ModalButton onClick={openTestModal}>회원탈퇴</ModalButton>
+          <ModalButton onClick={openTestModal}>앱버전</ModalButton>
       </ListWrapperStyle>
       <FooterStyle />
     </ContainerStyle>
   );
 };
+
+const ListWrapperStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+  
+  & div:first-child {
+    border-top: 1px solid #F1F1F1;
+  }
+
+  & button {
+    font-size: 14px;
+    color: #353535;
+  }
+`;
 
 const ContainerStyle = styled.div`
   display: flex;
@@ -78,22 +82,23 @@ const PushSettingStyle = styled.div`
   align-items: center;
 `;
 
-const ListWrapperStyle = styled.ul`
-  overflow-y: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  & > li {
-    margin: 0 16px;
-    border-bottom: 1px solid #f1f1f1;
-    height: 80px;
+const ModalButton = styled(BasicButton)`
+  width: 100%;
+  height: 82px;
+  border: 0;
+  border-bottom: 1px solid #F1F1F1;
+  padding: 0;
+  button {
+    width: 100%;
+    height: 100%;
+    text-align: left;
   }
 `;
 
 const PushTextStyle = styled.div`
   color: #353535;
   font-size: 14px;
+
 `;
 
 const SwitchStyle = styled(FormControlLabel)`
