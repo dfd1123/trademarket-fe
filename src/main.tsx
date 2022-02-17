@@ -8,14 +8,12 @@ import store from "@/store";
 import App from "@/App";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <WebSocketProvider>
-            <App />
-        </WebSocketProvider>
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>,
+  <BrowserRouter>
+    <Provider store={store}>
+      <WebSocketProvider>
+        <App />
+      </WebSocketProvider>
+    </Provider>
+  </BrowserRouter>,
   document.getElementById("root")
 );

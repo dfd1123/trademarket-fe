@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRoutes, Navigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setRouteInfo } from "@/store/info/infoReducer";
@@ -18,7 +19,7 @@ export default function RouterView() {
   const dispatch = useDispatch();
 
   /**
-   * @description route middleware 함수이며 각 route module에서 
+   * @description route middleware 함수이며 각 route module에서
    * import 해온 배열 정보 중 meta 필드를 확인하는 방식으로 작동
    */
   const middleware = (routes : Route[]) => {
@@ -61,7 +62,10 @@ export default function RouterView() {
   /**
    * @description 현재 라우팅 되는 route 정보를 redux에 mutate
    */
-  dispatch(setRouteInfo({routeInfo}));
+
+  useEffect(() => {
+    dispatch(setRouteInfo({routeInfo}));
+  }, []);
 
   const headerHide = meta.headerHide ? 'hide-header' : '';
   const footerHide = meta.headerHide ? 'hide-footer' : '';

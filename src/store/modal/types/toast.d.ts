@@ -1,17 +1,10 @@
 import { FunctionComponent } from 'react';
 
-export interface ModalType {
+export interface ToastType {
   id: number;
-  props?: any;
-  animation:{
-    in: boolean;
-    class: string;
-    duration?: number;
-  };
-  nonModal?: boolean;
-  component: FunctionComponent;
-  resolve: (value: any) => void;
-  reject: (reason?: any) => void;
+  msg: string;
+  type?: 'success' | 'warning';
+  duration?: number;
 }
 
 export interface ModalComponentPropsType {
