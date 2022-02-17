@@ -7,8 +7,8 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   reset?: boolean;
-  onEnter?: () => void;
-  onChange?: (value : any, name?: any) => void;
+  onEnter?: (value : any , name?: any) => void;
+  onChange?: (value : any , name?: any) => void;
 }
 
 const TextInput = ({
@@ -28,10 +28,20 @@ const TextInput = ({
 }: PropsType) => {
   const isSearch = type === "search";
   const input = useRef<HTMLInputElement>(null);
+  const [text, setText] = useState('');
   const [focus, setFocus] = useState(false);
 
   const handleEnter = () => {
-    if (onEnter) onEnter();
+    if (!onEnter) return;
+
+    if (input.current) {
+      const {value, name} = input.current;
+      if (onEnter) {
+        onEnter(value, name);
+        return;
+      }
+    }
+    onEnter('');
   };
 
   const toggleFocus = (status: boolean) => {
@@ -46,6 +56,7 @@ const TextInput = ({
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {value, name} = e.target;
+    setText(value);
     if (onChange) onChange(value, name);
   };
 
@@ -53,18 +64,19 @@ const TextInput = ({
     if (input.current) {
       input.current.value = "";
       const {value, name} = input.current;
+      setText('');
       if (onChange) onChange("", name);
     }
   };
 
   return (
-    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(value) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
+    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
       <div className="inp-cont">
         <input
           ref={input}
           type={type}
           name={name}
-          value={value}
+          value={text}
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}
@@ -76,7 +88,7 @@ const TextInput = ({
           onClick={onClick}
         />
         <div className="btn-cont">
-          {value && reset ? (
+          {text && reset ? (
             <button className="reset" onMouseDown={handleReset} />
           ) : (
             ""
@@ -100,10 +112,22 @@ export const BasicInput = styled(TextInput)`
 
   label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    padding-left:3px;
+    font-size:14px;
+    line-height: 20px;
+    color:#828282;
   }
   input {
+    width: 100%;
     padding: 10px;
+    border: 1px solid #F4F4F4;
+    border-radius: 5px;
+    background-color: #F4F4F4;
+
+    &::placeholder{
+      color:#BFBFBF;
+    }
   }
 
   .btn-cont {

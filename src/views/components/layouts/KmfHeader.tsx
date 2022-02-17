@@ -1,78 +1,97 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BasicButton } from '@/views/components/common/Button'
+import { useNavigate } from 'react-router-dom';
+import { BasicButton } from '@/views/components/common/Button';
+import icoBackArrow from '@/assets/img/kmf/ico/ico-back-arrow.svg';
 
 interface HeaderProps {
   headerText: string;
-  prevLink?: string;
-  prevImgUrl?: string;
+  prev?: boolean;
   nextLink?: string;
   nextImgUrl?: string;
 }
 
-const Header = ({ headerText, prevLink, prevImgUrl, nextLink, nextImgUrl }: HeaderProps) => {
+const KmfHeader = ({
+  headerText,
+  prev = false,
+  nextLink,
+  nextImgUrl,
+}: HeaderProps) => {
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
-    <div>
-      <HeaderComponent>
-        {headerText}
-      </HeaderComponent>
-      {
-        (prevLink && prevImgUrl) && (
-          <ButtonStyle position="left">
-            <ButtonWrapper><img src={prevImgUrl}/></ButtonWrapper>
-          </ButtonStyle>
-        )
-      }
-      {
-        (nextLink && nextImgUrl) && (
-          <ButtonStyle position="right">
-            <ButtonWrapper><img src={nextImgUrl}/></ButtonWrapper>
-          </ButtonStyle>
-        )
-      }
-      
-    </div>
+    <HeaderContainer>
+      {prev && (
+        <div className="btn-holder left">
+          <BasicButton onClick={goBack}>
+            <img src={icoBackArrow} />
+          </BasicButton>
+        </div>
+      )}
+      <h1 className="title">{headerText}</h1>
+      {nextLink && nextImgUrl && (
+        <div className="btn-holder right">
+          <BasicButton>
+            <img src={nextImgUrl} />
+          </BasicButton>
+        </div>
+      )}
+    </HeaderContainer>
   );
 };
 
-export default Header;
+export default KmfHeader;
 
-const HeaderComponent = styled.div`
+const HeaderContainer = styled.header`
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 2;
   text-align: center;
-  height: 46px;
   width: 100%;
-  font-size: 21px;
   background-color: #1574bd;
-  color: white;
-  padding: 0 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ButtonStyle = styled.div<{position: string}>`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  top: 8px;
-  left: ${props => props.position === 'left' ? '8px' : ''};
-  right: ${props => props.position === 'right' ? '8px' : ''};
-`;
-
-const ButtonWrapper = styled(BasicButton)`
-  width: 30px;
-  height: 30px;
-  border: 0;
-  background-color: transparent;
-  padding: 0;
-
-  button {
-    width: 100%;
-    height: 100%;
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 46px;
+    padding: 0 80px;
+    font-family: 'NotoSans';
+    font-size: 21px;
+    color: white;
   }
-  
-  img {
-    width: 24px;
-    height: 24px;
+  .btn-holder {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+
+    &.left{
+      left:0;
+    }
+
+    &.right{
+      right:0;
+    }
+
+    ${BasicButton} {
+      border:none;
+
+      button {
+        width:40px;
+        margin: 0 5px;
+      }
+
+      img {
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
 `;

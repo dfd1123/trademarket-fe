@@ -1,16 +1,16 @@
 import {Route} from '@/types/Route';
-import BusinessInfo from "@/views/pages/businessInfo/BusinessInfo";
+import ReferenceRoom from "@/views/pages/referenceRoom/ReferenceRoom";
 
 const referenceRoom : Route[]= [
     {
-        path: '/info',
-        element: <BusinessInfo/>,
-        meta: {
-            // isAuth: true,
-            headerHide: true,
-            footerHide: true,
-        }
-    }
+        path: '/ref', 
+        element: <ReferenceRoom />,
+        meta:{
+          // isAuth: true,
+          headerHide: true,
+          footerHide: true,
+        },
+      },
 ]
 
 export default referenceRoom;

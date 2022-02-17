@@ -16,7 +16,7 @@ const KmfListWrapper = ({children, imgUrl = "img/kmf/arrow.png"}: PropsType) => 
 
 export default KmfListWrapper;
 
-const ContainerStyle = styled.li<{ imgUrl?: string }>`
+const ContainerStyle = styled.div<{ imgUrl?: string }>`
   width: 100%;
   text-decoration: none;
   font-size: 14px;

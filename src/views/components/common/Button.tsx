@@ -27,7 +27,7 @@ const Button = ({ children, ripple, color, during, className, onClick, disabled}
 
 export const BasicButton = styled(Button)`
     display: inline-block;
-    padding: 0 10px;
+    padding: 0 0;
     font-size: 1em;
     line-height: 1.5em;
     text-align: center;

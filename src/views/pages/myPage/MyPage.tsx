@@ -23,7 +23,7 @@ const MyPage = () => {
 
   return (
     <ContainerStyle>
-      <KmfHeader headerText="마이페이지" />
+      <KmfHeader headerText="마이페이지" prev />
       <PushSettingStyle>
         <PushTextStyle>알림설정</PushTextStyle>
         <SwitchStyle

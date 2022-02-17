@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react';
 export interface ModalType {
   id: number;
   props?: any;
-  animation:{
+  animation?:{
     in: boolean;
     class: string;
     duration?: number;

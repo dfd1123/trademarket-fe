@@ -7,6 +7,11 @@ class CookieService {
         return this.#cookies.get('accessToken');
     }
 
+    setAccessToken(accessToken : string){
+        console.log(accessToken);
+        this.#cookies.set('accessToken', accessToken, {expires: 30});
+    }
+
 }
 
 export default new CookieService();

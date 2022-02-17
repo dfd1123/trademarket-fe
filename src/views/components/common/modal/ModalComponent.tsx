@@ -17,14 +17,14 @@ const ModalComponent = ({ modal }: PropsType) => {
       setOpen(false);
       setTimeout(() => {
         closeModal(modal.id);
-      }, modal.animation.duration || 0);
+      }, modal.animation?.duration || 0);
   };
 
   const resolve = (modal: ModalType, result: any) => {
     setOpen(false);
     setTimeout(() => {
         resolveModal(modal, result)
-      }, modal.animation.duration || 0);
+      }, modal.animation?.duration || 0);
   }
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const ModalComponent = ({ modal }: PropsType) => {
     <ModalComponentStyle modal={modal}>
       <CSSTransition
         in={open}
-        timeout={modal.animation.duration || 0}
-        classNames={modal.animation.class || 'fade'}
+        timeout={modal.animation?.duration || 0}
+        classNames={modal.animation?.class || 'fade'}
       >
         <Component
           is={modal.component}
@@ -61,7 +61,7 @@ const ModalComponentStyle = styled.div<{modal: ModalType}>`
       opacity: 0;
       &-active {
         opacity: 1;
-        transition: opacity ${(props) => props.modal.animation.duration || 0}ms;
+        transition: opacity ${(props) => props.modal.animation?.duration || 0}ms;
       }
       &-done {
         opacity: 1;
@@ -71,7 +71,7 @@ const ModalComponentStyle = styled.div<{modal: ModalType}>`
       opacity: 1;
       &-active {
         opacity: 0;
-        transition: opacity ${(props) => props.modal.animation.duration || 0}ms;
+        transition: opacity ${(props) => props.modal.animation?.duration || 0}ms;
       }
     }
   }

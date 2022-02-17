@@ -3,13 +3,15 @@ import { useRoutes, Navigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
-import user from '@/router/user';
+import test from '@/router/test';
+import auth from '@/router/auth';
 import common from '@/router/common';
 import businessInfo from "@/router/businessInfo";
 import referenceRoom from "@/router/referenceRoom";
 
 const routeList : Route[] = [
-    ...user,
+    ...test,
+    ...auth,
     ...common,
     ...businessInfo,
     ...referenceRoom

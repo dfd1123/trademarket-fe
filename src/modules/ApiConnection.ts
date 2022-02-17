@@ -8,6 +8,7 @@ import axios, {
 import _get from 'lodash/get';
 import errorCode from '@/data/errorCode';
 import cookieService from '@/services/CookieService';
+import useToast from '@/hooks/useToast';
 
 type CustomResponseFormat<T = any> = {
   response: T;
@@ -29,25 +30,27 @@ interface CustomInstance extends AxiosInstance {
   patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T>;
 }
 interface ApiResponse {
-  query: {
-    [key: string]: unknown;
+  data: {
+    query: {
+      [key: string]: unknown;
+    };
+    errorCode?: string;
+    msg: string;
+    state: number;
   };
-  errorCode?: string;
-  msg: string;
-  state: number;
 }
 
 export default class ApiConnection {
   #axios: CustomInstance;
-  #baseURL?: string = process.env.VITE_API_URI;
+  #baseURL: string = process.env.VITE_API_URL || '';
 
-  constructor(baseURL: string) {
-    this.#baseURL = baseURL ?? this.#baseURL;
+  constructor() {
     this.#axios = axios.create({ baseURL: this.#baseURL });
 
     this.#axios.interceptors.request.use(function (config) {
       const accessToken = cookieService.getAccessToken();
       if (config.headers) {
+        config.headers['Content-Type'] = 'application/json';
         if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
       }
 
@@ -59,14 +62,15 @@ export default class ApiConnection {
     new Promise((resolve, reject) => {
       promise
         .then((response) => {
-          resolve(response.query || response);
+          resolve(response.data.query || response.data);
         })
         .catch((e: Error | AxiosError) => {
-          const code: string = _get(e, 'response.errorCode');
+          const data = _get(e, 'response.data');
+          const code: string = _get(e, 'response.data.errorCode');
 
-          alert(errorCode[code]);
+          alert(errorCode[code] || errorCode['DEFAULT']);
 
-          reject({ error: e, code });
+          reject({ error: data, code });
         });
     });
 
@@ -74,7 +78,7 @@ export default class ApiConnection {
     path: string,
     params?: object,
     config?: AxiosRequestConfig & { silent?: boolean }
-  ) {
+  ): Promise<any> {
     return this.#responseHandler(this.#axios.get(path, { ...config, params }));
   }
 
@@ -82,7 +86,7 @@ export default class ApiConnection {
     path: string,
     data?: object,
     config?: AxiosRequestConfig & { silent?: boolean }
-  ) {
+  ): Promise<any> {
     return this.#responseHandler(this.#axios.post(path, data, config));
   }
 
@@ -90,7 +94,7 @@ export default class ApiConnection {
     path: string,
     data?: object,
     config?: AxiosRequestConfig & { silent?: boolean }
-  ) {
+  ): Promise<any> {
     return this.#responseHandler(this.#axios.put(path, data, config));
   }
 
@@ -98,7 +102,7 @@ export default class ApiConnection {
     path: string,
     data?: object,
     config?: AxiosRequestConfig & { silent?: boolean }
-  ) {
+  ): Promise<any> {
     return this.#responseHandler(this.#axios.delete(path, { ...config, data }));
   }
 }

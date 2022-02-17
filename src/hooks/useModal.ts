@@ -8,7 +8,7 @@ interface ModalOption {
   props?: any;
       nonModal?: boolean;
       duplicateCheck?: boolean;
-      animation:{
+      animation?:{
         in: boolean;
         class: string;
         duration?: number;
@@ -39,7 +39,7 @@ const useModal = (): ModalHookReturn => {
       animation:{
         in: false,
         class:'',
-        duration: 200000
+        duration: 200
       },
       nonModal: false,
       duplicateCheck: false,
@@ -55,10 +55,11 @@ const useModal = (): ModalHookReturn => {
         props,
         component,
         nonModal,
-        animation,
         resolve,
         reject,
       };
+
+      if(animation) modal.animation = animation;
 
       dispatch(addModal({ modal, duplicateCheck }));
     });

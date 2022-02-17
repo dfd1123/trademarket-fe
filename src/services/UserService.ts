@@ -3,8 +3,26 @@ import { useTypedSelector } from '@/store';
 import useAsyncData from '@/hooks/useAsyncData';
 import { TransactionInputType } from '@/types/TransactionType';
 import { RegisterInput } from '@/types/services/User';
+import ApiConnection from '@/modules/ApiConnection';
+import cookieService from './CookieService';
 
 class UserService {
+  #api;
+
+    constructor(){
+        this.#api = new ApiConnection();
+    }
+    
+  async emailLogin(body: {email:string, password: string}){
+    const result = await this.#api.post('/login', body);
+
+    console.log(result);
+
+    if(result.access_token){
+      cookieService.setAccessToken(result.access_token);
+    }
+  }
+
   register(params : RegisterInput) {
     const input : TransactionInputType = {
       Header: { function: 'D', termtype: 'HTS', trcode: 't113B' },
