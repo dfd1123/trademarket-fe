@@ -6,7 +6,7 @@ const businessInfo : Route[] = [
         path: '/info',
         element: <BusinessInfo/>,
         meta: {
-            isAuth: true,
+            // isAuth: true,
         }
     }
 ]

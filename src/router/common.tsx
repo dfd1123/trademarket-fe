@@ -37,34 +37,6 @@ const common : Route[] = [
     }
   },
   {
-    path: '/mypage', 
-    element: <MyPage />,
-    meta:{
-      isAuth: true,
-    },
-  },
-  {
-    path: '/term', 
-    element: <CommonInfo />,
-    meta:{
-      isAuth: true,
-    },
-  },
-  {
-    path: '/serviceInfo', 
-    element: <CommonInfo />,
-    meta:{
-      isAuth: true,
-    },
-  },
-  {
-    path: '/manageProfile', 
-    element: <ManageProfile />,
-    meta:{
-      isAuth: true,
-    }
-  },
-  {
     path: '/404',
     element: <NotFound />,
     meta:{

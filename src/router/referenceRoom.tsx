@@ -6,7 +6,7 @@ const referenceRoom : Route[]= [
         path: '/ref', 
         element: <ReferenceRoom />,
         meta:{
-            isAuth: true,
+            // isAuth: true,
         },
       },
 ]
