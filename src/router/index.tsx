@@ -6,6 +6,7 @@ import myPage from "@/router/myPage";
 import commonInfo from "@/router/commonInfo";
 import serviceInfo from "@/router/serviceInfo";
 import manageProfile from "@/router/manageProfile";
+import passwordChange from './passwordChange';
 import test from '@/router/test';
 import cookieService from "@/services/CookieService";
 import { setRouteInfo } from "@/store/info/infoReducer";
@@ -25,6 +26,7 @@ const routeList : Route[] = [
     ...commonInfo,
     ...serviceInfo,
     ...manageProfile,
+    ...passwordChange,
 ];
 
 export default function RouterView() {
