@@ -8,6 +8,7 @@ import {
 import DateSelectInput from '@/views/components/common/input/DateSelectInput';
 import FooterButton from '@/views/components/common/FooterButton';
 import BasicButton from '@/views/components/common/Button';
+import KmfImageViewer from '@/views/components/common/kmf/KmfImageViewer';
 
 const ManageProfile = () => {
   return (
@@ -18,10 +19,9 @@ const ManageProfile = () => {
         prevImgUrl="img/kmf/leftArrow.png"
       />
       <ContentWrapperStyle>
-        <ImageContainer>
-          <img src="img/kmf/profile_image.jpg" />
+        <KmfImageViewer imgUrl="img/kmf/profile_image.jpg" width="100%" height="262px">
           <FindImage imgUrl="img/kmf/find_img.png"></FindImage>
-        </ImageContainer>
+        </KmfImageViewer>
         <div className="input-form">
           <p className='title'>기본정보</p>
           <BasicInput className="text-input input-name" name="name" placeholder="이름을 입력해주세요." label="이름" />
@@ -124,18 +124,6 @@ const ContentWrapperStyle = styled.section`
       font-size: 17px;
       font-weight: 500;
     }
-  }
-`;
-
-const ImageContainer = styled.div`
-  width: 100%;
-  height: 262px;
-  position: relative;
-
-  img {
-    width: 100%;
-    height: 262px;
-    object-fit: cover;
   }
 `;
 
