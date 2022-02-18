@@ -5,16 +5,17 @@ import KmfHeader from '@/views/components/layouts/KmfHeader';
 import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
 import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
 import SearchBox from '@/views/components/referenceRoom/SearchBox';
-import referenceService from '@/services/ReferenceService';
 import { dateFormat } from '@/utils/dateUtils';
 import { RefrenceDataType } from '@/services/types/Reference';
+import useService from '@/hooks/useService';
 
 const ReferenceRoom = () => {
+  const services = useService();
   const [list, setList] = useState<RefrenceDataType[]>([]);
 
   const searchReference = async (searchKeyword = '') => {
     console.log(searchKeyword);
-    const {archives, archives_count} = await referenceService.getReferenceList({searchKeyword, limit:30, offset:0});
+    const {archives, archives_count} = await services.reference.getReferenceList({searchKeyword, limit:30, offset:0});
     setList(archives);
   };
 

@@ -4,9 +4,13 @@ import { ToastType } from "@/store/modal/types/toast";
 import { addToast, removeToast } from "@/store/modal/toast";
 import { removeModal } from "@/store/modal/modal";
 
-interface ToastOption {
+export interface ToastOption {
   type?: "success" | "warning";
   duration?: number;
+}
+
+export interface ToastFunctionType {
+  toast: (msg: string, options?: ToastOption) => void
 }
 
 const useToast = () => {

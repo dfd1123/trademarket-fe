@@ -9,8 +9,8 @@ import cookieService from './CookieService';
 class UserService {
   #api;
 
-    constructor(){
-        this.#api = new ApiConnection();
+    constructor(api : ApiConnection){
+        this.#api = api;
     }
     
   async emailLogin(body: {email:string, password: string}){
@@ -50,4 +50,4 @@ class UserService {
 }
 
 
-export default new UserService();
+export default UserService;

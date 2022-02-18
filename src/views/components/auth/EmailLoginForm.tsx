@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import userService from '@/services/UserService';
 import TextInput from '@/views/components/common/input/TextInput';
 import FooterButton from '@/views/components/common/FooterButton';
+import useService from '@/hooks/useService';
 
 const intialInput = {
   email: '',
@@ -11,7 +12,7 @@ const intialInput = {
 
 const EmailLoginForm = () => {
   const navigate = useNavigate();
-
+  const services = useService();
   const [inputs, setInputs] = useState(intialInput);
 
   const handleInputChange = (value: any, name: string) => {
@@ -25,7 +26,7 @@ const EmailLoginForm = () => {
     email: string;
     password: string;
   }) => {
-    await userService.emailLogin(inputs);
+    await services.user.emailLogin(inputs);
 
     navigate('/ref');
   };

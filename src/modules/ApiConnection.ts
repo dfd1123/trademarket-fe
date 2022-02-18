@@ -8,7 +8,7 @@ import axios, {
 import _get from 'lodash/get';
 import errorCode from '@/data/errorCode';
 import cookieService from '@/services/CookieService';
-import useToast from '@/hooks/useToast';
+import { ToastFunctionType } from '@/hooks/useToast';
 
 type CustomResponseFormat<T = any> = {
   response: T;
@@ -43,9 +43,11 @@ interface ApiResponse {
 export default class ApiConnection {
   #axios: CustomInstance;
   #baseURL: string = process.env.VITE_API_URL || '';
+  #toast;
 
-  constructor() {
+  constructor({toast}: ToastFunctionType) {
     this.#axios = axios.create({ baseURL: this.#baseURL });
+    this.#toast = toast;
 
     this.#axios.interceptors.request.use(function (config) {
       const accessToken = cookieService.getAccessToken();
@@ -68,7 +70,7 @@ export default class ApiConnection {
           const data = _get(e, 'response.data');
           const code: string = _get(e, 'response.data.errorCode');
 
-          alert(errorCode[code] || errorCode['DEFAULT']);
+          this.#toast(errorCode[code] || errorCode['DEFAULT']);
 
           reject({ error: data, code });
         });
