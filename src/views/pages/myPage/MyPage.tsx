@@ -7,7 +7,7 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import useModal from '@/hooks/useModal';
 import KmfModal from './KmfModal';
 import { BasicButton } from '@/views/components/common/Button';
-import { Switch } from '@/views/components/common/input/Switch';
+import { Switch } from '@/views/components/common/kmf/Switch';
 
 const MyPage = () => {
   const { openModal } = useModal();
