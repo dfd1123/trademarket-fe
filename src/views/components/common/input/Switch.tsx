@@ -1,10 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 
-export const Switch = () => {
+interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
+  onChange?: (value: any) => void;
+}
+
+export const Switch = ({onChange}: PropsType) => {
+
   return (
     <SwitchStyle className="switch-button">
-      <input type="checkbox" />
+      <input type="checkbox" onChange={onChange} />
       <span className="on-off"></span>
     </SwitchStyle>
   );
