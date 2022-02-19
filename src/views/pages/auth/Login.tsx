@@ -1,14 +1,12 @@
-import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import loginBg from '@/assets/img/kmf/bg/login-bg.png';
 import icoEmail from '@/assets/img/kmf/ico/ico-email.svg';
 import icoKakao from '@/assets/img/kmf/ico/ico-kakao.svg';
 import icoGoogle from '@/assets/img/kmf/ico/ico-google.svg';
-import { Link, Outlet } from 'react-router-dom';
 import { BasicButton } from '@/views/components/common/Button';
 
-function Login() {
+const Login = () => {
   const navigate = useNavigate();
 
   return (

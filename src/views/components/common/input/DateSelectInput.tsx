@@ -1,4 +1,6 @@
+import styled from 'styled-components';
 import { useState } from "react";
+import icoCalender from '@/assets/img/kmf/ico/ico-calender.svg';
 import useModal from "@/hooks/useModal";
 import TextInput from "@/views/components/common/input/TextInput";
 import ModalDatePicker from "@/views/components/common/modal/ModalDatePicker";
@@ -24,7 +26,7 @@ const DateSelectInput = ({
   const { openModal } = useModal();
 
   const openDatePickerModal = async () => {
-    const result = await openModal(ModalDatePicker, {props: {initialFocusedDate: date}});
+    const result = await openModal(ModalDatePicker, {props: {initialFocusedDate: date, class:'date-select'}});
     console.log(result);
     setDate(result);
     if (onChange) {
@@ -34,7 +36,7 @@ const DateSelectInput = ({
   };
 
   return (
-    <>
+    <DateSelectInputStyle>
       <TextInput
         type="text"
         label={label}
@@ -47,8 +49,19 @@ const DateSelectInput = ({
         placeholder={placeholder}
         onClick={openDatePickerModal}
       />
-    </>
+    </DateSelectInputStyle>
   );
 };
+
+const DateSelectInputStyle = styled.span`
+${TextInput}{
+  input{
+    padding-right:38px;
+    background-image: url(${icoCalender});
+    background-repeat: no-repeat;
+    background-position: calc(100% - 8px) center;
+  }
+}
+`
 
 export default DateSelectInput;

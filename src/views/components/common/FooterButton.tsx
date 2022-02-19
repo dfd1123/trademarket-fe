@@ -8,11 +8,11 @@ interface PropTypes extends React.HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
 }
 
-const FooterButton = ({ children, shared, onClick }: PropTypes) => {
+const FooterButton = ({ children, shared, disabled = false, onClick }: PropTypes) => {
   return (
     <FooterButtonStyle>
       {shared ? <BasicButton>공유</BasicButton> : ''}
-      <BasicButton during={1000} onClick={onClick}>{children}</BasicButton>
+      <BasicButton during={1000} disabled={disabled} onClick={onClick}>{children}</BasicButton>
     </FooterButtonStyle>
   );
 };
@@ -35,6 +35,11 @@ const FooterButtonStyle = styled.div`
       line-height: 25px;
       color: #fff;
       background-color: #1574bd;
+
+      &:disabled{
+          color:#bbb;
+          background-color: #eee;
+      }
     }
   }
 `;

@@ -11,11 +11,13 @@ const Confirm = ({title, msg, button, resolve}: DialogComponentPropsType) => {
     return (
         <DialogTemplete>
            {title ? (<strong className="title">{title}</strong>):''}
-            <p>{msg}</p>
+           <div className="body">
+           <p className="msg">{msg}</p>
             <div className="btn-holder">
-                <BasicButton className="btn-yes" onClick={() => handleButtonClick(true)}>{button.yes}</BasicButton>
                 <BasicButton className="btn-no" onClick={() => handleButtonClick(false)}>{button.no}</BasicButton>
+                <BasicButton className="btn-yes" onClick={() => handleButtonClick(true)}>{button.yes}</BasicButton>
             </div>
+           </div>
         </DialogTemplete>
     );
 }

@@ -48,7 +48,7 @@ export const ModalStyle = styled(ModalTemplate)`
     }
 
     .cont {
-      background-color: #fff;
+
     }
   }
 `;

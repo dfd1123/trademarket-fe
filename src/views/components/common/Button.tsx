@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Ripples from "react-ripples";
 
-interface PropTypes extends React.HTMLAttributes<HTMLButtonElement> {
+interface PropTypes extends React.HTMLAttributes<HTMLButtonElement | HTMLElement> {
   children: React.ReactNode;
   ripple?: boolean;
   color?: string;
@@ -14,11 +14,11 @@ interface PropTypes extends React.HTMLAttributes<HTMLButtonElement> {
 const Button = ({ children, ripple, color, during, className, onClick, disabled}: PropTypes) => {
   ripple = ripple ?? true;
   color = color ?? "rgba(0, 0, 0, .3)";
-  during = during ?? 600;
+  during = during ?? 900;
 
-  return ripple && !disabled ? (
-    <Ripples className={`btn ${className}`} color={color} during={during}>
-      <button onClick={onClick} disabled={disabled}>{children}</button>
+  return ripple ? (
+    <Ripples className={`btn ${className}`} color={color} during={during}  onClick={onClick}>
+      <button disabled={disabled}>{children}</button>
     </Ripples>
   ) : (
     <button className={`btn ${className}`} onClick={onClick} disabled={disabled}>{children}</button>
@@ -26,6 +26,7 @@ const Button = ({ children, ripple, color, during, className, onClick, disabled}
 };
 
 export const BasicButton = styled(Button)`
+    position:relative;
     display: inline-block;
     padding: 0 0;
     font-size: 1em;
@@ -33,6 +34,14 @@ export const BasicButton = styled(Button)`
     text-align: center;
     border-radius: 4px;
     border: 1px solid #ddd;
+
+    >button{
+      min-width: inherit;
+      min-height: inherit;
+      width:inherit;
+      height:inherit;
+      color:inherit;
+    }
 `;
 
 export const NoBorderButton = styled(BasicButton)`

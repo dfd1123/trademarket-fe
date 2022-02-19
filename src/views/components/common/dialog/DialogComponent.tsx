@@ -1,12 +1,12 @@
-import { DialogType } from "@/store/modal/types/dialog";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { CSSTransition } from "react-transition-group";
-import Component from "@/views/components/common/Component";
-import Alert from "@/views/components/common/dialog/Alert";
-import Confirm from "@/views/components/common/dialog/Confirm";
-import Prompt from "@/views/components/common/dialog/Prompt";
-import useDialog from "@/hooks/useDialog";
+import { DialogType } from '@/store/modal/types/dialog';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { CSSTransition } from 'react-transition-group';
+import Component from '@/views/components/common/Component';
+import Alert from '@/views/components/common/dialog/Alert';
+import Confirm from '@/views/components/common/dialog/Confirm';
+import Prompt from '@/views/components/common/dialog/Prompt';
+import useDialog from '@/hooks/useDialog';
 
 interface PropsType {
   dialog: DialogType;
@@ -18,9 +18,9 @@ const DialogComponent = ({ dialog }: PropsType) => {
   const animationDuration = 250;
   let component = Alert;
 
-  if (dialog.type === "confirm") {
+  if (dialog.type === 'confirm') {
     component = Confirm;
-  } else if (dialog.type === "prompt") {
+  } else if (dialog.type === 'prompt') {
     component = Prompt;
   }
 
@@ -45,13 +45,13 @@ const DialogComponent = ({ dialog }: PropsType) => {
       history.go(1);
     };
 
-    history.pushState(null, "", location.href);
-    window.addEventListener("popstate", preventGoBack);
+    history.pushState(null, '', location.href);
+    window.addEventListener('popstate', preventGoBack);
 
     return () => {
-        history.go(-1);
-        window.removeEventListener("popstate", preventGoBack);
-    }
+      history.go(-1);
+      window.removeEventListener('popstate', preventGoBack);
+    };
   }, []);
 
   return (
@@ -78,14 +78,14 @@ const DialogComponentStyle = styled.div<{ animationDuration: number }>`
     }
 
     &.dialog-enter {
-        opacity: 0;
+      opacity: 0;
       .cont {
         opacity: 0;
         transform: scale3d(1.1, 1.1, 1.1);
       }
       &-active {
-          opacity: 1;
-          transition: opacity ${(props) => props.animationDuration || 0}ms;
+        opacity: 1;
+        transition: opacity ${(props) => props.animationDuration || 0}ms;
         .cont {
           opacity: 1;
           transform: scale3d(1, 1, 1);
@@ -102,13 +102,13 @@ const DialogComponentStyle = styled.div<{ animationDuration: number }>`
       }
     }
     &.dialog-exit {
-        opacity: 1;
+      opacity: 1;
       .cont {
         opacity: 1;
       }
       &-active {
         opacity: 0;
-          transition: opacity ${(props) => props.animationDuration || 0}ms;
+        transition: opacity ${(props) => props.animationDuration || 0}ms;
         .cont {
           opacity: 0;
           transition: opacity ${(props) => props.animationDuration || 0}ms;

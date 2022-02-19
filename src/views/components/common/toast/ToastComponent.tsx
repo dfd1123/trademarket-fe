@@ -3,7 +3,7 @@ import styled from "styled-components";
 import useToast from "@/hooks/useToast";
 import { CSSTransition } from "react-transition-group";
 import { ToastType } from "@/store/modal/types/toast";
-import { TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
+import { SMALL_MOBILE_SIZE, TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
 
 interface PropsType {
   toast: ToastType;
@@ -52,6 +52,7 @@ const ToastComponentStyle = styled.div<{
   pointer-events: none;
 
   > div {
+      display:inline-block;
     margin-top: 10px;
     cursor: pointer;
     pointer-events: auto;
@@ -142,6 +143,13 @@ const ToastComponentStyle = styled.div<{
         transition: opacity ${(props) => props.animationDuration}ms,
           transform ${(props) => props.animationDuration}ms;
       }
+    }
+  }
+
+  @media (max-width: ${SMALL_MOBILE_SIZE}){
+    > div {
+        width:95%;
+      max-width:300px;
     }
   }
 `;

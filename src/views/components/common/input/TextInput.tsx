@@ -7,6 +7,8 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   reset?: boolean;
+  number?:boolean;
+  autocomplete?:'on'|'off'
   onEnter?: (value : any , name?: any) => void;
   onChange?: (value : any , name?: any) => void;
 }
@@ -20,7 +22,10 @@ const TextInput = ({
   placeholder = "",
   readOnly = false,
   disabled = false,
+  tabIndex = 0,
   reset = false,
+  number = false,
+  autoComplete = 'off',
   onEnter,
   onChange,
   onClick
@@ -54,7 +59,11 @@ const TextInput = ({
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const {value, name} = e.target;
+    let {value, name} = e.target;
+    if(number) {
+      value = value.replace(/[^0-9]/g,'');
+      console.log(value)
+    }
     setText(value);
     if (onChange) onChange(value, name);
   };
@@ -79,6 +88,8 @@ const TextInput = ({
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}
+          tabIndex={tabIndex}
+          autoComplete={autoComplete}
           onKeyPress={handleKeyPress}
           onChange={handleValueChange}
           onFocus={() => toggleFocus(true)}

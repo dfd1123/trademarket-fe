@@ -1,6 +1,9 @@
 import {Route} from '@/types/Route';
 import EmailLogin from '@/views/pages/auth/EmailLogin';
+import FindId from '@/views/pages/auth/FindId';
 import Login from "@/views/pages/auth/Login";
+import PasswordReset from '@/views/pages/auth/PasswordReset';
+import Register from '@/views/pages/auth/Register';
 
 const auth : Route[] = [
     {
@@ -9,8 +12,20 @@ const auth : Route[] = [
     },
     {
         path: '/emailLogin',
-        element: <EmailLogin/>
-    }
+        element: <EmailLogin />
+    },
+    {
+        path: '/register',
+        element: <Register/>
+    },
+    {
+        path: '/find/id',
+        element: <FindId/>
+    },
+    {
+        path: '/password/reset',
+        element: <PasswordReset/>
+    },
 ]
 
 export default auth;

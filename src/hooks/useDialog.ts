@@ -4,7 +4,7 @@ import { DialogType } from '@/store/modal/types/dialog';
 
 interface DialogOption {
   title?: string;
-  msg: string;
+  msg?: string;
   value?: string | number;
   button?:{
     yes: string;

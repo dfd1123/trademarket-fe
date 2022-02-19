@@ -19,13 +19,7 @@ const EmailLoginForm = () => {
     setInputs({ ...inputs, [name]: value });
   };
 
-  const submitHandler = async ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => {
+  const submitHandler = async () => {
     await services.user.emailLogin(inputs);
 
     navigate('/ref');
@@ -48,9 +42,9 @@ const EmailLoginForm = () => {
         placeholder="비밀번호를 입력해주세요."
         reset
         onChange={handleInputChange}
-        onEnter={() => submitHandler(inputs)}
+        onEnter={submitHandler}
       />
-      <FooterButton onClick={() => submitHandler(inputs)}>로그인</FooterButton>
+      <FooterButton disabled={!inputs.email || !inputs.password} onClick={submitHandler}>로그인</FooterButton>
     </>
   );
 };
