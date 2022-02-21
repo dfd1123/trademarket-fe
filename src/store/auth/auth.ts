@@ -10,12 +10,12 @@ const authSlice = createSlice({
     name: 'authSlice',
     initialState,
     reducers: {
-        setAuth(state, action: PayloadAction<{ user?: UserInfo, accessToken?: string}>){
-            const {user, accessToken} = action.payload;
+        setAuth(state, action: PayloadAction<{ user?: UserInfo, access_token?: string}>){
+            const {user, access_token} = action.payload;
 
-            if(accessToken && user){
+            if(access_token && user){
                 state.user = user;
-                state.accessToken = accessToken;
+                state.accessToken = access_token;
             }else{
                 state.user = null;
                 state.accessToken = null;

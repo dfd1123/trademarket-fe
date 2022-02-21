@@ -6,6 +6,8 @@ import useToast from "@/hooks/useToast";
 import useDialog from '@/hooks/useDialog';
 import TestModal from '@/views/components/common/modal/Test';
 import {BasicButton} from '@/views/components/common/Button';
+import CircleLoading from '@/views/components/common/CircleLoading';
+import Loading from '../components/common/Loading';
 
 
 function Test1() {
@@ -63,6 +65,8 @@ function Test1() {
         <BasicButton onClick={openConfirm}>Confirm</BasicButton>
         <BasicButton onClick={openPrompt}>Prompt</BasicButton>
       </div>
+      <CircleLoading />
+      <Loading scale={0.8} loading={true} />
     </div>
   );
 }

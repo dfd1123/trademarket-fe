@@ -47,7 +47,10 @@ const RegisterForm = () => {
     console.log(data);
     const result = await services.user.register(inputs);
 
-    if (result.accessToken) {
+    console.log(result);
+
+    if (result.access_token) {
+      console.log('awdawdadw');
       dispatch(setAuth(result));
       toast('회원가입이 완료되었습니다. 관리자 승인 후 이용 가능하십니다.', {
         type: 'success',
