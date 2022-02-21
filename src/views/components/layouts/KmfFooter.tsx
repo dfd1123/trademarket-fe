@@ -1,14 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom';
 
 const KmfFooter = () => {
+  const navigate = useNavigate();
+
   return (
     <Container>
-      <LinkButton>공지사항</LinkButton>
-      <LinkButton>사업안내</LinkButton>
-      <LinkButton>회원검색</LinkButton>
-      <LinkButton>자료실</LinkButton>
-      <LinkButton>마이페이지</LinkButton>
+      <LinkButton onClick={() => navigate('/')}>공지사항</LinkButton>
+      <LinkButton onClick={() => navigate('/info')}>사업안내</LinkButton>
+      <LinkButton onClick={() => navigate('/')}>회원검색</LinkButton>
+      <LinkButton onClick={() => navigate('/ref')}>자료실</LinkButton>
+      <LinkButton onClick={() => navigate('/mypage')}>마이페이지</LinkButton>
     </Container>
   );
 };

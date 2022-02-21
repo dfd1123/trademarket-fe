@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import useService from '@/hooks/useService';
+import { RefrenceDataType } from '@/services/types/Reference';
+import { dateFormat } from '@/utils/dateUtils';
+import KmfRefrenceList from '@/views/components/common/kmf/KmfRefrenceList';
+import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
 import KmfFooter from '@/views/components/layouts/KmfFooter';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
-import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
-import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
 import SearchBox from '@/views/components/referenceRoom/SearchBox';
-import { dateFormat } from '@/utils/dateUtils';
-import { RefrenceDataType } from '@/services/types/Reference';
-import useService from '@/hooks/useService';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 const ReferenceRoom = () => {
   const services = useService();
@@ -15,7 +15,12 @@ const ReferenceRoom = () => {
 
   const searchReference = async (searchKeyword = '') => {
     console.log(searchKeyword);
-    const {archives, archives_count} = await services.reference.getReferenceList({searchKeyword, limit:30, offset:0});
+    const { archives, archives_count } =
+      await services.reference.getReferenceList({
+        searchKeyword,
+        limit: 30,
+        offset: 0,
+      });
     setList(archives);
   };
 
@@ -25,15 +30,17 @@ const ReferenceRoom = () => {
 
   return (
     <ReferenceRoomStyle>
-      <KmfHeader headerText="자료실" />
+      <KmfHeader headerText="자료실" prev />
       <SearchBox search={searchReference} />
       <span className="item-cnt">총 {list.length} 건</span>
       <div className="list-holder">
-        {list.map(item => (
-          <KmfListWrapper key={`ref-${item.ar_id}`} imgUrl={item.ar_file ? 'img/kmf/download.png' : ''}>
-            <KmfLinkedList
+        {list.map((item) => (
+          <KmfListWrapper
+            key={`ref-${item.ar_id}`}
+            imgUrl={item.ar_file ? 'img/kmf/download.png' : ''}>
+            <KmfRefrenceList
               title={item.ar_title}
-              to="/info"
+              // type="download"
               date={dateFormat(new Date(item.created_at), 'yyyy - MM - dd')}
             />
           </KmfListWrapper>
@@ -52,6 +59,7 @@ const ReferenceRoomStyle = styled.div`
   .search-box {
     background-color: #1574bd;
     padding: 16px;
+
     .search-inp {
       width: 100%;
     }

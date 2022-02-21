@@ -1,65 +1,132 @@
-import React, {useState, useRef} from 'react';
-import styled from 'styled-components';
-import KmfFooter from '@/views/components/layouts/KmfFooter';
-import KmfHeader from '@/views/components/layouts/KmfHeader';
-import {
-  BasicInput,
-} from '@/views/components/common/input/TextInput';
-import DateSelectInput from '@/views/components/common/input/DateSelectInput';
-import FooterButton from '@/views/components/common/FooterButton';
-import BasicButton from '@/views/components/common/Button';
-import KmfImageViewer from '@/views/components/common/kmf/KmfImageViewer';
+import basicProfile from '@/assets/img/kmf/basicProfile.jpeg';
 import icoFindImg from '@/assets/img/kmf/ico/ico-img-find.svg';
-import basicProfile from '@/assets/img/kmf/basicProfile.jpeg'
+import BasicButton from '@/views/components/common/Button';
+import DateSelectInput from '@/views/components/common/input/DateSelectInput';
+import { BasicInput } from '@/views/components/common/input/TextInput';
+import KmfImageViewer from '@/views/components/common/kmf/KmfImageViewer';
+import KmfHeader from '@/views/components/layouts/KmfHeader';
+import React, { useReducer, useRef, useState, useEffect } from 'react';
+import styled from 'styled-components';
+
+const initialState = {
+  imgUrl: '',
+  name: '',
+  birth: new Date(),
+  phone: '',
+  company: '',
+  address: '',
+  artist: '',
+  id: '',
+};
+
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case 'setState':
+      return { ...state, [action.name]: action.payload };
+  }
+}
 
 const ManageProfile = () => {
-  const [defaultImgUrl, setDefaultImgUrl] = useState(basicProfile);
+  const [imgUrl, setImgUrl] = useState(basicProfile);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleChangeFile = (e) => {
     console.log('event', e);
-    if(!e?.target?.files) return;
+    if (!e?.target?.files) return;
     const imgFile = e.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
       const imgBase64 = typeof reader.result === 'string' ? reader.result : '';
-      setDefaultImgUrl(imgBase64);
-    }
+      setImgUrl(imgBase64);
+    };
     reader.readAsDataURL(imgFile);
-  }
+  };
+
+  useEffect(() => {
+    console.log('state', state);
+  }, [state])
 
   return (
     <ContainerStyle>
-      <KmfHeader
-        headerText={'프로필관리'}
-          prev
-      />
+      <KmfHeader headerText={'프로필관리'} prev />
       <ContentWrapperStyle>
-        <KmfImageViewer imgUrl={defaultImgUrl} width="100%" height="262px" >
-          <input type="file" accept="image/*" hidden ref={inputRef} onChange={handleChangeFile}/>
-          <FindImage className="find-img" imgUrl={icoFindImg} onClick={() => {
-            console.log('ref', inputRef);
-            inputRef?.current?.click();
-          }}></FindImage>
+        <KmfImageViewer imgUrl={imgUrl} width="100%" height="262px">
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            ref={inputRef}
+            onChange={handleChangeFile}
+          />
+          <FindImage
+            className="find-img"
+            imgUrl={icoFindImg}
+            onClick={() => {
+              console.log('ref', inputRef);
+              inputRef?.current?.click();
+            }} />
         </KmfImageViewer>
         <div className="input-form">
-          <p className='title'>기본정보</p>
-          <BasicInput className="text-input input-name" name="name" placeholder="이름을 입력해주세요." label="이름" />
-          <DateSelectInput className="text-input" name="birth" placeholder="날짜를 선택해주세요." label="생년월일" />
-          <BasicInput className="text-input" name="phone" placeholder="숫자만 입력해주세요." label="연락처" number/>
-          <p className='title info'>소속사 정보</p>
-          <BasicInput className="text-input input-company" name="company" placeholder="" label="현재 소속사" />
-          <BasicInput className="text-input input-address" name="address" placeholder="주소를 검색해주세요." label="소속사 주소" />
-          <BasicInput className="text-input input-full-address" name="full-address" placeholder="상세주소를 입력해주세요." />
-          <BasicInput className="text-input input-artist" name="artist" placeholder="담당 아티스트명을 알려주세요." label="담당 아티스트" />
+          <p className="title">기본정보</p>
+          <BasicInput
+            className="text-input input-name"
+            name="name"
+            placeholder="이름을 입력해주세요."
+            label="이름"
+          />
+          <DateSelectInput
+            className="text-input"
+            name="birth"
+            placeholder="날짜를 선택해주세요."
+            label="생년월일"
+          />
+          <BasicInput
+            className="text-input"
+            name="phone"
+            placeholder="숫자만 입력해주세요."
+            label="연락처"
+            number
+          />
+          <p className="title info">소속사 정보</p>
+          <BasicInput
+            className="text-input input-company"
+            name="company"
+            placeholder=""
+            label="현재 소속사"
+          />
+          <BasicInput
+            className="text-input input-address"
+            name="address"
+            placeholder="주소를 검색해주세요."
+            label="소속사 주소"
+          />
+          <BasicInput
+            className="text-input input-full-address"
+            name="full-address"
+            placeholder="상세주소를 입력해주세요."
+          />
+          <BasicInput
+            className="text-input input-artist"
+            name="artist"
+            placeholder="담당 아티스트명을 알려주세요."
+            label="담당 아티스트"
+          />
 
-          <p className='title info'>등록정보</p>
+          <p className="title info">등록정보</p>
           <p className="id">아이디</p>
           <p className="email">asdf@naver.com</p>
           <div className="kmf-fighting">KMF 화이팅!</div>
         </div>
       </ContentWrapperStyle>
-      <BasicButton className="footer-btn">저장하기</BasicButton>
+      <BasicButton
+        className="footer-btn"
+        onClick={() => {
+          console.log('click');
+          dispatch({ type: 'setState', name: 'imgUrl', payload: imgUrl});
+        }}>
+        저장하기
+      </BasicButton>
     </ContainerStyle>
   );
 };
@@ -67,7 +134,7 @@ const ManageProfile = () => {
 const ContainerStyle = styled.div`
   display: flex;
   flex-direction: column;
-  
+
   .footer-btn {
     height: 78px;
     display: flex;
@@ -114,7 +181,7 @@ const ContentWrapperStyle = styled.section`
       color: #1e1e1e;
     }
 
-    input[name~="address"] {
+    input[name~='address'] {
       margin-bottom: -6px;
     }
   }
@@ -169,7 +236,7 @@ const FindImage = styled.div<{ imgUrl?: string }>`
   left: calc(50% - 20px);
   z-index: 1;
   display: flex;
-  background-image: url(${props => props.imgUrl});
+  background-image: url(${(props) => props.imgUrl});
   background-size: 40px;
   background-repeat: no-repeat;
 

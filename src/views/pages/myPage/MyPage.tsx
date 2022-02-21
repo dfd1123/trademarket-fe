@@ -1,24 +1,31 @@
-import React from 'react';
-import styled from 'styled-components';
-import KmfFooter from '@/views/components/layouts/KmfFooter';
-import KmfHeader from '@/views/components/layouts/KmfHeader';
-import { dateFormat } from '@/utils/dateUtils';
-import { styled as MuiStyled } from '@mui/material/styles';
 import useModal from '@/hooks/useModal';
-import KmfModal from './KmfModal';
 import { BasicButton } from '@/views/components/common/Button';
 import { Switch } from '@/views/components/common/kmf/Switch';
+import KmfFooter from '@/views/components/layouts/KmfFooter';
+import KmfHeader from '@/views/components/layouts/KmfHeader';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import KmfModal from './KmfModal';
 
 const MyPage = () => {
   const { openModal } = useModal();
+  const navigate = useNavigate();
 
-  const openTestModal = async () => {
+  const openTestModal = async (
+    title: string,
+    content: string,
+    subTitle: string,
+    subContent: string,
+    isConfirm: boolean
+  ) => {
     const result = await openModal(KmfModal, {
       props: {
-        title: 'sdas',
-        content: 'dadfasfasfas',
-        subTitle: 'ssss',
-        subContent: 'asdfasdfasfasf',
+        title: title,
+        content: content,
+        subTitle: subTitle,
+        subContent: subContent,
+        isConfirm: isConfirm,
       },
     });
 
@@ -34,18 +41,55 @@ const MyPage = () => {
       </PushSettingStyle>
       <ListWrapperStyle>
         {/* link */}
-        <ModalButton onClick={openTestModal}>프로필 관리</ModalButton>
-        {/* link */}
-        <ModalButton onClick={openTestModal}>비밀번호 변경</ModalButton>
-        {/* link */}
-        <ModalButton onClick={openTestModal}>서비스 이용약관</ModalButton>
-        {/* link */}
-        <ModalButton onClick={openTestModal}>
-          개인정보 수집 및 활용지칩
+        <ModalButton onClick={() => navigate('/manageProfile')}>
+          프로필 관리
         </ModalButton>
-        <ModalButton onClick={openTestModal}>로그아웃</ModalButton>
-        <ModalButton onClick={openTestModal}>회원탈퇴</ModalButton>
-        <ModalButton onClick={openTestModal}>앱버전</ModalButton>
+        {/* link */}
+        <ModalButton onClick={() => navigate('/passwordChange')}>
+          비밀번호 변경
+        </ModalButton>
+        {/* link */}
+        <ModalButton onClick={() => navigate('/serviceInfo')}>
+          서비스 이용약관
+        </ModalButton>
+        {/* link */}
+        <ModalButton onClick={() => navigate('/term')}>개인정보 수집 및 활용지칩</ModalButton>
+        <ModalButton
+          onClick={() =>
+            openTestModal(
+              '로그아웃 확인',
+              'KMF Members에서 로그아웃 하시겠어요?',
+              '',
+              '',
+              true
+            )
+          }>
+          로그아웃
+        </ModalButton>
+        <ModalButton
+          onClick={() =>
+            openTestModal(
+              '회원탈퇴안내',
+              '회원탈퇴는 사무국으로 문의해주세요.',
+              'KMF 사무국 연락처',
+              '02-999-9999',
+              false
+            )
+          }>
+          회원탈퇴
+        </ModalButton>
+        <ModalButton
+          onClick={() =>
+            openTestModal(
+              '앱버전',
+              '현재 앱의 버전은 v.1.0.0 입니다.',
+              '',
+              '',
+              false
+            )
+          }>
+          앱버전
+        </ModalButton>
       </ListWrapperStyle>
       <FooterStyle />
     </ContainerStyle>
@@ -91,6 +135,7 @@ const ModalButton = styled(BasicButton)`
   border: 0;
   border-bottom: 1px solid #f1f1f1;
   padding: 0;
+
   button {
     width: 100%;
     height: 100%;
