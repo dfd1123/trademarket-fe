@@ -32,7 +32,7 @@ const TextInput = ({
 }: PropsType) => {
   const isSearch = type === "search";
   const input = useRef<HTMLInputElement>(null);
-  const [text, setText] = useState('');
+  const [text, setText] = useState(value || '');
   const [focus, setFocus] = useState(false);
 
   const handleEnter = () => {
@@ -84,7 +84,7 @@ const TextInput = ({
           ref={input}
           type={type}
           name={name}
-          value={text}
+          value={value || text}
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}

@@ -7,6 +7,7 @@ import modalSlice from '@/store/modal/modal';
 import dialogSlice from '@/store/modal/dialog';
 import toastSlice from '@/store/modal/toast';
 import infoReducer from '@/store/info/infoReducer';
+import authSlice from '@/store/auth/auth';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Selector<T> = (state: RootState) => T;
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   modalSlice,
   dialogSlice,
   toastSlice,
-  infoReducer
+  infoReducer,
+  authSlice
 });
 
 const store = configureStore({

@@ -1,28 +1,41 @@
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import { setAuth } from '@/store/auth/auth';
+import useToast from '@/hooks/useToast';
 import useService from '@/hooks/useService';
 import TextInput from '@/views/components/common/input/TextInput';
 import AddressInput from '@/views/components/common/input/AddressInput';
-import useDialog from '@/hooks/useDialog';
 import FooterButton from '@/views/components/common/FooterButton';
-import DateSelectInput from '../common/input/DateSelectInput';
+import DateSelectInput from '@/views/components/common/input/DateSelectInput';
 
 const intialInput = {
   name: '',
-  birthday: '',
-  phone_number: '',
-  agency: '',
-  agency_address: '',
-  agency_address_detail: '',
+  email: '',
+  birth: '',
+  phone: '',
+  company: '',
+  address1: '',
+  address2: '',
   password: '',
-  confirmPassword: '',
+  password_confirm: '',
 };
 
-const PasswordResetForm = () => {
+const RegisterForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const services = useService();
   const [inputs, setInputs] = useState(intialInput);
   const [correct, setCorrect] = useState(false);
-  const { alert } = useDialog();
+  const [validate, setValidate] = useState(false);
+  const { toast } = useToast();
+
+  const checkValidate = () => {
+    let check = Object.values(inputs).every((input) => Boolean(input));
+    check = inputs.password.length >= 8 && inputs.password.length <= 20;
+    setValidate(check);
+  };
 
   const handleInputChange = (value: any, name: string) => {
     console.log(name, value);
@@ -32,11 +45,23 @@ const PasswordResetForm = () => {
   const submitHandler = async () => {
     const data = { ...inputs };
     console.log(data);
-    // await services.user.emailLogin(inputs);
+    const result = await services.user.register(inputs);
+
+    if (result.accessToken) {
+      dispatch(setAuth(result));
+      toast('회원가입이 완료되었습니다. 관리자 승인 후 이용 가능하십니다.', {
+        type: 'success',
+      });
+      navigate('/mypage');
+    }
   };
 
   useEffect(() => {
-    setCorrect(inputs.password === inputs.confirmPassword);
+    checkValidate();
+    setCorrect(
+      inputs.password === inputs.password_confirm &&
+        Boolean(inputs.password && inputs.password_confirm)
+    );
   }, [inputs]);
 
   return (
@@ -52,7 +77,7 @@ const PasswordResetForm = () => {
           onChange={handleInputChange}
         />
         <DateSelectInput
-          name="birthday"
+          name="birth"
           label="생년월일"
           placeholder="날짜를 선택해주세요."
           reset
@@ -60,7 +85,7 @@ const PasswordResetForm = () => {
         />
         <TextInput
           type="text"
-          name="phone_number"
+          name="phone"
           label="연락처"
           placeholder="숫자만 입력해주세요."
           number
@@ -72,13 +97,13 @@ const PasswordResetForm = () => {
         <h6>소속사정보</h6>
         <TextInput
           type="text"
-          name="agency"
+          name="company"
           label="현재 소속사"
           reset
           onChange={handleInputChange}
         />
         <AddressInput
-          name="agency_address"
+          name="address1"
           label="소속사 주소"
           placeholder="주소를 검색하세요."
           reset
@@ -86,7 +111,7 @@ const PasswordResetForm = () => {
         />
         <TextInput
           type="text"
-          name="agency_address_detail"
+          name="address2"
           placeholder="상세주소를 입력해주세요."
           reset
           onChange={handleInputChange}
@@ -95,8 +120,8 @@ const PasswordResetForm = () => {
       <div className="article">
         <h6>접속정보</h6>
         <TextInput
-          type="password"
-          name="password"
+          type="email"
+          name="email"
           label="아이디"
           placeholder="abc@mail.com"
           reset
@@ -110,15 +135,23 @@ const PasswordResetForm = () => {
           reset
           onChange={handleInputChange}
         />
+        {inputs.password &&
+        (inputs.password.length < 8 || inputs.password.length > 20) ? (
+          <span className={`status incorrect`}>
+            8자리에서 20자리 이하로 입력해주세요.
+          </span>
+        ) : (
+          ''
+        )}
         <TextInput
           type="password"
-          name="confirmPassword"
+          name="password_confirm"
           label="비밀번호 확인"
           reset
           onChange={handleInputChange}
           onEnter={submitHandler}
         />
-        {inputs.confirmPassword ? (
+        {inputs.password_confirm ? (
           <span className={`status ${correct ? 'correct' : 'incorrect'}`}>
             {correct ? '비밀번호가 일치합니다' : '비밀번호가 불일치합니다.'}
           </span>
@@ -126,8 +159,8 @@ const PasswordResetForm = () => {
           ''
         )}
       </div>
-      <FooterButton disabled={!correct} onClick={submitHandler}>
-      KMF 멤버스 가입신청
+      <FooterButton disabled={!correct || !validate} onClick={submitHandler}>
+        KMF 멤버스 가입신청
       </FooterButton>
     </PasswordResetFormStyle>
   );
@@ -166,4 +199,4 @@ const PasswordResetFormStyle = styled.div`
   }
 `;
 
-export default PasswordResetForm;
+export default RegisterForm;

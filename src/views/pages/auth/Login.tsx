@@ -9,6 +9,10 @@ import { BasicButton } from '@/views/components/common/Button';
 const Login = () => {
   const navigate = useNavigate();
 
+  const socialLogin = (social : string) => {
+    location.href = `${process.env.VITE_API_URL}/${social}`;
+  }
+
   return (
     <LoginContainerStyle>
       <div className="main-tit">
@@ -18,10 +22,10 @@ const Login = () => {
       <div className="login-btn-holder">
         <div>
           <span className="label">SNS로 시작</span>
-          <BasicButton className="btn-kakao" during={1000}>
+          <BasicButton className="btn-kakao" during={1000} onClick={() => socialLogin('kakao')}>
             카카오로 시작하기
           </BasicButton>
-          <BasicButton className="btn-google" during={1000}>
+          <BasicButton className="btn-google" during={1000} onClick={() => socialLogin('google')}>
             구글로 시작하기
           </BasicButton>
           <BasicButton className="btn-email" during={1000} onClick={() => navigate('/emailLogin')}>
