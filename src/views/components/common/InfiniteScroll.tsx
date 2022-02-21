@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface PropTypes {
     children: React.ReactNode;
@@ -8,10 +8,11 @@ interface PropTypes {
 
 const InfiniteScroll = ({children, loading, loadMore} : PropTypes) => {
     const pageEnd = useRef(null);
+    const [observer, setObserver] = useState<IntersectionObserver | null>(null);
 
-    useEffect(() => {
+    useEffect(() : any => {
         if(pageEnd.current){
-            const observer = new IntersectionObserver(
+            const io = new IntersectionObserver(
                 (entries) => {
                   if (entries[0].isIntersecting) {
                     loadMore();
@@ -20,8 +21,12 @@ const InfiniteScroll = ({children, loading, loadMore} : PropTypes) => {
                 { threshold: 1 },
               );
 
-              observer.observe(pageEnd.current);
+              setObserver(io);
+
+              observer && observer.observe(pageEnd.current);
         }
+
+        return () => observer && observer.disconnect();
     }, [pageEnd])
     return (
         <>
