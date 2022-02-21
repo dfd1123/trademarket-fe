@@ -13,5 +13,5 @@ export interface RegisterInput {
   address1: string;
   address2: string;
   password: string;
-  password_confirm: string;
+  password_confirmation: string;
 }

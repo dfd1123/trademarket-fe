@@ -19,7 +19,7 @@ const intialInput = {
   address1: '',
   address2: '',
   password: '',
-  password_confirm: '',
+  password_confirmation: '',
 };
 
 const RegisterForm = () => {
@@ -59,8 +59,8 @@ const RegisterForm = () => {
   useEffect(() => {
     checkValidate();
     setCorrect(
-      inputs.password === inputs.password_confirm &&
-        Boolean(inputs.password && inputs.password_confirm)
+      inputs.password === inputs.password_confirmation &&
+        Boolean(inputs.password && inputs.password_confirmation)
     );
   }, [inputs]);
 
@@ -145,13 +145,13 @@ const RegisterForm = () => {
         )}
         <TextInput
           type="password"
-          name="password_confirm"
+          name="password_confirmation"
           label="비밀번호 확인"
           reset
           onChange={handleInputChange}
           onEnter={submitHandler}
         />
-        {inputs.password_confirm ? (
+        {inputs.password_confirmation ? (
           <span className={`status ${correct ? 'correct' : 'incorrect'}`}>
             {correct ? '비밀번호가 일치합니다' : '비밀번호가 불일치합니다.'}
           </span>
