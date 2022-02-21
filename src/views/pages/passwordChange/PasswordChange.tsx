@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import KmfFooter from '@/views/components/layouts/KmfFooter';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
@@ -10,18 +10,35 @@ import FooterButton from '@/views/components/common/FooterButton';
 import BasicButton from '@/views/components/common/Button';
 
 const PasswordChange = () => {
+  const [password, setPassword] = useState('');
+  const [correct, setCorrect] = useState(false);
+
+  const passwordOnChange = (value: string, name: string) => {
+    console.log('pwd', value);
+    setPassword(value);
+  }
+
+  const confirmCorrectPassword = (value: string, name: string) => {
+    setCorrect(value === password);
+  }
+
+  useEffect(() => {
+    console.log(correct);
+    password.length === 0 && setCorrect(true);
+  }, [password, correct])
+
   return (
     <ContainerStyle>
       <KmfHeader
         headerText={'비밀번호 변경'}
-        prevLink="d"
-        prevImgUrl="img/kmf/leftArrow.png"
+        prev
       />
       <ContentWrapperStyle>
         <div className="input-form">
-          <BasicInput className="password-input" name="prev" placeholder="기존 비밀번호를 입력해주세요." label="기존 비밀번호" />
-          <BasicInput className="password-input" name="current" placeholder="새로운 비밀번호를 입력해주세요." label="새로운 비밀번호" />
-          <BasicInput className="password-input" name="current-check" placeholder="비밀번호 확인" label="비밀번호 확인" />
+          <BasicInput className="password-input" name="prev" placeholder="기존 비밀번호를 입력해주세요." label="기존 비밀번호" type={"password"} />
+          <div className={"pwd-validation"}>{!correct && 'asdfsadf'}</div>
+          <BasicInput className="password-input" name="current" placeholder="새로운 비밀번호를 입력해주세요." label="새로운 비밀번호" type={"password"} onChange={passwordOnChange}/>
+          <BasicInput className="password-input" name="current-check" placeholder="비밀번호 확인" label="비밀번호 확인" type={"password"} onChange={confirmCorrectPassword}/>
         <div className="kmf-fighting">KMF 화이팅!</div>
         </div>
       </ContentWrapperStyle>
@@ -71,7 +88,9 @@ const ContentWrapperStyle = styled.section`
     color: #acacac;
   }
 
-  
+  .pwd-validation {
+    color: red;
+  }
 `;
 
 const ImageContainer = styled.div`

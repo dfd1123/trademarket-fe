@@ -14,7 +14,6 @@ function BusinessInfo() {
   const [date, setDate] = useState<Date>(new Date());
   const locale = 'ko-KR';
   const formatDate = (calendarLocale: string, date: Date) => {
-    // return moment(date).format('D').toString();
     return dateFormat(date, 'd')
   };
 

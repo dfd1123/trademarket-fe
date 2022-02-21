@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import styled from 'styled-components';
 import KmfFooter from '@/views/components/layouts/KmfFooter';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
@@ -9,25 +9,44 @@ import DateSelectInput from '@/views/components/common/input/DateSelectInput';
 import FooterButton from '@/views/components/common/FooterButton';
 import BasicButton from '@/views/components/common/Button';
 import KmfImageViewer from '@/views/components/common/kmf/KmfImageViewer';
+import icoFindImg from '@/assets/img/kmf/ico/ico-img-find.svg';
+import basicProfile from '@/assets/img/kmf/basicProfile.jpeg'
 
 const ManageProfile = () => {
+  const [defaultImgUrl, setDefaultImgUrl] = useState(basicProfile);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleChangeFile = (e) => {
+    console.log('event', e);
+    if(!e?.target?.files) return;
+    const imgFile = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imgBase64 = typeof reader.result === 'string' ? reader.result : '';
+      setDefaultImgUrl(imgBase64);
+    }
+    reader.readAsDataURL(imgFile);
+  }
+
   return (
     <ContainerStyle>
       <KmfHeader
         headerText={'프로필관리'}
-        prevLink="d"
-        prevImgUrl="img/kmf/leftArrow.png"
+          prev
       />
       <ContentWrapperStyle>
-        <KmfImageViewer imgUrl="img/kmf/profile_image.jpg" width="100%" height="262px">
-          <FindImage imgUrl="img/kmf/find_img.png"></FindImage>
+        <KmfImageViewer imgUrl={defaultImgUrl} width="100%" height="262px" >
+          <input type="file" accept="image/*" hidden ref={inputRef} onChange={handleChangeFile}/>
+          <FindImage className="find-img" imgUrl={icoFindImg} onClick={() => {
+            console.log('ref', inputRef);
+            inputRef?.current?.click();
+          }}></FindImage>
         </KmfImageViewer>
         <div className="input-form">
           <p className='title'>기본정보</p>
           <BasicInput className="text-input input-name" name="name" placeholder="이름을 입력해주세요." label="이름" />
-          <BasicInput className="text-input" name="birth" placeholder="날짜를 선택해주세요." label="생년월일" />
-          <BasicInput className="text-input" name="phone" placeholder="숫자만 입력해주세요." label="연락처" />
-
+          <DateSelectInput className="text-input" name="birth" placeholder="날짜를 선택해주세요." label="생년월일" />
+          <BasicInput className="text-input" name="phone" placeholder="숫자만 입력해주세요." label="연락처" number/>
           <p className='title info'>소속사 정보</p>
           <BasicInput className="text-input input-company" name="company" placeholder="" label="현재 소속사" />
           <BasicInput className="text-input input-address" name="address" placeholder="주소를 검색해주세요." label="소속사 주소" />
@@ -37,10 +56,10 @@ const ManageProfile = () => {
           <p className='title info'>등록정보</p>
           <p className="id">아이디</p>
           <p className="email">asdf@naver.com</p>
+          <div className="kmf-fighting">KMF 화이팅!</div>
         </div>
-        <div className="kmf-fighting">KMF 화이팅!</div>
-        <BasicButton>저장하기</BasicButton>
       </ContentWrapperStyle>
+      <BasicButton className="footer-btn">저장하기</BasicButton>
     </ContainerStyle>
   );
 };
@@ -48,10 +67,19 @@ const ManageProfile = () => {
 const ContainerStyle = styled.div`
   display: flex;
   flex-direction: column;
+  
+  .footer-btn {
+    height: 78px;
+    display: flex;
+    justify-content: center;
+    background-color: #1574bd;
+    color: white;
+    font-size: 20px;
+  }
 `;
 
 const ContentWrapperStyle = styled.section`
-  height: calc(100vh - 46px);
+  height: calc(100vh - 46px - 78px);
   overflow: scroll;
   font-size: 14px;
   line-height: 20px;
@@ -76,39 +104,43 @@ const ContentWrapperStyle = styled.section`
   .text-input {
     width: 100%;
     margin-bottom: 14px;
+
     input {
       width: 100%;
     }
+
     label {
       font-size: 14px;
       color: #1e1e1e;
     }
+
     input[name~="address"] {
       margin-bottom: -6px;
     }
   }
 
   .input-name {
-    label{
+    label {
       font-size: 12px;
     }
   }
 
   .id {
     font-size: 14px;
-      color: #1e1e1e;
+    color: #787878;
   }
 
   .email {
-    font-size: 14px;
+    font-size: 16px;
     color: black;
+    margin: 14px 0 0 14px;
   }
 
   .kmf-fighting {
-    /* height: 128px; */
     padding: 20px;
     text-align: center;
     color: #acacac;
+    margin-top: auto;
   }
 
   ${BasicButton} {
@@ -119,6 +151,7 @@ const ContentWrapperStyle = styled.section`
     justify-content: center;
     align-items: center;
     border-radius: 0 !important;
+
     > button {
       color: white;
       font-size: 17px;
@@ -128,9 +161,10 @@ const ContentWrapperStyle = styled.section`
 `;
 
 const FindImage = styled.div<{ imgUrl?: string }>`
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
   position: absolute;
+  border-radius: 20px;
   top: 111px;
   left: calc(50% - 20px);
   z-index: 1;
@@ -138,6 +172,10 @@ const FindImage = styled.div<{ imgUrl?: string }>`
   background-image: url(${props => props.imgUrl});
   background-size: 40px;
   background-repeat: no-repeat;
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 `;
 
 export default ManageProfile;
