@@ -66,7 +66,7 @@ const CircleLoadingStyle = styled.div<{scale?: number}>`
       height: 100%;
       width: 100%;
       clip: rect(0, 32px, 32px, 16px);
-      border: 3px solid #000;
+      border: 3px solid #1574bd;
       border-radius: 50%;
       -webkit-animation: loader-1-3 1.2s cubic-bezier(0.77, 0, 0.175, 1)
         infinite;

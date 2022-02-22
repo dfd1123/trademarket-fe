@@ -7,7 +7,7 @@ import useDialog from '@/hooks/useDialog';
 
 const intialInput = {
   name: '',
-  phone_number: '',
+  phone: '',
 };
 
 const FindIdForm = () => {
@@ -23,12 +23,14 @@ const FindIdForm = () => {
 
   const submitHandler = async () => {
     const data = { ...inputs };
-    data.phone_number = data.phone_number.replace(/-/gi, '');
+    data.phone = data.phone.replace(/-/gi, '');
     console.log(data);
-    // await services.user.emailLogin(inputs);
+    const {email} = await services.user.findId(inputs);
+    setResult(email);
   };
 
-  const passwordResetting = () => {
+  const passwordResetting = async () => {
+    await services.user.sendResetPasswordEmail({email: result});
     alert('비밀번호를 재설정할 수 있는 링크를 가입시 등록하신 이메일로 발송했어요.', {title:'메일발송'});
   }
 
@@ -44,7 +46,7 @@ const FindIdForm = () => {
       />
       <TextInput
         type="text"
-        name="phone_number"
+        name="phone"
         label="전화번호"
         placeholder="숫자만 입력"
         number
@@ -53,7 +55,7 @@ const FindIdForm = () => {
         onEnter={submitHandler}
       />
       <div className="btn-holder">
-        <BasicButton disabled={!inputs.name || !inputs.phone_number} onClick={submitHandler}>아이디 찾기</BasicButton>
+        <BasicButton disabled={!inputs.name || !inputs.phone} onClick={submitHandler}>아이디 찾기</BasicButton>
       </div>
       {result ? (
         <>

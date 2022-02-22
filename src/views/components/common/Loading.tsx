@@ -33,6 +33,7 @@ const LoadingStyle = styled.div<{scale?:number}>`
     >div{
         display:inline-block;
         padding: 3px;
+        background-color: #fff;
         border-radius: 50%;
         box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
         transform: scale(${(props) => props.scale});

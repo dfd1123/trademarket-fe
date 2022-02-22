@@ -6,7 +6,7 @@ const myPage : Route[] = [
         path: '/mypage',
         element: <MyPage/>,
         meta: {
-            // isAuth: true,
+            isAuth: true,
         }
     }
 ]

@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+import arrowImg from '@/assets/img/kmf/arrow.png';
 
 interface PropsType {
   imgUrl?: string;
   children: React.ReactNode;
+  className?:string;
 }
 
-const KmfListWrapper = ({children, imgUrl = "img/kmf/arrow.png"}: PropsType) => {
+const KmfListWrapper = ({children, className, imgUrl = arrowImg}: PropsType) => {
   return (
-    <>
-      <ContainerStyle imgUrl={imgUrl}>{children}</ContainerStyle>
-    </>
+      <ContainerStyle className={className} imgUrl={imgUrl}>{children}</ContainerStyle>
   );
 };
 

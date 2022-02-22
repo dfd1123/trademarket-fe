@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTypedSelector } from '@/store';
 import useAsyncData from '@/hooks/useAsyncData';
 import { TransactionInputType } from '@/types/TransactionType';
-import { RegisterInput } from './types/User';
+import { FindIdInput, RegisterInput, ResetPwInput, SendResetPasswordEmailInput } from './types/User';
 import ApiConnection from '@/modules/ApiConnection';
 import cookieService from './CookieService';
 
@@ -30,6 +30,18 @@ class UserService {
 
     return result;
   };
+
+  findId(body : FindIdInput){
+    return this.#api.post('/find_id', body);
+  }
+
+  sendResetPasswordEmail(body : SendResetPasswordEmailInput){
+    return this.#api.post('find_pw', body);
+  }
+
+  resetPw(body : ResetPwInput){
+    return this.#api.post('reset_pw', body);
+  }
 }
 
 

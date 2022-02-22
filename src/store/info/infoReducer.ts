@@ -3,6 +3,7 @@ import { dark, light } from '@/assets/styles/theme';
 import { DefaultTheme } from 'styled-components';
 import { Route, ReduceRoute } from '@/types/Route';
 interface StateType {
+  loading: boolean;
   routeInfo:
     | ReduceRoute
     | {
@@ -18,6 +19,7 @@ interface StateType {
 }
 
 const initialState: StateType = {
+  loading: false,
   routeInfo: {
     path: null,
     element: null,
@@ -34,6 +36,9 @@ const infoSlice = createSlice({
   name: 'infoSlice',
   initialState,
   reducers: {
+    setLoadingStatus(state, action: PayloadAction<{status: boolean}>){
+      state.loading = action.payload.status;
+    },
     setRouteInfo(state, action: PayloadAction<{ routeInfo: Route | null }>) {
       const { routeInfo } = action.payload;
 
@@ -62,6 +67,6 @@ const infoSlice = createSlice({
   },
 });
 
-export const { setRouteInfo } = infoSlice.actions;
+export const { setLoadingStatus, setRouteInfo } = infoSlice.actions;
 
 export default infoSlice.reducer;

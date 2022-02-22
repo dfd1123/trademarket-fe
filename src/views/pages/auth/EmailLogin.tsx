@@ -15,7 +15,7 @@ const EmailLogin = () => {
         <EmailLoginForm />
         <div className="btn-holder">
           <BasicButton during={900} onClick={()=> navigate('/find/id')}>아이디/비밀번호를 잊으셨나요?</BasicButton>
-          <BasicButton during={900}>회원이 아니신가요?</BasicButton>
+          <BasicButton during={900} onClick={()=> navigate('/register')}>회원이 아니신가요?</BasicButton>
         </div>
       </div>
     </EmailLoginStyle>

@@ -15,3 +15,19 @@ export interface RegisterInput {
   password: string;
   password_confirmation: string;
 }
+
+export interface FindIdInput {
+  name: string;
+  phone: string;
+}
+
+export interface SendResetPasswordEmailInput {
+  email: string;
+}
+
+export interface ResetPwInput {
+  email: string;
+  token: string;
+  password: string;
+  password_confirmation: string;
+}

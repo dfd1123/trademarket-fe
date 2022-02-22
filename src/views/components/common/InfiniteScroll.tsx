@@ -1,20 +1,24 @@
+import { useTypedSelector } from "@/store";
 import { useEffect, useRef, useState } from "react";
-
+import styled from 'styled-components';
 interface PropTypes {
     children: React.ReactNode;
     loading?: boolean;
     loadMore: () => void;
   }
 
-const InfiniteScroll = ({children, loading, loadMore} : PropTypes) => {
+const InfiniteScroll = ({children, loading = false, loadMore} : PropTypes) => {
     const pageEnd = useRef(null);
     const [observer, setObserver] = useState<IntersectionObserver | null>(null);
+    // const loading = useTypedSelector((state) => state.infoReducer.loading, (a,b) => a === b);
 
     useEffect(() : any => {
         if(pageEnd.current){
             const io = new IntersectionObserver(
                 (entries) => {
-                  if (entries[0].isIntersecting) {
+                  const {top, height, target} = entries[0].boundingClientRect as any;
+                  const canExcute = top + height >= window.innerHeight;
+                  if (canExcute && entries[0].isIntersecting) {
                     loadMore();
                   }
                 },
@@ -27,13 +31,17 @@ const InfiniteScroll = ({children, loading, loadMore} : PropTypes) => {
         }
 
         return () => observer && observer.disconnect();
-    }, [pageEnd])
+    }, [pageEnd.current, loadMore])
     return (
-        <>
+        <InfiniteScrollStyle>
             {children}
-            <div ref={pageEnd}></div>
-        </>
+            <div ref={pageEnd} className="page-end"></div>
+        </InfiniteScrollStyle>
     );
 }
+
+const InfiniteScrollStyle = styled.div`
+  .page-end{ height: 1px; }
+`;
 
 export default InfiniteScroll;

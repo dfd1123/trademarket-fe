@@ -8,7 +8,7 @@ import axios, {
 import _get from 'lodash/get';
 import errorCode from '@/data/errorCode';
 import cookieService from '@/services/CookieService';
-import { ToastFunctionType } from '@/hooks/useToast';
+import { ToastOption } from '@/hooks/useToast';
 
 type CustomResponseFormat<T = any> = {
   response: T;
@@ -40,14 +40,21 @@ interface ApiResponse {
   };
 }
 
+interface ApiContructorParams {
+  toast: (msg: string, options?: ToastOption) => void,
+  setLoadStatus: (status: boolean) => void
+}
+
 export default class ApiConnection {
   #axios: CustomInstance;
   #baseURL: string = process.env.VITE_API_URL || '';
   #toast;
+  #setLoadStatus;
 
-  constructor({toast}: ToastFunctionType) {
+  constructor({toast, setLoadStatus}: ApiContructorParams) {
     this.#axios = axios.create({ baseURL: this.#baseURL });
     this.#toast = toast;
+    this.#setLoadStatus = setLoadStatus;
 
     this.#axios.interceptors.request.use(function (config) {
       const accessToken = cookieService.getAccessToken();
@@ -60,8 +67,10 @@ export default class ApiConnection {
     });
   }
 
-  #responseHandler = (promise: Promise<ApiResponse>, silent?: boolean) =>
-    new Promise((resolve, reject) => {
+  #responseHandler = (promise: Promise<ApiResponse>, silent?: boolean) =>{
+    this.#setLoadStatus(true);
+
+    return new Promise((resolve, reject) => {
       promise
         .then((response) => {
           resolve(response.data.query || response.data);
@@ -73,8 +82,11 @@ export default class ApiConnection {
           this.#toast(errorCode[code] || errorCode['DEFAULT']);
 
           reject({ error: data, code });
+        }).finally(() => {
+          this.#setLoadStatus(false);
         });
     });
+  }
 
   get(
     path: string,
