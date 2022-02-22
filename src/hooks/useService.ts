@@ -6,7 +6,6 @@ import NoticeService from '@/services/NoticeService';
 import { useDispatch } from 'react-redux';
 import { setLoadingStatus } from '@/store/info/infoReducer';
 
-
 const useService = () => {
   const {toast} : {toast: (msg: string, options?: ToastOption) => void} = useToast();
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ const useService = () => {
     notice: new NoticeService(api)
   };
 
-  return {...services};
+  return { ...services };
 };
 
 export default useService;

@@ -31,3 +31,13 @@ export interface ResetPwInput {
   password: string;
   password_confirmation: string;
 }
+export interface ProfileInput {
+  name: string;
+  // email: string;
+  birth: string;
+  phone: string;
+  company: string;
+  address1: string;
+  address2: string;
+  manage_artist: string;
+}
