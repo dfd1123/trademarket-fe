@@ -54,7 +54,7 @@ class UserService {
   }
 
   getMyUserInfo(){
-    return this.#api.post('/profile');
+    return this.#api.get('/profile');
   }
 }
 

@@ -23,14 +23,8 @@ const MyPage = () => {
     }
   }
 
-  const secession = async () => {
-    const result = await alert('회원탈퇴는 사무국으로 문의해주세요.', {title: '회원탈퇴안내', children: OfficeNumber});
-
-    if(result) {
-
-    } else {
-
-    }
+  const secession = () => {
+    alert('회원탈퇴는 사무국으로 문의해주세요.', {title: '회원탈퇴안내', children: OfficeNumber});
   }
 
   return (

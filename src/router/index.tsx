@@ -15,6 +15,7 @@ import { Route, RouteMeta } from "@/types/Route";
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { Navigate, useRoutes } from "react-router-dom";
+import NotFound from '@/views/pages/NotFound';
 
 const routeList : Route[] = [
     ...test,
@@ -71,7 +72,7 @@ export default function RouterView() {
    */
   const routing = useRoutes([
     ...routes,
-    {path: '*', element: <Navigate to='/404' />},
+    {path: '*', element: <NotFound />},
   ]);
 
   const {routeInfo, meta} = getCurrentRouteInfo(routing);
