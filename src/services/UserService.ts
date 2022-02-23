@@ -19,6 +19,8 @@ class UserService {
     if (result.access_token) {
       cookieService.setAccessToken(result.access_token);
     }
+
+    return result;
   }
 
   async register(body: RegisterInput) {
@@ -45,6 +47,10 @@ class UserService {
 
   getProfile(body: { id: number }) {
     return this.#api.get('/user/view', body);
+  }
+
+  getMyUserInfo(){
+    return this.#api.post('/profile');
   }
 }
 

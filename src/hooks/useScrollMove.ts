@@ -22,18 +22,15 @@ const useScrollMove = ({ page, path, dom } : PropsType) => {
   
   const saveScroll = _debounce(function() {
     scrollY.current = window.scrollY;
-  }, 500)
+  }, 100)
 
   useEffect(() => {
       window.addEventListener('scroll', saveScroll);
     return () => {
-        // scrollSave();
         window.removeEventListener('scroll', saveScroll);
         localStorage.setItem(`${page}_scroll_pos`, String(scrollY.current));
     };
   }, []);
-
-  console.log(scrollY.current)
 
   return { scrollInfos: scrollY.current, scrollRemove };
 };

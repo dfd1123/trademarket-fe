@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import { useSelector, TypedUseSelectorHook } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import realTimePrice from '@/store/realTime/realTimePrice';
 import asyncData from '@/store/asyncData/asyncData';
 import modalSlice from '@/store/modal/modal';
@@ -12,7 +14,7 @@ import authSlice from '@/store/auth/auth';
 export type RootState = ReturnType<typeof store.getState>;
 export type Selector<T> = (state: RootState) => T;
 
-const rootReducer = combineReducers({
+const reducers = combineReducers({
   realTimePrice,
   asyncData,
   modalSlice,
@@ -22,8 +24,16 @@ const rootReducer = combineReducers({
   authSlice
 });
 
+const persistConfig = { 
+  key: 'root', 
+  storage, 
+  whitelist:['authSlice']
+};
+
+const persistedReducer = persistReducer(persistConfig, reducers);
+
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,
   }),

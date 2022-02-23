@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import userService from '@/services/UserService';
+import useService from '@/hooks/useService';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '@/store/auth/auth';
 import TextInput from '@/views/components/common/input/TextInput';
 import FooterButton from '@/views/components/common/FooterButton';
-import useService from '@/hooks/useService';
 
 const intialInput = {
   email: '',
@@ -12,6 +13,7 @@ const intialInput = {
 
 const EmailLoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const services = useService();
   const [inputs, setInputs] = useState(intialInput);
 
@@ -20,9 +22,15 @@ const EmailLoginForm = () => {
   };
 
   const submitHandler = async () => {
-    await services.user.emailLogin(inputs);
+    const {access_token} = await services.user.emailLogin(inputs);
 
-    navigate('/ref');
+    if(access_token){
+      const user = await services.user.getMyUserInfo();
+
+      dispatch(setAuth({user, access_token}));
+
+      navigate('/mypage');
+    }
   };
 
   return (
