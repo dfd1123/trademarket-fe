@@ -1,36 +1,37 @@
-import useModal from '@/hooks/useModal';
+import styled from 'styled-components';
+import useDialog from '@/hooks/useDialog';
+import useService from '@/hooks/useService';
 import { BasicButton } from '@/views/components/common/Button';
 import { Switch } from '@/views/components/common/kmf/Switch';
 import KmfFooter from '@/views/components/layouts/KmfFooter';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
-import React from 'react';
+import OfficeNumber from '@/views/components/mypage/OfficeNumber';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import KmfModal from './KmfModal';
 
 const MyPage = () => {
-  const { openModal } = useModal();
   const navigate = useNavigate();
+  const { alert, confirm } = useDialog();
+  const services = useService();
 
-  const openTestModal = async (
-    title: string,
-    content: string,
-    subTitle: string,
-    subContent: string,
-    isConfirm: boolean
-  ) => {
-    const result = await openModal(KmfModal, {
-      props: {
-        title: title,
-        content: content,
-        subTitle: subTitle,
-        subContent: subContent,
-        isConfirm: isConfirm,
-      },
-    });
+  const logout = async () => {
+    const result = await confirm('KMF Members에서 로그아웃 하시겠어요?', {title: '로그아웃 확인'});
 
-    console.log(result);
-  };
+    if(result) {
+      await services.user.logout();
+      services.cookie.removeAccessToken();
+      navigate('/login');
+    }
+  }
+
+  const secession = async () => {
+    const result = await alert('회원탈퇴는 사무국으로 문의해주세요.', {title: '회원탈퇴안내', children: OfficeNumber});
+
+    if(result) {
+
+    } else {
+
+    }
+  }
 
   return (
     <ContainerStyle>
@@ -55,39 +56,15 @@ const MyPage = () => {
         {/* link */}
         <ModalButton onClick={() => navigate('/term')}>개인정보 수집 및 활용지칩</ModalButton>
         <ModalButton
-          onClick={() =>
-            openTestModal(
-              '로그아웃 확인',
-              'KMF Members에서 로그아웃 하시겠어요?',
-              '',
-              '',
-              true
-            )
-          }>
+          onClick={logout}>
           로그아웃
         </ModalButton>
         <ModalButton
-          onClick={() =>
-            openTestModal(
-              '회원탈퇴안내',
-              '회원탈퇴는 사무국으로 문의해주세요.',
-              'KMF 사무국 연락처',
-              '02-999-9999',
-              false
-            )
-          }>
+          onClick={secession}>
           회원탈퇴
         </ModalButton>
         <ModalButton
-          onClick={() =>
-            openTestModal(
-              '앱버전',
-              '현재 앱의 버전은 v.1.0.0 입니다.',
-              '',
-              '',
-              false
-            )
-          }>
+          onClick={() => alert('현재 앱의 버전은 v.1.0.0 입니다.', {title: '앱버전'})}>
           앱버전
         </ModalButton>
       </ListWrapperStyle>

@@ -8,8 +8,11 @@ class CookieService {
     }
 
     setAccessToken(accessToken : string){
-        console.log(accessToken);
         this.#cookies.set('accessToken', accessToken, {expires: 30});
+    }
+
+    removeAccessToken(){
+        this.#cookies.remove('accessToken');
     }
 
 }

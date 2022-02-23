@@ -33,6 +33,10 @@ class UserService {
     return result;
   };
 
+  logout(){
+    return this.#api.post('/logout');
+  }
+
   findId(body : FindIdInput){
     return this.#api.post('/find_id', body);
   }

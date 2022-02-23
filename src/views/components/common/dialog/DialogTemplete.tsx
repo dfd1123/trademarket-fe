@@ -34,11 +34,11 @@ const DialogTempleteStyle = styled.div`
     }
 
     .cont {
-      max-width: 300px;
+      width: 300px;
       border-radius: 5px;
       overflow: hidden;
 
-      strong {
+      > strong {
         display: block;
         padding-left: 56px;
         padding-right: 16px;
@@ -65,10 +65,11 @@ const DialogTempleteStyle = styled.div`
           color: #353535;
           line-height: 20px;
         }
-
-        .btn-holder {
-          padding: 8px 0;
+      }
+      .btn-holder {
+          padding: 8px 16px;
           text-align: right;
+          background-color: #fff;
 
           ${BasicButton} {
             min-width: 76px;
@@ -85,7 +86,6 @@ const DialogTempleteStyle = styled.div`
             }
           }
         }
-      }
     }
   }
 `;

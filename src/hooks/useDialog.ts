@@ -1,3 +1,4 @@
+import { FunctionComponent } from 'react';
 import { useDispatch } from 'react-redux';
 import { addDialog, removeDialog } from '@/store/modal/dialog';
 import { DialogType } from '@/store/modal/types/dialog';
@@ -5,6 +6,7 @@ import { DialogType } from '@/store/modal/types/dialog';
 interface DialogOption {
   title?: string;
   msg?: string;
+  children?: FunctionComponent;
   value?: string | number;
   button?:{
     yes: string;
@@ -25,7 +27,7 @@ const useDialog = (): DialogHookReturn => {
   const dispatch = useDispatch();
 
   const openDialog = (type: "alert" | "confirm" | "prompt", options: DialogOption) => {
-    let { title, msg, button, value } = options;
+    let { title, msg, children, button, value } = options;
     const basicButton : {yes:string, no?: string} = {yes: '확인', no: '취소'};
 
     switch(type){
@@ -46,6 +48,7 @@ const useDialog = (): DialogHookReturn => {
         type: type,
         title: title ?? '',
         msg: msg ?? '',
+        children,
         value: value ?? '',
         button: button ?? basicButton,
         resolve,
@@ -56,17 +59,17 @@ const useDialog = (): DialogHookReturn => {
     });
   }
 
-  const alert = (message = '', options: DialogOption = {title: '', msg: '', button: {yes: '확인'}}): Promise<unknown> => {
+  const alert = (message = '', options: DialogOption = {title: '', msg: '', children: undefined, button: {yes: '확인'}}): Promise<unknown> => {
     options.msg = message;
     return openDialog('alert', options);
   }
 
-  const confirm = (message = '', options: DialogOption = {title: '', msg: '', button: {yes: '확인', no: '취소'}}): Promise<unknown> => {
+  const confirm = (message = '', options: DialogOption = {title: '', msg: '', children: undefined, button: {yes: '확인', no: '취소'}}): Promise<unknown> => {
     options.msg = message;
     return openDialog('confirm', options);
   }
 
-  const prompt = (message = '', options: DialogOption = {title: '', msg: '', value: '', button: {yes: '확인', no: '취소'}}): Promise<unknown> => {
+  const prompt = (message = '', options: DialogOption = {title: '', msg: '', children: undefined, value: '', button: {yes: '확인', no: '취소'}}): Promise<unknown> => {
     options.msg = message;
     return openDialog('prompt', options);
   }

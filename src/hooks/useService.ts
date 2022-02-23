@@ -5,6 +5,7 @@ import ReferenceService from '@/services/ReferenceService';
 import NoticeService from '@/services/NoticeService';
 import { useDispatch } from 'react-redux';
 import { setLoadingStatus } from '@/store/info/infoReducer';
+import cookieService from '@/services/CookieService';
 
 const useService = () => {
   const {toast} : {toast: (msg: string, options?: ToastOption) => void} = useToast();
@@ -14,6 +15,7 @@ const useService = () => {
   const api: ApiConnection = new ApiConnection({toast, setLoadStatus});
 
   const services = {
+    cookie: cookieService,
     user: new UserService(api),
     reference: new ReferenceService(api),
     notice: new NoticeService(api)

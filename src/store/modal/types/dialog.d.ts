@@ -4,6 +4,7 @@ export interface DialogType {
   type: "alert" | "confirm" | "prompt";
   title?: string;
   msg: string;
+  children?: FunctionComponent;
   value?: string | number;
   button?: {
     yes: string;
@@ -16,6 +17,7 @@ export interface DialogType {
 export interface DialogComponentPropsType {
   title?: boolean;
   msg: string;
+  children?: FunctionComponent;
   value?: string | number;
   button: {
     yes: string;
