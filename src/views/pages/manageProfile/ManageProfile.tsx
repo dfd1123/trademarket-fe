@@ -10,6 +10,8 @@ import styled from 'styled-components';
 import { ProfileInput } from '@/services/types/User';
 import useService from '@/hooks/useService';
 import { dateFormat } from '@/utils/dateUtils';
+import { resetSpecificState } from '@/store/asyncData/asyncData';
+import login from '@/views/pages/auth/Login';
 
 const initialState: ProfileInput = {
   name: '',
@@ -37,6 +39,7 @@ const ManageProfile = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
   const services = useService();
+  const loginOs = window.navigator.userAgent;
 
   const handleChangeFile = (e: any) => {
     console.log('event', e);
@@ -55,7 +58,7 @@ const ManageProfile = () => {
     dispatch({ type: 'setImg', name: name, payload: payload });
   };
 
-  const onChangeHandler = (name: string, payload: string) => {
+  const onChangeHandler = (name: string, payload: any) => {
     dispatch({ type: 'onChange', name: name, payload: payload });
   };
 
@@ -67,6 +70,11 @@ const ManageProfile = () => {
   };
 
   useEffect(() => {
+    console.log('state changed', state);
+  }, [state]);
+
+  useEffect(() => {
+    console.log('os', loginOs);
     getUserProfileData(16);
   }, []);
 
@@ -78,6 +86,7 @@ const ManageProfile = () => {
           <input
             type="file"
             accept="image/*"
+            name="profile_img[]"
             hidden
             ref={inputRef}
             onChange={handleChangeFile}
@@ -155,7 +164,14 @@ const ManageProfile = () => {
           <p className="title info">등록정보</p>
           <p className="id">아이디</p>
           <p className="email">asdf@naver.com</p>
-          <div className="kmf-fighting">KMF 화이팅!</div>
+          <div className="kmf-fighting">
+            KMF 화이팅!{' '}
+            {loginOs.includes('Android')
+              ? 'Android'
+              : loginOs.includes('iOS')
+              ? 'iOS'
+              : null}
+          </div>
         </div>
       </ContentWrapperStyle>
       <BasicButton
