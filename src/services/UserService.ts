@@ -31,34 +31,46 @@ class UserService {
     }
 
     return result;
-  };
+  }
 
-  logout(){
+  logout() {
     return this.#api.post('/logout');
   }
 
-  findId(body : FindIdInput){
+  findId(body: FindIdInput) {
     return this.#api.post('/find_id', body);
   }
 
-  sendResetPasswordEmail(body : SendResetPasswordEmailInput){
+  sendResetPasswordEmail(body: SendResetPasswordEmailInput) {
     return this.#api.post('find_pw', body);
   }
 
-  resetPw(body : ResetPwInput){
+  resetPw(body: ResetPwInput) {
     return this.#api.post('reset_pw', body);
   }
 
   getProfile(body: { id: number }) {
-    return this.#api.get('/user/view', body);
+    return this.#api.get('user/view', body);
   }
 
-  getMyUserInfo(){
+  getMyUserInfo() {
     return this.#api.get('/profile');
   }
 
   getUserList(params : GetUserListRequest){
     return this.#api.get('/user/list', params);
+  }
+  
+  modifyProfile(body: {
+    id: string;
+    name: string;
+    birth: string;
+    address1: string;
+    company: string;
+    manage_artist: string;
+    profile_img: any;
+  }) {
+    return this.#api.put('/user/update', body);
   }
 }
 
