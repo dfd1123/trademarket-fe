@@ -17,7 +17,7 @@ Et laboris ut quis proident do ipsum aliqua ex cillum tempor sit dolor. Nostrud 
 
 Et laboris ut quis proident do ipsum aliqua ex cillum tempor sit dolor. Nostrud elit ullamco commodo aliqua ipsum voluptate incididunt magna dolor cupidatat amet aliqua deserunt labore. Elit non occaecat aliqua id consequat fugiat excepteur incididunt ipsum commodo incididunt excepteur. Nulla veniam eiusmod consectetur laboris aliquip tempor proident ex do culpa laboris amet et. Proident Lorem eu officia aliquip elit Lorem magna dolore. Aute ad labore et commodo commodo dolore esse cupidatat. Amet non deserunt anim commodo.\n
 
-Mollit sunt in esse nostrud. Amet ullamco deserunt veniam irure occaecat ullamco tempor ullamco exercitation quis in. Proident nulla exercitation adipisicing nisi fugiat. Nostrud consequat excepteur aute id consectetur fugiat occaecat anim ex aliquip deserunt nisi. Officia laborum cillum adipisicing sit cillum mollit adipisicing eiusmod. Id reprehenderit amet voluptate enim eu officia magna ad amet. Veniam dolor et ullamco ea.`
+Mollit sunt in esse nostrud. Amet ullamco deserunt veniam irure occaecat ullamco tempor ullamco exercitation quis in. Proident nulla exercitation adipisicing nisi fugiat. Nostrud consequat excepteur aute id consectetur fugiat occaecat anim ex aliquip deserunt nisi. Officia laborum cillum adipisicing sit cillum mollit adipisicing eiusmod. Id reprehenderit amet voluptate enim eu officia magna ad amet. Veniam dolor et ullamco ea.`;
 
 interface PropTypes {
   content: string;
@@ -27,11 +27,17 @@ interface PropTypes {
 const CommonInfo = () => {
   return (
     <ContainerStyle>
-      <KmfHeader headerText={'headerText'} prevLink="d" prevImgUrl='img/kmf/leftArrow.png' nextLink="ds" nextImgUrl="img/kmf/rightArrow.png" />
+      <KmfHeader
+        headerText={'headerText'}
+        prev
+        // prevImgUrl="img/kmf/leftArrow.png"
+        // nextLink="ds"
+        // nextImgUrl="img/kmf/rightArrow.png"
+      />
       <ContentWrapperStyle>{loremContent}</ContentWrapperStyle>
     </ContainerStyle>
-  )
-}
+  );
+};
 
 const ContainerStyle = styled.div`
   display: flex;
@@ -45,7 +51,6 @@ const ContentWrapperStyle = styled.section`
   overflow: scroll;
   font-size: 14px;
   line-height: 20px;
-  `;
-
+`;
 
 export default CommonInfo;

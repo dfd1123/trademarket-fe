@@ -9,11 +9,10 @@ import React, { useReducer, useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ProfileInput } from '@/services/types/User';
 import useService from '@/hooks/useService';
-import { dateFormat } from '@/utils/dateUtils';
-import { resetSpecificState } from '@/store/asyncData/asyncData';
-import login from '@/views/pages/auth/Login';
+import { useTypedSelector } from '@/store/index';
 
 const initialState: ProfileInput = {
+  id: '',
   name: '',
   birth: '',
   phone: '',
@@ -23,26 +22,15 @@ const initialState: ProfileInput = {
   manage_artist: '',
 };
 
-function reducer(state: any, action: any) {
-  switch (action.type) {
-    case 'setImg':
-      return { ...state, [action.name]: action.payload };
-    case 'onChange':
-      return { ...state, [action.name]: action.payload };
-    case 'setState':
-      return { ...state, ...action.payload };
-  }
-}
-
 const ManageProfile = () => {
   const [imgUrl, setImgUrl] = useState(basicProfile);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const services = useService();
+  const userData = useTypedSelector((state) => state.authSlice);
+  const [userInfo, setUserInfo] = useState(initialState);
   const loginOs = window.navigator.userAgent;
+  const service = useService();
 
   const handleChangeFile = (e: any) => {
-    console.log('event', e);
     if (!e?.target?.files) return;
     const imgFile = e.target.files[0];
     console.log('imgFile', e.target);
@@ -54,29 +42,35 @@ const ManageProfile = () => {
     reader.readAsDataURL(imgFile);
   };
 
-  const setProfileData = (name: string, payload: string) => {
-    dispatch({ type: 'setImg', name: name, payload: payload });
+  const getUserInfo = async (id: number) => {
+    const result = await service.user.getProfile({ id: id });
+    delete result.user.association;
+    delete result.user.cardinal_num;
+    delete result.user.status;
+    setUserInfo({ ...result.user, id: String(id) });
+    console.log('user info', result.user, result.user.birth);
   };
 
   const onChangeHandler = (name: string, payload: any) => {
-    dispatch({ type: 'onChange', name: name, payload: payload });
+    setUserInfo({ ...userInfo, [name]: payload });
   };
 
-  const getUserProfileData = async (id: number) => {
-    const { user } = await services.user.getProfile({ id });
-    // console.log('api', data);
-    console.log(user);
-    dispatch({ type: 'setState', payload: user });
+  const onSave = async () => {
+    console.log('onSave', userInfo);
+    const result = { ...userInfo, profile_img: '' };
+    console.log(result);
+    await service.user.modifyProfile(result);
   };
-
-  useEffect(() => {
-    console.log('state changed', state);
-  }, [state]);
 
   useEffect(() => {
     console.log('os', loginOs);
-    getUserProfileData(16);
+    console.log('user data', userData);
+    userData?.user?.id ? getUserInfo(userData.user.id) : null;
   }, []);
+
+  useEffect(() => {
+    console.log('user info changed', userInfo);
+  }, [userInfo]);
 
   return (
     <ContainerStyle>
@@ -107,7 +101,7 @@ const ManageProfile = () => {
             name="name"
             placeholder="이름을 입력해주세요."
             label="이름"
-            value={state.name}
+            value={userInfo.name}
             onChange={(e: React.ChangeEvent) => onChangeHandler('name', e)}
           />
           <DateSelectInput
@@ -115,14 +109,15 @@ const ManageProfile = () => {
             name="birth"
             placeholder="날짜를 선택해주세요."
             label="생년월일"
-            value={state.birth}
+            value={userInfo.birth}
+            onChange={(e: any) => onChangeHandler('birth', e)}
           />
           <BasicInput
             className="text-input"
             name="phone"
             placeholder="숫자만 입력해주세요."
             label="연락처"
-            value={parseInt(state.phone)}
+            value={userInfo.phone}
             onChange={(e: React.ChangeEvent) => onChangeHandler('phone', e)}
             number
           />
@@ -132,7 +127,7 @@ const ManageProfile = () => {
             name="company"
             placeholder=""
             label="현재 소속사"
-            value={state.company}
+            value={userInfo.company}
             onChange={(e: React.ChangeEvent) => onChangeHandler('company', e)}
           />
           <BasicInput
@@ -140,14 +135,14 @@ const ManageProfile = () => {
             name="address"
             placeholder="주소를 검색해주세요."
             label="소속사 주소"
-            value={state.address1}
+            value={userInfo.address1}
             onChange={(e: React.ChangeEvent) => onChangeHandler('address1', e)}
           />
           <BasicInput
             className="text-input input-full-address"
             name="full-address"
             placeholder="상세주소를 입력해주세요."
-            value={state.address2}
+            value={userInfo.address2}
             onChange={(e: React.ChangeEvent) => onChangeHandler('address2', e)}
           />
           <BasicInput
@@ -155,7 +150,7 @@ const ManageProfile = () => {
             name="artist"
             placeholder="담당 아티스트명을 알려주세요."
             label="담당 아티스트"
-            value={state.manage_artist}
+            value={userInfo.manage_artist}
             onChange={(e: React.ChangeEvent) =>
               onChangeHandler('manage_artist', e)
             }
@@ -174,12 +169,7 @@ const ManageProfile = () => {
           </div>
         </div>
       </ContentWrapperStyle>
-      <BasicButton
-        className="footer-btn"
-        onClick={() => {
-          console.log('state', state);
-          // dispatch({ type: 'setState', name: 'imgUrl', payload: imgUrl });
-        }}>
+      <BasicButton className="footer-btn" onClick={onSave}>
         저장하기
       </BasicButton>
     </ContainerStyle>

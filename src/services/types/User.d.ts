@@ -32,8 +32,8 @@ export interface ResetPwInput {
   password_confirmation: string;
 }
 export interface ProfileInput {
+  id: string;
   name: string;
-  // email: string;
   birth: string;
   phone: string;
   company: string;
