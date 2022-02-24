@@ -12,7 +12,7 @@ const UserList = ({user}: PropsType) => {
         <UserListStyle>
             <div className="info">
                 <div className="name">{user.name || '알수없음'} {user.cardinal_num}</div>
-                <span className="company">{user.company}</span>
+                <span className="company">{user.company || '-'}</span>
             </div>
             <div className="image">
                 <img src={image} alt={user.name || '알수없음'} />
