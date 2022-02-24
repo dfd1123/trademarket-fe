@@ -29,25 +29,38 @@ const ManageProfile = () => {
   const [userInfo, setUserInfo] = useState(initialState);
   const loginOs = window.navigator.userAgent;
   const service = useService();
+  const [profileImg, setProfileImg] = useState<File | null>(null);
+  const [imgSrc, setImgSrc] = useState<any>();
+  // const [imgChanged, setImgChanged] = useState(false);
 
   const handleChangeFile = (e: any) => {
     if (!e?.target?.files) return;
     const imgFile = e.target.files[0];
-    console.log('imgFile', e.target);
+    console.log('imgFile', e.target.files);
+    const fileArr = Array.prototype.slice.call(e.target.files);
+    setProfileImg(fileArr[0]);
+    console.log(fileArr);
+    // setProfileImg(e.target.value);
     const reader = new FileReader();
     reader.onloadend = (e) => {
       const imgBase64 = typeof reader.result === 'string' ? reader.result : '';
-      setImgUrl(imgBase64);
+      setImgSrc(imgBase64);
+      const path = imgBase64.split(',')[1];
+      console.log('base64', reader.result);
+    };
+    reader.onload = (e) => {
+      console.log('file path', e.target);
     };
     reader.readAsDataURL(imgFile);
   };
 
   const getUserInfo = async (id: number) => {
     const result = await service.user.getProfile({ id: id });
+    console.log('user info', result);
     delete result.user.association;
     delete result.user.cardinal_num;
     delete result.user.status;
-    setUserInfo({ ...result.user, id: String(id) });
+    setUserInfo({ ...result.user, id: String(id), profile_img: null });
     console.log('user info', result.user, result.user.birth);
   };
 
@@ -57,7 +70,12 @@ const ManageProfile = () => {
 
   const onSave = async () => {
     console.log('onSave', userInfo);
-    const result = { ...userInfo, profile_img: '' };
+    const result = profileImg
+      ? {
+          ...userInfo,
+          profile_img: profileImg,
+        }
+      : { ...userInfo, profile_img: [] };
     console.log(result);
     await service.user.modifyProfile(result);
   };
@@ -66,17 +84,30 @@ const ManageProfile = () => {
     console.log('os', loginOs);
     console.log('user data', userData);
     userData?.user?.id ? getUserInfo(userData.user.id) : null;
+    const src = userData?.user?.profile_img
+      ? `http://devapi.kmf5678.or.kr/storage/${userData.user.profile_img.slice(
+          2,
+          userData.user.profile_img.length - 2
+        )}`
+      : imgUrl;
+    setImgSrc(src);
   }, []);
 
   useEffect(() => {
     console.log('user info changed', userInfo);
+    // console.log(imgChanged);
+    console.log('image path', profileImg);
   }, [userInfo]);
+
+  useEffect(() => {
+    // setUserInfo({ ...userInfo, profile_img: profileImg });
+  }, [profileImg]);
 
   return (
     <ContainerStyle>
       <KmfHeader headerText={'프로필관리'} prev />
       <ContentWrapperStyle>
-        <KmfImageViewer imgUrl={imgUrl} width="100%" height="262px">
+        <KmfImageViewer imgUrl={imgSrc} width="100%" height="262px">
           <input
             type="file"
             accept="image/*"
@@ -155,7 +186,6 @@ const ManageProfile = () => {
               onChangeHandler('manage_artist', e)
             }
           />
-
           <p className="title info">등록정보</p>
           <p className="id">아이디</p>
           <p className="email">asdf@naver.com</p>

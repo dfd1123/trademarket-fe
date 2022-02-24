@@ -1,17 +1,15 @@
 import styled from 'styled-components';
 
 interface PropsType {
-    dotColor: string;
+  dotColor?: string;
 }
 
-const TileContent = ({ dotColor } :PropsType) => {
-    return (
-        <TileContentContainer>
-            <Dot color={dotColor} />
-            <Dot color={dotColor} />
-            <Dot color={dotColor} />
-        </TileContentContainer>
-    )
+const TileContent = ({ dotColor }: PropsType) => {
+  return (
+    <TileContentContainer>
+      <Dot color={'#343433'} />
+    </TileContentContainer>
+  );
 };
 
 const TileContentContainer = styled.div`
@@ -22,11 +20,11 @@ const TileContentContainer = styled.div`
   margin-top: 6px;
 `;
 
-const Dot = styled.div<{color: string}>`
+const Dot = styled.div<{ color: string }>`
   height: 6px;
   width: 6px;
   border-radius: 3px;
-  background-color: ${props => props.color};
+  background-color: ${(props) => props.color};
   padding: 1px;
   margin: 0 1px 0 1px;
 `;

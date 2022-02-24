@@ -3,14 +3,17 @@ import useToast, { ToastOption } from '@/hooks/useToast';
 import ApiConnection from '@/modules/ApiConnection';
 import ReferenceService from '@/services/ReferenceService';
 import NoticeService from '@/services/NoticeService';
+import BusinessService from '@/services/BusinessService';
 import { useDispatch } from 'react-redux';
 import { setLoadingStatus } from '@/store/info/infoReducer';
 import CookieService from '@/services/CookieService';
 
 const useService = () => {
-  const {toast} : {toast: (msg: string, options?: ToastOption) => void} = useToast();
+  const { toast }: { toast: (msg: string, options?: ToastOption) => void } =
+    useToast();
   const dispatch = useDispatch();
-  const setLoadStatus = (status : boolean) => dispatch(setLoadingStatus({status}));
+  const setLoadStatus = (status: boolean) =>
+    dispatch(setLoadingStatus({ status }));
 
   const cookie = new CookieService();
 

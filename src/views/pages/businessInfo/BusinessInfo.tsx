@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 // https://github.com/wojtekmaj/react-calendar
 import Calendar from 'react-calendar';
@@ -9,18 +9,36 @@ import KmfHeader from '@/views/components/layouts/KmfHeader';
 import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
 import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
 import TileContent from '@/views/components/businessInfo/TileContet';
+import useService from '@/hooks/useService';
+import { forEach } from 'lodash';
 
 function BusinessInfo() {
   const [date, setDate] = useState<Date>(new Date());
   const locale = 'ko-KR';
+  const service = useService();
+  const [businesses, setBusinesses] = useState<any>();
+  const [dates, setDates] = useState<string[]>([]);
   const formatDate = (calendarLocale: string, date: Date) => {
-    return dateFormat(date, 'd')
+    return dateFormat(date, 'd');
   };
+  const getBusinessData = async () => {
+    const { notices, notices_count } =
+      await service.business.getBusinessInfoList(30, 0);
+    setBusinesses(notices);
+    const dateArr = notices.map((item) => item.no_date_start);
+    setDates(dateArr);
+    console.log(dateArr);
+    console.log(notices);
+  };
+
+  useEffect(() => {
+    getBusinessData();
+  }, []);
 
   return (
     <ContainerStyle>
       {/* <Header>사업안내</Header> */}
-      <KmfHeader headerText={"사업안내"} />
+      <KmfHeader headerText={'사업안내'} />
       <CalendarWrapperStyle
         locale={locale}
         calendarType="US"
@@ -32,24 +50,38 @@ function BusinessInfo() {
         onChange={() => console.log('date')}
         // 요기에 스타일링을 해서 가로로 들어가게 하면 됩니다. 일정이 없더라도 빈 공간을 만들거나 타일의 크기를 fix 할것.
         // tileContent={({ activeStartDate, date, view }) => view === 'month' && date.getDay() === 0 ?
-        tileContent={({ date, view }) => view === 'month' && dateFormat(date, 'yyyy-MM-dd') === dateFormat(new Date(), 'yyyy-MM-dd') ?
-          <>
-            <TileContent dotColor={'red'} />
-          </>
-          :
-          <>
-            <TileContent dotColor={''} />
-          </>
-        }
+        tileContent={({ date, view }) => {
+          return dates.includes(dateFormat(date, 'yyyy-MM-dd')) ? (
+            <TileContent />
+          ) : null;
+        }}
+        // tileContent={({ date, view }) =>
+        //   view === 'month' &&
+        //   dateFormat(date, 'yyyy-MM-dd') ===
+        //     dateFormat(new Date(), 'yyyy-MM-dd') ? (
+        //     <>
+        //       <TileContent dotColor={'red'} />
+        //     </>
+        //   ) : (
+        //     <>
+        //       <TileContent dotColor={''} />
+        //     </>
+        //   )
+        // }
       />
       <CurrentMonthStyle>{dateFormat(date, 'yyyy.MM')}</CurrentMonthStyle>
       <SupportListWrapperStyle>
-        <KmfListWrapper>
-            <KmfLinkedList title='Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt. Pariatur Lorem anim esse velit dolore dolore occaecat velit voluptate velit sunt.' to="/info" />
-        </KmfListWrapper>
-        <KmfListWrapper>
-            <KmfLinkedList title='2월 콘텐츠창작 지원사업' to="/info" />
-        </KmfListWrapper>
+        {businesses &&
+          businesses.map((item, index) => {
+            return (
+              <KmfListWrapper key={item.no_id}>
+                <KmfLinkedList
+                  title={item.no_title}
+                  to={`/info/${item.no_id}`}
+                />
+              </KmfListWrapper>
+            );
+          })}
       </SupportListWrapperStyle>
       <KmfFooter />
     </ContainerStyle>
@@ -60,7 +92,7 @@ const CalendarWrapperStyle = styled(Calendar)`
   width: 100%;
   border: none;
   .react-calendar__navigation {
-    background-color: #1574BD;
+    background-color: #1574bd;
     & > * {
       color: white;
     }
@@ -71,7 +103,7 @@ const CalendarWrapperStyle = styled(Calendar)`
     .react-calendar__navigation__prev-button {
       order: 1;
       &:enabled {
-        background-color: #1574BD;
+        background-color: #1574bd;
       }
       &:active {
         background-color: #59bdff;
@@ -79,7 +111,7 @@ const CalendarWrapperStyle = styled(Calendar)`
     }
     .react-calendar__navigation__next-button {
       &:enabled {
-        background-color: #1574BD;
+        background-color: #1574bd;
       }
       &:active {
         background-color: #59bdff;
@@ -96,7 +128,7 @@ const CalendarWrapperStyle = styled(Calendar)`
     /* padding: 0 2px; */
   }
   & .react-calendar__tile {
-    padding: 8px 6px ;
+    padding: 8px 6px;
     /* background-color: white; */
   }
 `;
