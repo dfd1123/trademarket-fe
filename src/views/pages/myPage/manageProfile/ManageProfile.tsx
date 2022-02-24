@@ -20,6 +20,7 @@ const initialState: ProfileInput = {
   address1: '',
   address2: '',
   manage_artist: '',
+  'profile_img[]': '',
 };
 
 const ManageProfile = () => {
@@ -38,7 +39,7 @@ const ManageProfile = () => {
     const imgFile = e.target.files[0];
     console.log('imgFile', e.target.files);
     const fileArr = Array.prototype.slice.call(e.target.files);
-    setProfileImg(fileArr[0]);
+    setProfileImg(fileArr);
     console.log(fileArr);
     // setProfileImg(e.target.value);
     const reader = new FileReader();

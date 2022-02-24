@@ -17,19 +17,24 @@ const useService = () => {
 
   const cookie = new CookieService();
 
-  const api: ApiConnection = new ApiConnection({toast, cookie, setLoadStatus});
+  const api: ApiConnection = new ApiConnection({
+    toast,
+    cookie,
+    setLoadStatus,
+  });
 
   const serviceParams = {
     api: api,
     cookie: cookie,
-    dispatch
+    dispatch,
   };
 
   const services = {
     cookie: cookie,
     user: new UserService(serviceParams),
     reference: new ReferenceService(serviceParams),
-    notice: new NoticeService(serviceParams)
+    notice: new NoticeService(serviceParams),
+    business: new BusinessService(serviceParams),
   };
 
   return { ...services };

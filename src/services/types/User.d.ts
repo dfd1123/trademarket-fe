@@ -40,8 +40,8 @@ export interface ProfileInput {
   address1: string;
   address2: string;
   manage_artist: string;
+  'profile_img[]': any;
 }
-
 
 export interface GetUserListRequest {
   offset: number;
@@ -59,7 +59,7 @@ export interface UserListInfo {
   status: number;
 }
 
-export interface GetUserListResponse{
+export interface GetUserListResponse {
   users_count: number;
   users: UserListInfo[];
 }

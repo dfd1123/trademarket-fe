@@ -1,10 +1,14 @@
-import ApiConnection from '@/modules/ApiConnection';
+import { ConstructorParamsType } from '@/services/types/Service';
 
 class BusinessService {
   #api;
+  #dispatch;
+  #cookie;
 
-  constructor(api: ApiConnection) {
+  constructor({ api, cookie, dispatch }: ConstructorParamsType) {
     this.#api = api;
+    this.#dispatch = dispatch;
+    this.#cookie = cookie;
   }
 
   getBusinessInfoList(params: {
@@ -13,10 +17,6 @@ class BusinessService {
     searchKeyword?: string;
   }) {
     return this.#api.get('/notice/list', params);
-  }
-
-  getReferenceDetail(params: { no_id: number }) {
-    return this.#api.get('/notice');
   }
 }
 

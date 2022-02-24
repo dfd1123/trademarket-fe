@@ -1,11 +1,17 @@
-import { FindIdInput, GetUserListRequest, RegisterInput, ResetPwInput, SendResetPasswordEmailInput } from './types/User';
+import {
+  FindIdInput,
+  GetUserListRequest,
+  RegisterInput,
+  ResetPwInput,
+  SendResetPasswordEmailInput,
+} from './types/User';
 import cookieService from './CookieService';
 import { ConstructorParamsType } from './types/Service';
 class UserService {
   #api;
   #cookie;
 
-  constructor({api, cookie, dispatch} : ConstructorParamsType) {
+  constructor({ api, cookie, dispatch }: ConstructorParamsType) {
     this.#api = api;
     this.#cookie = cookie;
   }
@@ -54,7 +60,7 @@ class UserService {
     return this.#api.get('/profile');
   }
 
-  getUserList(params : GetUserListRequest){
+  getUserList(params: GetUserListRequest) {
     return this.#api.get('/user/list', params);
   }
 
@@ -65,7 +71,7 @@ class UserService {
     address1: string;
     company: string;
     manage_artist: string;
-    profile_img: any;
+    'profile_img[]': any;
   }) {
     return this.#api.put('/user/update', body);
   }
