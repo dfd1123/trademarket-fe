@@ -38,7 +38,6 @@ const RegisterForm = () => {
   };
 
   const handleInputChange = (value: any, name: string) => {
-    console.log(name, value);
     setInputs({ ...inputs, [name]: value });
   };
 

@@ -21,7 +21,6 @@ const PasswordResetForm = () => {
   const { toast } = useToast();
 
   const handleInputChange = (value: any, name: string) => {
-    console.log(name, value);
     setInputs({ ...inputs, [name]: value });
   };
 

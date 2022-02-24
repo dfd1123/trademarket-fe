@@ -1,5 +1,5 @@
 import {Route} from '@/types/Route';
-import NoticeList from '@/views/components/notice/NoticeList';
+import NoticeList from '@/views/pages/notice/NoticeList';
 import NoticeView from '@/views/pages/notice/NoticeView';
 
 const notice : Route[] = [

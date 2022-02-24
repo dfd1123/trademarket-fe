@@ -17,14 +17,13 @@ const FindIdForm = () => {
   const {alert} = useDialog();
 
   const handleInputChange = (value: any, name: string) => {
-    console.log(name, value);
     setInputs({ ...inputs, [name]: value });
   };
 
   const submitHandler = async () => {
     const data = { ...inputs };
     data.phone = data.phone.replace(/-/gi, '');
-    console.log(data);
+    
     const {email} = await services.user.findId(inputs);
     setResult(email);
   };

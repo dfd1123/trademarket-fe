@@ -17,8 +17,6 @@ const useScrollMove = ({ page, path, dom } : PropsType) => {
     scrollY.current = 0;
     localStorage.removeItem(`${page}_scroll_pos`);
   }, []);
-
-  console.log(location.pathname, path);
   
   const saveScroll = _debounce(function() {
     scrollY.current = window.scrollY;

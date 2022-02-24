@@ -25,7 +25,7 @@ export default KmfRefrenceList;
 
 const Container = styled.div`
   width: 100%;
-  padding: 10px 0;
+  padding: 10px 16px;
   height: 100%;
 
   .date {

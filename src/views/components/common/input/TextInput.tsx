@@ -62,7 +62,6 @@ const TextInput = ({
     let {value, name} = e.target;
     if(number) {
       value = value.replace(/[^0-9]/g,'');
-      console.log(value)
     }
     setText(value);
     if (onChange) onChange(value, name);

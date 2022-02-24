@@ -27,7 +27,7 @@ const DateSelectInput = ({
 
   const openDatePickerModal = async () => {
     const result = await openModal(ModalDatePicker, {props: {initialFocusedDate: date, class:'date-select'}});
-    console.log(result);
+
     setDate(result);
     if (onChange) {
       if (name) onChange(result, name);

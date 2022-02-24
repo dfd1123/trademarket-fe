@@ -17,7 +17,7 @@ const InfiniteScroll = ({children, loading = false, loadMore} : PropTypes) => {
             const io = new IntersectionObserver(
                 (entries) => {
                   const {top, height, target} = entries[0].boundingClientRect as any;
-                  const canExcute = top + height >= window.innerHeight;
+                  const canExcute = top + height >= window.innerHeight / 2;
                   if (canExcute && entries[0].isIntersecting) {
                     loadMore();
                   }

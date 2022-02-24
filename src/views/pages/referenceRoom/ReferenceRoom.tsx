@@ -14,7 +14,6 @@ const ReferenceRoom = () => {
   const [list, setList] = useState<RefrenceDataType[]>([]);
 
   const searchReference = async (searchKeyword = '') => {
-    console.log(searchKeyword);
     const { archives, archives_count } =
       await services.reference.getReferenceList({
         searchKeyword,
@@ -52,10 +51,7 @@ const ReferenceRoom = () => {
 };
 
 const ReferenceRoomStyle = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-
+  overflow: hidden;
   .search-box {
     background-color: #1574bd;
     padding: 16px;
@@ -75,13 +71,9 @@ const ReferenceRoomStyle = styled.div`
   }
 
   .list-holder {
-    overflow-y: auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
     > div {
-      margin: 0 16px;
+      width:calc(100% - 32px);
+      margin: 0 auto;
       border-bottom: 1px solid #f1f1f1;
     }
   }

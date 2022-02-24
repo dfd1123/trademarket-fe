@@ -11,8 +11,7 @@ interface PropTypes extends React.HTMLAttributes<HTMLButtonElement | HTMLElement
   disabled?: boolean;
 }
 
-const Button = ({ children, ripple, color, during, className, onClick, disabled}: PropTypes) => {
-  ripple = ripple ?? true;
+const Button = ({ children, ripple = true, color, during, className, onClick, disabled}: PropTypes) => {
   color = color ?? "rgba(0, 0, 0, .3)";
   during = during ?? 900;
 

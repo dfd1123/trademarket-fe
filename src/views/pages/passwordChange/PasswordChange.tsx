@@ -24,7 +24,6 @@ const PasswordChange = () => {
   };
 
   useEffect(() => {
-    console.log(match);
     password.length === 0 && setMatch(true);
   }, [password, match]);
 

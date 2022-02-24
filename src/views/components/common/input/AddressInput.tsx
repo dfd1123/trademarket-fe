@@ -27,7 +27,7 @@ const AddressInput = ({
   
     const openAddressModal = async () => {
       const result = await openModal(PostCodeModal);
-      console.log(result);
+
       setAddress(result);
       if (onChange) {
         if (name) onChange(result, name);
