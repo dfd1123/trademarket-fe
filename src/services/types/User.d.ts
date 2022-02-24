@@ -41,3 +41,25 @@ export interface ProfileInput {
   address2: string;
   manage_artist: string;
 }
+
+
+export interface GetUserListRequest {
+  offset: number;
+  limit: number;
+  searchKeyword?: string;
+  orderBy: string;
+}
+
+export interface UserListInfo {
+  id: number;
+  name: string | null;
+  cardinal_num: string;
+  company: string | null;
+  profile_img: string | null;
+  status: number;
+}
+
+export interface GetUserListResponse{
+  users_count: number;
+  users: UserListInfo[];
+}

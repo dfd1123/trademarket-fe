@@ -24,14 +24,10 @@ const NoticeList = () => {
   const getNotice = async () => {
     if (list.length && list.length === totalCount) return;
 
-    const params = {
+    const result: NoticeListResponse = await services.notice.getNoticeList({
       offset: list.length,
       limit: 30,
-    };
-
-    const result: NoticeListResponse = await services.notice.getNoticeList(
-      params
-    );
+    });
     setTotalCount(result.notices_count);
     setList([...list, ...result.notices]);
   };

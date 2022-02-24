@@ -52,14 +52,6 @@ const ReferenceRoom = () => {
 
 const ReferenceRoomStyle = styled.div`
   overflow: hidden;
-  .search-box {
-    background-color: #1574bd;
-    padding: 16px;
-
-    .search-inp {
-      width: 100%;
-    }
-  }
 
   .item-cnt {
     display: block;

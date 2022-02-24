@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
-import Ripples from "react-ripples";
+import React, { useEffect, useState, useRef } from 'react';
+import styled from 'styled-components';
+import _uniqueId from 'lodash/uniqueId';
+import Ripples from 'react-ripples';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   data?: any;
@@ -15,42 +16,44 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const CheckBox = ({
   data,
-  type = "checkbox",
+  type = 'checkbox',
   label,
   name,
   value,
-  className = "",
+  className = '',
   readOnly = false,
   disabled = false,
-  ripple = { color: "rgba(0, 0, 0, .3)", during: 600 },
+  ripple = { color: 'rgba(0, 0, 0, .3)', during: 600 },
   onChange,
 }: PropsType) => {
+  const uniqueId = `${type}-${_uniqueId()}`;
   const [check, setCheck] = useState(false);
   const inpRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (data) {
-      const uniqData = [...new Set(data)];
-      if (onChange && JSON.stringify(uniqData) !== JSON.stringify(data))
-        onChange(uniqData);
+      if (type === 'checkbox') {
+        const uniqData = [...new Set(data)];
+        if (onChange && JSON.stringify(uniqData) !== JSON.stringify(data))
+          onChange(uniqData);
+      }
       handleCheck(data);
     }
   }, [data]);
 
-  const handleCheck = (data: any) => {
+  const handleCheck = (changeData: any) => {
     if (inpRef.current) {
-      inpRef.current.checked = false;
-      setCheck(false);
-      if (Array.isArray(data)) {
-        if (data.includes(value)) {
+      setCheck(inpRef.current.checked);
+      if (Array.isArray(changeData)) {
+        if (changeData.includes(value)) {
           inpRef.current.checked = true;
           setCheck(true);
         }
-      } else if (typeof data === "boolean") {
-        inpRef.current.checked = data;
-        setCheck(data);
+      } else if (typeof changeData === 'boolean') {
+        inpRef.current.checked = changeData;
+        setCheck(changeData);
       } else {
-        if (value === data) {
+        if (data === value) {
           inpRef.current.checked = true;
           setCheck(true);
         }
@@ -60,7 +63,7 @@ const CheckBox = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let changeValue: any = false;
-    if (type === "checkbox") {
+    if (type === 'checkbox') {
       changeValue = [];
       const query = `input[name="${name}"]:checked`;
       const selectedEls = document.querySelectorAll(
@@ -69,7 +72,7 @@ const CheckBox = ({
 
       for (let i = 0; i < selectedEls.length; i++) {
         const elValue =
-          typeof value === "number"
+          typeof value === 'number'
             ? Number(selectedEls[i].value)
             : selectedEls[i].value;
         let indexOf = changeValue.findIndex((val: unknown) => val === elValue);
@@ -86,41 +89,48 @@ const CheckBox = ({
       }
     }
 
+    console.log(changeValue);
+
     if (onChange) onChange(changeValue);
-    handleCheck(changeValue);
+    // handleCheck(changeValue);
   };
 
   return ripple ? (
     <Ripples
       className={`btn ${className}`}
       color={ripple.color}
-      during={ripple.during}
-    >
-      <label className={`${className} ${check ? "checked" : ""}`}>
-        <input
-          ref={inpRef}
-          type={type}
-          name={name}
-          value={value}
-          readOnly={readOnly}
-          disabled={disabled}
-          onChange={handleChange}
-        />
+      during={ripple.during}>
+      <input
+        ref={inpRef}
+        id={uniqueId}
+        type={type}
+        name={name}
+        value={value}
+        readOnly={readOnly}
+        disabled={disabled}
+        onChange={handleChange}
+      />
+      <label
+        htmlFor={uniqueId}
+        className={`${className} ${check ? 'checked' : ''}`}>
         {label}
       </label>
     </Ripples>
   ) : (
     <div>
-      <label className={`${className} ${check ? "checked" : ""}`}>
-        <input
-          ref={inpRef}
-          type={type}
-          name={name}
-          value={value}
-          readOnly={readOnly}
-          disabled={disabled}
-          onChange={handleChange}
-        />
+      <input
+        ref={inpRef}
+        id={uniqueId}
+        type={type}
+        name={name}
+        value={value}
+        readOnly={readOnly}
+        disabled={disabled}
+        onChange={handleChange}
+      />
+      <label
+        htmlFor={uniqueId}
+        className={`${className} ${check ? 'checked' : ''}`}>
         {label}
       </label>
     </div>
@@ -143,17 +153,19 @@ export const ButtonCheckBox = styled(BasicCheckBox)`
   align-items: center;
   > input {
     display: none;
+
+    &:checked {
+      ~ label {
+        color: #fff;
+        background-color: #aaa;
+      }
+    }
   }
 
   > label {
     padding: 10px;
     text-align: center;
     background-color: #ddd;
-
-    &.checked {
-      color: #fff;
-      background-color: #aaa;
-    }
   }
 `;
 

@@ -27,7 +27,7 @@ interface PropTypes {
 const CommonInfo = () => {
   return (
     <ContainerStyle>
-      <KmfHeader headerText={'headerText'} prevLink="d" prevImgUrl='img/kmf/leftArrow.png' nextLink="ds" nextImgUrl="img/kmf/rightArrow.png" />
+      <KmfHeader headerText={'headerText'} prev nextLink="ds" nextImgUrl="img/kmf/rightArrow.png" />
       <ContentWrapperStyle>{loremContent}</ContentWrapperStyle>
     </ContainerStyle>
   )

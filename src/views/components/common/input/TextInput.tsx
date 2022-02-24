@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import basicResetClose from "@/assets/img/icon/ico-circle-close.svg";
-import searchIcon from "@/assets/img/icon/ico-search.svg";
+import searchIcon from "@/assets/img/kmf/ico/ico-search2.svg";
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -172,8 +172,10 @@ export const BasicInput = styled(TextInput)`
     }
 
     .search {
-      opacity: 0.4;
+      /* opacity: 0.4; */
       &::after {
+        width: 28px;
+        height: 28px;
         background-image: url(${searchIcon});
       }
     }
@@ -194,7 +196,7 @@ export const BasicInput = styled(TextInput)`
       }
       &.search {
         input {
-          padding-right: 50px;
+          padding-right: 60px;
         }
       }
     }
@@ -202,7 +204,7 @@ export const BasicInput = styled(TextInput)`
 
   &.search {
     input {
-      padding-right: 30px;
+      padding-right: 50px;
     }
   }
 `;

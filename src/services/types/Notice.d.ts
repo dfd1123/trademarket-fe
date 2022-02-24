@@ -11,8 +11,8 @@ export interface GetNoticeInfoInput {
 export interface NoticeInfo {
     deleted: number;
     no_content: string;
-    no_date_end: string;
-    no_date_start: string;
+    no_date_end: string | null;
+    no_date_start: string | null;
     no_file: string | null;
     no_hit: number;
     no_id: number;

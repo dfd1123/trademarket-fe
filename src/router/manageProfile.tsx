@@ -1,5 +1,5 @@
 import { Route } from '@/types/Route';
-import ManageProfile from '@/views/pages/manageProfile/ManageProfile';
+import ManageProfile from '@/views/pages/myPage/manageProfile/ManageProfile';
 
 const manageProfile: Route[] = [
   {

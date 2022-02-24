@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTypedSelector } from '@/store';
 import useAsyncData from '@/hooks/useAsyncData';
 import { TransactionInputType } from '@/types/TransactionType';
-import { FindIdInput, RegisterInput, ResetPwInput, SendResetPasswordEmailInput } from './types/User';
+import { FindIdInput, GetUserListRequest, RegisterInput, ResetPwInput, SendResetPasswordEmailInput } from './types/User';
 import ApiConnection from '@/modules/ApiConnection';
 import cookieService from './CookieService';
 
@@ -55,6 +55,10 @@ class UserService {
 
   getMyUserInfo(){
     return this.#api.get('/profile');
+  }
+
+  getUserList(params : GetUserListRequest){
+    return this.#api.get('/user/list', params);
   }
 }
 

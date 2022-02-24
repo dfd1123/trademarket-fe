@@ -6,30 +6,31 @@ interface PropsType {
   search: (text: string) => void;
 }
 
-const SearchBox = ({ search }: PropsType) => {
+const UserSearchBox = ({ search }: PropsType) => {
   const [searchValue, setSearchValue] = useState('');
 
   return (
-    <SearchBoxStyle>
+    <UserSearchBoxStyle>
       <BasicInput
         name="search"
         type="search"
         value={searchValue}
         reset={true}
         className="search-inp"
+        placeholder="휘원명, 소속사명, 가수로 검색"
         onChange={setSearchValue}
         onEnter={search}
       />
-    </SearchBoxStyle>
+    </UserSearchBoxStyle>
   );
 };
 
-const SearchBoxStyle = styled.div`
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 3;
-  width: 100%;
+const UserSearchBoxStyle = styled.div`
+  position:sticky;
+  top:0;
+  left:0;
+  z-index:3;
+  width:100%;
   background-color: #1574bd;
   padding: 16px;
 
@@ -38,4 +39,4 @@ const SearchBoxStyle = styled.div`
   }
 `;
 
-export default SearchBox;
+export default UserSearchBox;

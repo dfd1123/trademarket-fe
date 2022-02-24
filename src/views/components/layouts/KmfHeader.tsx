@@ -62,6 +62,7 @@ const HeaderContainer = styled.header`
     padding: 0 80px;
     font-family: 'NotoSans';
     font-size: 21px;
+    font-weight: 600;
     color: white;
   }
   .btn-holder {
