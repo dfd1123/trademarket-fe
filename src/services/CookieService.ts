@@ -15,6 +15,15 @@ class CookieService {
         this.#cookies.remove('accessToken');
     }
 
+    getHitCnt(key : 'notice' | 'ref', id: number | string){
+        const exist = this.#cookies.get(`${key}-${id}`);
+        return Boolean(exist);
+    }
+
+    setHitCnt(key : 'notice' | 'ref', id: number | string){
+        this.#cookies.set(`${key}-${id}`, '1', {expires: 1});
+    }
+
 }
 
-export default new CookieService();
+export default CookieService;

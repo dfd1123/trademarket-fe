@@ -1,23 +1,20 @@
-import { useEffect } from 'react';
-import { useTypedSelector } from '@/store';
-import useAsyncData from '@/hooks/useAsyncData';
-import { TransactionInputType } from '@/types/TransactionType';
 import { FindIdInput, GetUserListRequest, RegisterInput, ResetPwInput, SendResetPasswordEmailInput } from './types/User';
-import ApiConnection from '@/modules/ApiConnection';
 import cookieService from './CookieService';
-
+import { ConstructorParamsType } from './types/Service';
 class UserService {
   #api;
+  #cookie;
 
-  constructor(api: ApiConnection) {
+  constructor({api, cookie, dispatch} : ConstructorParamsType) {
     this.#api = api;
+    this.#cookie = cookie;
   }
 
   async emailLogin(body: { email: string; password: string }) {
     const result = await this.#api.post('/login', body);
 
     if (result.access_token) {
-      cookieService.setAccessToken(result.access_token);
+      this.#cookie.setAccessToken(result.access_token);
     }
 
     return result;
@@ -27,7 +24,7 @@ class UserService {
     const result = await this.#api.post('/register', body);
 
     if (result.access_token) {
-      cookieService.setAccessToken(result.access_token);
+      this.#cookie.setAccessToken(result.access_token);
     }
 
     return result;
@@ -60,7 +57,7 @@ class UserService {
   getUserList(params : GetUserListRequest){
     return this.#api.get('/user/list', params);
   }
-  
+
   modifyProfile(body: {
     id: string;
     name: string;

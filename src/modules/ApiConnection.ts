@@ -9,6 +9,7 @@ import _get from 'lodash/get';
 import errorCode from '@/data/errorCode';
 import cookieService from '@/services/CookieService';
 import { ToastOption } from '@/hooks/useToast';
+import CookieService from '@/services/CookieService';
 
 type CustomResponseFormat<T = any> = {
   response: T;
@@ -42,6 +43,7 @@ interface ApiResponse {
 
 interface ApiContructorParams {
   toast: (msg: string, options?: ToastOption) => void,
+  cookie: CookieService,
   setLoadStatus: (status: boolean) => void
 }
 
@@ -49,15 +51,17 @@ export default class ApiConnection {
   #axios: CustomInstance;
   #baseURL: string = process.env.VITE_API_URL || '';
   #toast;
+  #cookie;
   #setLoadStatus;
 
-  constructor({toast, setLoadStatus}: ApiContructorParams) {
+  constructor({toast, cookie, setLoadStatus}: ApiContructorParams) {
     this.#axios = axios.create({ baseURL: this.#baseURL });
     this.#toast = toast;
+    this.#cookie = cookie;
     this.#setLoadStatus = setLoadStatus;
 
     this.#axios.interceptors.request.use(function (config) {
-      const accessToken = cookieService.getAccessToken();
+      const accessToken = cookie.getAccessToken();
       if (config.headers) {
         config.headers['Content-Type'] = 'application/json';
         if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;

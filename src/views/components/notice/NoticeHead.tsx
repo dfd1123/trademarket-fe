@@ -1,13 +1,18 @@
 import styled from 'styled-components';
 import { dateFormat } from '@/utils/dateUtils';
+import { useTypedSelector } from '@/store';
 
 interface PropsType {
+  id?: number;
   type: number;
   date: string;
   title: string;
 }
 
-const NoticeHead = ({ type, date, title }: PropsType) => {
+const NoticeHead = ({id,  type, date, title }: PropsType) => {
+  const unreadNoticeList = useTypedSelector(state => state.noticeSlice.unreadNoticeList);
+  const unread = unreadNoticeList.includes(id ?? -1);
+
   let noticeType = '';
   date = dateFormat(new Date(date), 'yyyy - MM - dd');
 
@@ -27,6 +32,7 @@ const NoticeHead = ({ type, date, title }: PropsType) => {
     <NoticeHeadStyle>
       <span className={`label type-${type}`}>{noticeType}</span>
       <span className="date">{date}</span>
+      {unread ? (<span className="new">new</span>) : ('')}
       <div className="title">
         {title}
       </div>
@@ -63,6 +69,12 @@ const NoticeHeadStyle = styled.div`
         font-size: 12px;
         color: #828282;
         line-height: 17px;
+      }
+
+      .new{
+        margin-left: 8px;
+        font-size: 12px;
+        color:red;
       }
 
       .title {

@@ -10,13 +10,13 @@ import passwordChange from '@/router/passwordChange';
 import notice from "@/router/notice";
 import searchUser from "@/router/searchUser";
 import test from '@/router/test';
-import cookieService from "@/services/CookieService";
 import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { Navigate, useRoutes } from "react-router-dom";
 import NotFound from '@/views/pages/NotFound';
+import useService from '@/hooks/useService';
 
 const routeList : Route[] = [
     ...test,
@@ -36,6 +36,10 @@ const routeList : Route[] = [
 
 export default function RouterView() {
   const dispatch = useDispatch();
+  const services = useService();
+  
+  services.notice.getUnreadList();
+  services.reference.getUnreadList();
 
   /**
    * @description route middleware 함수이며 각 route module에서
@@ -45,7 +49,7 @@ export default function RouterView() {
     return routes.map(route => {
       let newElement = route.element;
       if(route.meta){
-        const accessToken = cookieService.getAccessToken();
+        const accessToken = services.cookie.getAccessToken();
         if(route.meta.isAuth && !accessToken) {
           newElement = <Navigate to='/login' /> ;
         }

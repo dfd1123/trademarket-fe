@@ -1,17 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useTypedSelector } from '@/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BasicButton from '@/views/components/common/Button';
 
 const KmfFooter = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const {unreadNoticeList, unreadRefList} = useTypedSelector(state => state.noticeSlice);
+  const unreadNoticeLength = unreadNoticeList.length > 9 ? '+9' : unreadNoticeList.length;
+  const unreadRefLength = unreadRefList.length > 9 ? '+9' : unreadRefList.length;
 
   return (
     <FooterStyle>
       <BasicButton onClick={() => navigate('/notice')}>
         <div className={`${pathname.includes('/notice') ? 'active':''}`}>
-          <i className="cnt">10</i>
+          {unreadNoticeLength ? (<i className="cnt">{unreadNoticeLength}</i>) : ('')}
           <svg width="23" height="22" viewBox="0 0 23 22" xmlns="http://www.w3.org/2000/svg">
             <path
               fillRule="evenodd"
@@ -45,7 +49,7 @@ const KmfFooter = () => {
       </BasicButton>
       <BasicButton onClick={() => navigate('/ref')}>
         <div className={`${pathname.includes('/ref') ? 'active':''}`}>
-          <i className="cnt">1</i>
+          {unreadRefLength ? (<i className="cnt">{unreadRefLength}</i>) : ('')}
           <svg width="24" height="20" viewBox="0 0 24 20" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M3 5C3.55228 5 4 5.44772 4 6V18H20V6C20 5.44772 20.4477 5 21 5C21.5523 5 22 5.44772 22 6V19C22 19.5523 21.5523 20 21 20H3C2.44772 20 2 19.5523 2 19V6C2 5.44772 2.44772 5 3 5Z" />
             <path fillRule="evenodd" clipRule="evenodd" d="M0 1C0 0.447715 0.447715 0 1 0H23C23.5523 0 24 0.447715 24 1V6C24 6.55228 23.5523 7 23 7H1C0.447715 7 0 6.55228 0 6V1ZM2 2V5H22V2H2Z" />
@@ -99,7 +103,7 @@ const FooterStyle = styled.footer`
         justify-content: space-around;
         .cnt{
           position:absolute;
-          top:-8px;
+          top:-5px;
           right:-8px;
           z-index: 1;
           display: flex;

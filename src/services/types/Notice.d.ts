@@ -8,6 +8,10 @@ export interface GetNoticeInfoInput {
     no_id: string | number;
 }
 
+export interface HitNoticeInput {
+    no_id: string | number;
+}
+
 export interface NoticeInfo {
     deleted: number;
     no_content: string;

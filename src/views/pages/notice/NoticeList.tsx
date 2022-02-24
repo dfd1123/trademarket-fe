@@ -74,6 +74,7 @@ const NoticeList = () => {
             <KmfListWrapper key={notice.no_id} className="no-list">
                 <Link to={`/notice/${notice.no_id}`}>
                   <NoticeHead
+                    id={notice.no_id}
                     type={notice.no_type}
                     title={notice.no_title}
                     date={notice.created_at}
