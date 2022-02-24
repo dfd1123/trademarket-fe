@@ -13,13 +13,13 @@ import useScrollMove from '@/hooks/useScrollMove';
 import KmfFooter from '@/views/components/layouts/KmfFooter';
 
 const NoticeList = () => {
+  const services = useService();
   const [list, setList] = useState<NoticeInfo[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const { scrollInfos, scrollRemove } = useScrollMove({
     page: 'notice-list',
     path: '/notice',
   });
-  const services = useService();
 
   const getNotice = async () => {
     if (list.length && list.length === totalCount) return;

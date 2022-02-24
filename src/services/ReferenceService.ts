@@ -20,7 +20,7 @@ class ReferenceService {
     return this.#api.get('/archive/list', params);
   }
 
-  getReferenceDetail(params: { ar_id: number }) {
+  getReferenceDetail(params: { ar_id: number | string }) {
     const {ar_id} = params;
     const alreadyRead = this.#cookie.getHitCnt('ref', ar_id);
 
@@ -32,10 +32,10 @@ class ReferenceService {
     this.#api.put('/archive_read/read', params);
 
 
-    return this.#api.get('/archive');
+    return this.#api.get('/archive/view', params);
   };
 
-  hitReference(body : {ar_id: number}){
+  hitReference(body : {ar_id: number | string}){
     this.#api.put('/archive/hit', body);
   }
 
