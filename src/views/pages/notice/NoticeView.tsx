@@ -12,12 +12,25 @@ const NoticeView = () => {
     const services = useService();
     let {no_id} = useParams();
     const [info, setInfo] = useState<NoticeInfo | null>(null); 
+    const [noticeType, setNoticeType] = useState('');
 
     const getNotice = async () => {
         if(!no_id || info) return;
         const result = await services.notice.getNoticeInfo({no_id});
 
         setInfo(result.notice);
+
+        switch (result.notice.no_type) {
+          case 1:
+            setNoticeType('공지사항');
+            break;
+          case 2:
+            setNoticeType('사업안내');
+            break;
+          case 3:
+            setNoticeType('경조사');
+            break;
+        }
     }
 
     useEffect(() => {
@@ -26,7 +39,7 @@ const NoticeView = () => {
     
   return info ? (
     <NoticeViewStyle>
-    <KmfHeader headerText="공지사항" prev />
+    <KmfHeader headerText={noticeType} prev />
     <div className="notice-cont">
       <NoticeHead type={info.no_type} date={info.created_at} title={info.no_title} />
       <div className="body">
