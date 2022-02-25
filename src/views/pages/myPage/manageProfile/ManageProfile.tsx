@@ -16,17 +16,22 @@ import useToast from '@/hooks/useToast';
 
 const ManageProfile = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const userData = useTypedSelector((state) => state.authSlice.user as UserInfo);
-  const [userInfo, setUserInfo] = useState<ProfileInput>({...userData});
-  const [imgUrl, setImgUrl] = useState(userInfo.profile_img ? `${process.env.VITE_STORAGE_URL}${userInfo.profile_img}` : basicProfile );
-  const loginOs = window.navigator.userAgent;
+  const userData = useTypedSelector(
+    (state) => state.authSlice.user as UserInfo
+  );
+  const [userInfo, setUserInfo] = useState<ProfileInput>({ ...userData });
+  const [imgUrl, setImgUrl] = useState(
+    userInfo.profile_img
+      ? `${process.env.VITE_STORAGE_URL}${userInfo.profile_img}`
+      : basicProfile
+  );
   const service = useService();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   const handleChangeFile = async (e: any) => {
-    const {file, dataUrl} = await imageFileUpload(e);
+    const { file, dataUrl } = await imageFileUpload(e);
 
-    if(file){
+    if (file) {
       setImgUrl(dataUrl);
       console.log(file);
       onChangeHandler('profile_img', file);
@@ -40,7 +45,7 @@ const ManageProfile = () => {
   const onSave = async () => {
     await service.user.modifyProfile(userInfo);
 
-    toast('회원 정보를 업데이트 하였습니다.', {type: 'success'});
+    toast('회원 정보를 업데이트 하였습니다.', { type: 'success' });
   };
 
   return (
@@ -129,14 +134,7 @@ const ManageProfile = () => {
           <p className="title info">등록정보</p>
           <p className="id">아이디</p>
           <p className="email">asdf@naver.com</p>
-          <div className="kmf-fighting">
-            KMF 화이팅!{' '}
-            {loginOs.includes('Android')
-              ? 'Android'
-              : loginOs.includes('iOS')
-              ? 'iOS'
-              : null}
-          </div>
+          <div className="kmf-fighting">KMF 화이팅! </div>
         </div>
       </ContentWrapperStyle>
       <BasicButton className="footer-btn" onClick={onSave}>

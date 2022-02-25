@@ -14,7 +14,7 @@ class BusinessService {
   getBusinessInfoList(params: {
     limit: number;
     offset: number;
-    searchKeyword?: string;
+    no_type: string;
   }) {
     return this.#api.get('/notice/list', params);
   }

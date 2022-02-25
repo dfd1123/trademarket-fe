@@ -6,18 +6,18 @@ interface PropsType {
 
 const TileContent = ({ dotColor }: PropsType) => {
   return (
-    <TileContentContainer>
-      <Dot color={'#343433'} />
+    <TileContentContainer className="tile">
+      <Dot color={dotColor} />
     </TileContentContainer>
   );
 };
 
 const TileContentContainer = styled.div`
-  width: 100%;
+  //width: 100%;
   height: 8px;
   display: flex;
   justify-content: center;
-  margin-top: 6px;
+  margin: 6px 1px 0 1px;
 `;
 
 const Dot = styled.div<{ color: string }>`
@@ -25,8 +25,8 @@ const Dot = styled.div<{ color: string }>`
   width: 6px;
   border-radius: 3px;
   background-color: ${(props) => props.color};
-  padding: 1px;
-  margin: 0 1px 0 1px;
+  //padding: 1px;
+  //margin: 0 1px 0 1px;
 `;
 
 export default TileContent;

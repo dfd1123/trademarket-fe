@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useDialog from '@/hooks/useDialog';
 import useService from '@/hooks/useService';
@@ -7,31 +8,55 @@ import KmfFooter from '@/views/components/layouts/KmfFooter';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
 import OfficeNumber from '@/views/components/mypage/OfficeNumber';
 import { useNavigate } from 'react-router-dom';
+import { useTypedSelector } from '@/store';
+import { setPushAlarm } from '@/utils/notificationUtil';
 
 const MyPage = () => {
   const navigate = useNavigate();
   const { alert, confirm } = useDialog();
   const services = useService();
+  const [allowPush, setAllowPush] = useState<boolean>(false);
+  const userData = useTypedSelector((state) => state.authSlice.user);
 
   const logout = async () => {
-    const result = await confirm('KMF Members에서 로그아웃 하시겠어요?', {title: '로그아웃 확인'});
+    const result = await confirm('KMF Members에서 로그아웃 하시겠어요?', {
+      title: '로그아웃 확인',
+    });
 
-    if(result) {
+    if (result) {
       await services.user.logout();
       navigate('/login');
     }
-  }
+  };
 
   const secession = () => {
-    alert('회원탈퇴는 사무국으로 문의해주세요.', {title: '회원탈퇴안내', children: OfficeNumber});
-  }
+    alert('회원탈퇴는 사무국으로 문의해주세요.', {
+      title: '회원탈퇴안내',
+      children: OfficeNumber,
+    });
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      setAllowPush(true);
+    } else {
+      setAllowPush(false);
+    }
+    setPushAlarm(allowPush);
+  };
+
+  useEffect(() => {
+    console.log(userData?.flag_alarm);
+    setAllowPush(userData?.flag_alarm !== 0);
+  }, [allowPush]);
 
   return (
     <ContainerStyle>
       <KmfHeader headerText="마이페이지" prev />
       <PushSettingStyle>
         <PushTextStyle>알림설정</PushTextStyle>
-        <Switch />
+        <Switch defaultInput={allowPush} onChange={onChange} />
       </PushSettingStyle>
       <ListWrapperStyle>
         {/* link */}
@@ -47,17 +72,15 @@ const MyPage = () => {
           서비스 이용약관
         </ModalButton>
         {/* link */}
-        <ModalButton onClick={() => navigate('/term')}>개인정보 수집 및 활용지칩</ModalButton>
-        <ModalButton
-          onClick={logout}>
-          로그아웃
+        <ModalButton onClick={() => navigate('/term')}>
+          개인정보 수집 및 활용지칩
         </ModalButton>
+        <ModalButton onClick={logout}>로그아웃</ModalButton>
+        <ModalButton onClick={secession}>회원탈퇴</ModalButton>
         <ModalButton
-          onClick={secession}>
-          회원탈퇴
-        </ModalButton>
-        <ModalButton
-          onClick={() => alert('현재 앱의 버전은 v.1.0.0 입니다.', {title: '앱버전'})}>
+          onClick={() =>
+            alert('현재 앱의 버전은 v.1.0.0 입니다.', { title: '앱버전' })
+          }>
           앱버전
         </ModalButton>
       </ListWrapperStyle>

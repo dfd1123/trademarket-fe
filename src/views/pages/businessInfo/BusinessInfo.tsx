@@ -10,25 +10,57 @@ import KmfListWrapper from '@/views/components/common/listView/KmfListWrapper';
 import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
 import TileContent from '@/views/components/businessInfo/TileContet';
 import useService from '@/hooks/useService';
-import { forEach } from 'lodash';
+
+const color = ['#1574BD', '#A7CD10', '#828282'];
+
+interface businessInfoType {
+  created_at: '';
+  deleted: 0;
+  no_content: '';
+  no_date_end: '';
+  no_date_start: '';
+  no_file: null;
+  no_hit: 0;
+  no_id: 0;
+  no_title: '';
+  no_type: 0;
+  updated_at: '';
+}
 
 function BusinessInfo() {
   const [date, setDate] = useState<Date>(new Date());
   const locale = 'ko-KR';
   const service = useService();
-  const [businesses, setBusinesses] = useState<any>();
+  const [businesses, setBusinesses] = useState<businessInfoType[]>();
   const [dates, setDates] = useState<string[]>([]);
   const formatDate = (calendarLocale: string, date: Date) => {
     return dateFormat(date, 'd');
   };
   const getBusinessData = async () => {
     const { notices, notices_count } =
-      await service.business.getBusinessInfoList(30, 0);
+      await service.business.getBusinessInfoList({
+        limit: 30,
+        offset: 0,
+        no_type: '2',
+      });
     setBusinesses(notices);
-    const dateArr = notices.map((item) => item.no_date_start);
+    const dateArr = notices.map((item: any) => item.no_date_start);
     setDates(dateArr);
     console.log(dateArr);
     console.log(notices);
+  };
+
+  const setTileContent = (date: Date, view: string) => {
+    const result = dates.filter(
+      (item) => dateFormat(date, 'yyyy-MM-dd') === item
+    );
+    return result.length > 0 ? (
+      <div className="tileWrapper">
+        {result.map((item, index) => {
+          return index > 2 ? null : <TileContent dotColor={color[index]} />;
+        })}
+      </div>
+    ) : null;
   };
 
   useEffect(() => {
@@ -37,7 +69,6 @@ function BusinessInfo() {
 
   return (
     <ContainerStyle>
-      {/* <Header>사업안내</Header> */}
       <KmfHeader headerText={'사업안내'} />
       <CalendarWrapperStyle
         locale={locale}
@@ -48,36 +79,17 @@ function BusinessInfo() {
         value={date}
         formatDay={formatDate}
         onChange={() => console.log('date')}
-        // 요기에 스타일링을 해서 가로로 들어가게 하면 됩니다. 일정이 없더라도 빈 공간을 만들거나 타일의 크기를 fix 할것.
-        // tileContent={({ activeStartDate, date, view }) => view === 'month' && date.getDay() === 0 ?
-        tileContent={({ date, view }) => {
-          return dates.includes(dateFormat(date, 'yyyy-MM-dd')) ? (
-            <TileContent />
-          ) : null;
-        }}
-        // tileContent={({ date, view }) =>
-        //   view === 'month' &&
-        //   dateFormat(date, 'yyyy-MM-dd') ===
-        //     dateFormat(new Date(), 'yyyy-MM-dd') ? (
-        //     <>
-        //       <TileContent dotColor={'red'} />
-        //     </>
-        //   ) : (
-        //     <>
-        //       <TileContent dotColor={''} />
-        //     </>
-        //   )
-        // }
+        tileContent={({ date, view }) => setTileContent(date, view)}
       />
       <CurrentMonthStyle>{dateFormat(date, 'yyyy.MM')}</CurrentMonthStyle>
       <SupportListWrapperStyle>
         {businesses &&
-          businesses.map((item, index) => {
+          businesses.map((item: businessInfoType) => {
             return (
               <KmfListWrapper key={item.no_id}>
                 <KmfLinkedList
                   title={item.no_title}
-                  to={`/info/${item.no_id}`}
+                  to={`/notice/${item.no_id}`}
                 />
               </KmfListWrapper>
             );
@@ -129,7 +141,12 @@ const CalendarWrapperStyle = styled(Calendar)`
   }
   & .react-calendar__tile {
     padding: 8px 6px;
-    /* background-color: white; */
+    height: 44px;
+
+    .tileWrapper {
+      display: flex;
+      justify-content: center;
+    }
   }
 `;
 
