@@ -13,11 +13,11 @@ const TileContent = ({ dotColor }: PropsType) => {
 };
 
 const TileContentContainer = styled.div`
-  //width: 100%;
+  width: 10px;
   height: 8px;
   display: flex;
   justify-content: center;
-  margin: 6px 1px 0 1px;
+  //margin: 6px 2px 0 2px;
 `;
 
 const Dot = styled.div<{ color: string }>`
@@ -25,8 +25,6 @@ const Dot = styled.div<{ color: string }>`
   width: 6px;
   border-radius: 3px;
   background-color: ${(props) => props.color};
-  //padding: 1px;
-  //margin: 0 1px 0 1px;
 `;
 
 export default TileContent;

@@ -11,7 +11,7 @@ import KmfLinkedList from '@/views/components/common/listView/KmfLinkedList';
 import TileContent from '@/views/components/businessInfo/TileContet';
 import useService from '@/hooks/useService';
 
-const color = ['#1574BD', '#A7CD10', '#828282'];
+const color = ['#1574BD', '#A7CD10', '#828282', '#1574BD', '#A7CD10'];
 
 interface businessInfoType {
   created_at: '';
@@ -57,7 +57,7 @@ function BusinessInfo() {
     return result.length > 0 ? (
       <div className="tileWrapper">
         {result.map((item, index) => {
-          return index > 2 ? null : <TileContent dotColor={color[index]} />;
+          return index > 4 ? null : <TileContent dotColor={color[index]} />;
         })}
       </div>
     ) : null;
@@ -140,12 +140,18 @@ const CalendarWrapperStyle = styled(Calendar)`
     /* padding: 0 2px; */
   }
   & .react-calendar__tile {
-    padding: 8px 6px;
-    height: 44px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .tileWrapper {
       display: flex;
-      justify-content: center;
+      flex-direction: row-reverse;
+      justify-content: flex-start;
+      width: 30px;
+      flex-wrap: wrap-reverse;
+      padding-top: 4px;
     }
   }
 `;

@@ -9,6 +9,7 @@ interface KmfLinkedListProps {
   to?: string;
   fontColor?: string;
   fontSize?: string;
+  progress?: string;
 }
 
 const KmfLinkedList = ({
@@ -18,6 +19,7 @@ const KmfLinkedList = ({
   to = '',
   fontColor = '#000',
   fontSize = '14px',
+  progress,
 }: KmfLinkedListProps) => {
   to = to ?? window.location.href;
   return (
@@ -28,6 +30,7 @@ const KmfLinkedList = ({
           <Title fontColor={fontColor} fontSize={fontSize}>
             {title}
           </Title>
+          <div className="progress"></div>
         </Link>
       ) : (
         <div className={'link'}>
@@ -59,7 +62,7 @@ const Container = styled.div`
 const Title = styled.p<{ fontColor: string; fontSize: string }>`
   font-size: 14px;
   font-weight: 400;
-  width: 80%;
+  width: 60%;
   line-height: 1.4rem;
   display: -webkit-box !important;
   overflow: hidden !important;
