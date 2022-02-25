@@ -1,3 +1,5 @@
+import { UserInfo } from '@/store/auth/types/auth';
+
 export interface EmailLoginResponse {
   access_token?: string;
   token_type?: 'bearer';
@@ -31,16 +33,16 @@ export interface ResetPwInput {
   password: string;
   password_confirmation: string;
 }
-export interface ProfileInput {
-  id: string;
+export interface ProfileInput extends UserInfo {
+  id: number;
   name: string;
   birth: string;
   phone: string;
   company: string;
   address1: string;
   address2: string;
-  manage_artist: string;
-  'profile_img[]': any;
+  manage_artist: string | null;
+  profile_img: File[] | string | null;
 }
 
 export interface GetUserListRequest {
