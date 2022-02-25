@@ -4,7 +4,7 @@ import { useTypedSelector } from '@/store';
 
 interface PropsType {
   id?: number;
-  type: number;
+  type?: number;
   date: string;
   title: string;
 }
@@ -30,7 +30,7 @@ const NoticeHead = ({id,  type, date, title }: PropsType) => {
 
   return (
     <NoticeHeadStyle>
-      <span className={`label type-${type}`}>{noticeType}</span>
+      {noticeType ? (<span className={`label type-${type}`}>{noticeType}</span>) : ('')}
       <span className="date">{date}</span>
       {unread ? (<span className="new">new</span>) : ('')}
       <div className="title">

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import icoCalender from '@/assets/img/kmf/ico/ico-calender.svg';
 import useModal from "@/hooks/useModal";
 import TextInput from "@/views/components/common/input/TextInput";
@@ -34,6 +34,10 @@ const DateSelectInput = ({
       else onChange(result);
     }
   };
+
+  useEffect(() => {
+    setDate(value);
+  }, [value])
 
   return (
     <DateSelectInputStyle>

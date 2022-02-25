@@ -68,9 +68,7 @@ const ReferenceRoom = () => {
         {list.map((item) => (
           <KmfListWrapper key={`ref-${item.ar_id}`}>
             <ReferenceList
-              id={item.ar_id}
-              title={item.ar_title}
-              date={item.created_at}
+              info={item}
             />
           </KmfListWrapper>
         ))}

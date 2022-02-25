@@ -14,6 +14,7 @@ const authSlice = createSlice({
             const {user, access_token} = action.payload;
 
             if(access_token && user){
+                user.profile_img = JSON.parse(user.profile_img || '');
                 state.user = user;
                 state.accessToken = access_token;
             }else{

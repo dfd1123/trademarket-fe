@@ -1,12 +1,14 @@
 import {
   FindIdInput,
   GetUserListRequest,
+  ProfileInput,
   RegisterInput,
   ResetPwInput,
   SendResetPasswordEmailInput,
 } from './types/User';
 import cookieService from './CookieService';
 import { ConstructorParamsType } from './types/Service';
+import { UserInfo } from '@/store/auth/types/auth';
 class UserService {
   #api;
   #cookie;
@@ -64,15 +66,7 @@ class UserService {
     return this.#api.get('/user/list', params);
   }
 
-  modifyProfile(body: {
-    id: string;
-    name: string;
-    birth: string;
-    address1: string;
-    company: string;
-    manage_artist: string;
-    'profile_img[]': any;
-  }) {
+  modifyProfile(body: ProfileInput) {
     return this.#api.put('/user/update', body);
   }
 }

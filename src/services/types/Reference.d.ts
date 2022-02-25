@@ -1,6 +1,6 @@
 export interface RefrenceDataType {
     ar_content: string;
-    ar_file: object | null;
+    ar_file: string | null;
     ar_id: number;
     ar_title: string;
     created_at: string;

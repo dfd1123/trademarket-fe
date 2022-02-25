@@ -2,34 +2,48 @@ import styled from 'styled-components';
 import { useTypedSelector } from '@/store';
 import { dateFormat } from '@/utils/dateUtils';
 import BasicButton from '@/views/components/common/Button';
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import { RefrenceDataType } from '@/services/types/Reference';
 
 interface PropsType {
-  id: number;
-  title: string;
-  date: string;
+  info : RefrenceDataType
 }
 
-const ReferenceList = ({ id, title, date }: PropsType) => {
-  const navigate = useNavigate();
+const ReferenceList = ({ info }: PropsType) => {
   const unreadRefList = useTypedSelector(
     (state) => state.noticeSlice.unreadRefList
   );
-  const unread = unreadRefList.includes(id ?? -1);
-  date = dateFormat(new Date(date), 'yyyy - MM - dd');
+  const unread = unreadRefList.includes(info.ar_id ?? -1);
+  const date = dateFormat(new Date(info.created_at), 'yyyy - MM - dd');
+
+  const fileDownload = () => {
+    const file = JSON.parse(info.ar_file || '[]');
+    if(file[0]){
+      const fileArr = file[0].split('/');
+      const filename = fileArr[fileArr.length - 1];
+
+      const blob = new Blob([`${process.env.VITE_STORAGE_URL}${file[0]}`], {type: 'text/plain'});
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    }
+  }
 
   return (
     <Container>
-      <Link to={`/ref/${id}`}>
-        <p className="title">{title}</p>
+      <Link to={`/ref/${info.ar_id}`}>
+        <p className="title">{info.ar_title}</p>
         <span className="date">{date || '-'}</span>
         {unread ? <span className="new">new</span> : ''}
       </Link>
       <BasicButton
         className="button"
         ripple={false}
-        onClick={() => console.log('click')}>
+        onClick={fileDownload}>
         <svg
           width="24"
           height="25"

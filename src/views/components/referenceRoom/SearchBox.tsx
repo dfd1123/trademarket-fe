@@ -17,6 +17,7 @@ const SearchBox = ({ search }: PropsType) => {
         value={searchValue}
         reset={true}
         className="search-inp"
+        placeholder="키워드로 검색"
         onChange={setSearchValue}
         onEnter={search}
       />

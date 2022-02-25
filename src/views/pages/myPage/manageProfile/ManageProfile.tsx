@@ -1,68 +1,33 @@
-import basicProfile from '@/assets/img/kmf/basicProfile.jpeg';
+import basicProfile from '@/assets/img/kmf/default_profile.png';
 import icoFindImg from '@/assets/img/kmf/ico/ico-img-find.svg';
 import BasicButton from '@/views/components/common/Button';
 import DateSelectInput from '@/views/components/common/input/DateSelectInput';
 import { BasicInput } from '@/views/components/common/input/TextInput';
 import KmfImageViewer from '@/views/components/common/kmf/KmfImageViewer';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
-import React, { useReducer, useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ProfileInput } from '@/services/types/User';
 import useService from '@/hooks/useService';
 import { useTypedSelector } from '@/store/index';
-
-const initialState: ProfileInput = {
-  id: '',
-  name: '',
-  birth: '',
-  phone: '',
-  company: '',
-  address1: '',
-  address2: '',
-  manage_artist: '',
-  'profile_img[]': '',
-};
+import { imageFileUpload } from '@/utils/fileUtils';
+import { UserInfo } from '@/store/auth/types/auth';
 
 const ManageProfile = () => {
-  const [imgUrl, setImgUrl] = useState(basicProfile);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const userData = useTypedSelector((state) => state.authSlice);
-  const [userInfo, setUserInfo] = useState(initialState);
+  const userData = useTypedSelector((state) => state.authSlice.user as UserInfo);
+  const [userInfo, setUserInfo] = useState<ProfileInput>({...userData});
+  const [imgUrl, setImgUrl] = useState(userInfo.profile_img ? `${process.env.VITE_STORAGE_URL}${userInfo.profile_img}` : basicProfile );
   const loginOs = window.navigator.userAgent;
   const service = useService();
-  const [profileImg, setProfileImg] = useState<File | null>(null);
-  const [imgSrc, setImgSrc] = useState<any>();
-  // const [imgChanged, setImgChanged] = useState(false);
 
-  const handleChangeFile = (e: any) => {
-    if (!e?.target?.files) return;
-    const imgFile = e.target.files[0];
-    console.log('imgFile', e.target.files);
-    const fileArr = Array.prototype.slice.call(e.target.files);
-    setProfileImg(fileArr);
-    console.log(fileArr);
-    // setProfileImg(e.target.value);
-    const reader = new FileReader();
-    reader.onloadend = (e) => {
-      const imgBase64 = typeof reader.result === 'string' ? reader.result : '';
-      setImgSrc(imgBase64);
-      const path = imgBase64.split(',')[1];
-      console.log('base64', reader.result);
-    };
-    reader.onload = (e) => {
-      console.log('file path', e.target);
-    };
-    reader.readAsDataURL(imgFile);
-  };
+  const handleChangeFile = async (e: any) => {
+    const {file, dataUrl} = await imageFileUpload(e);
 
-  const getUserInfo = async (id: number) => {
-    const result = await service.user.getProfile({ id: id });
-    console.log('user info', result);
-    delete result.user.association;
-    delete result.user.cardinal_num;
-    delete result.user.status;
-    setUserInfo({ ...result.user, id: String(id), profile_img: null });
-    console.log('user info', result.user, result.user.birth);
+    if(file){
+      setImgUrl(dataUrl);
+      onChangeHandler('profile_img', [file]);
+    }
   };
 
   const onChangeHandler = (name: string, payload: any) => {
@@ -70,45 +35,15 @@ const ManageProfile = () => {
   };
 
   const onSave = async () => {
-    console.log('onSave', userInfo);
-    const result = profileImg
-      ? {
-          ...userInfo,
-          profile_img: profileImg,
-        }
-      : { ...userInfo, profile_img: [] };
-    console.log(result);
-    await service.user.modifyProfile(result);
+    if(!Array.isArray(userInfo.profile_img)) userInfo.profile_img = [];
+    await service.user.modifyProfile(userInfo);
   };
-
-  useEffect(() => {
-    console.log('os', loginOs);
-    console.log('user data', userData);
-    userData?.user?.id ? getUserInfo(userData.user.id) : null;
-    const src = userData?.user?.profile_img
-      ? `http://devapi.kmf5678.or.kr/storage/${userData.user.profile_img.slice(
-          2,
-          userData.user.profile_img.length - 2
-        )}`
-      : imgUrl;
-    setImgSrc(src);
-  }, []);
-
-  useEffect(() => {
-    console.log('user info changed', userInfo);
-    // console.log(imgChanged);
-    console.log('image path', profileImg);
-  }, [userInfo]);
-
-  useEffect(() => {
-    // setUserInfo({ ...userInfo, profile_img: profileImg });
-  }, [profileImg]);
 
   return (
     <ContainerStyle>
       <KmfHeader headerText={'프로필관리'} prev />
       <ContentWrapperStyle>
-        <KmfImageViewer imgUrl={imgSrc} width="100%" height="262px">
+        <KmfImageViewer imgUrl={imgUrl} width="100%" height="262px">
           <input
             type="file"
             accept="image/*"
@@ -182,7 +117,7 @@ const ManageProfile = () => {
             name="artist"
             placeholder="담당 아티스트명을 알려주세요."
             label="담당 아티스트"
-            value={userInfo.manage_artist}
+            value={userInfo.manage_artist || ''}
             onChange={(e: React.ChangeEvent) =>
               onChangeHandler('manage_artist', e)
             }

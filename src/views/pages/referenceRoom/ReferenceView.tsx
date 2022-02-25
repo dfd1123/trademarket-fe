@@ -1,5 +1,5 @@
 import useService from '@/hooks/useService';
-import { NoticeInfo } from '@/services/types/Notice';
+import { RefrenceDataType } from '@/services/types/Reference';
 import FooterButton from '@/views/components/common/FooterButton';
 import KmfHeader from '@/views/components/layouts/KmfHeader';
 import NoticeHead from '@/views/components/notice/NoticeHead';
@@ -11,7 +11,7 @@ const ReferenceView = () => {
   const navigate = useNavigate();
   const services = useService();
   let { ar_id } = useParams();
-  const [info, setInfo] = useState<NoticeInfo | null>(null);
+  const [info, setInfo] = useState<RefrenceDataType | null>(null);
 
   const getReference = async () => {
     if (!ar_id || info) return;
@@ -26,10 +26,9 @@ const ReferenceView = () => {
 
   return info ? (
     <ReferenceViewStyle>
-      <KmfHeader headerText="" prev />
+      <KmfHeader headerText="자료실" prev />
       <div className="notice-cont">
         <NoticeHead
-          type={info.no_type}
           date={info.created_at}
           title={info.ar_title}
         />

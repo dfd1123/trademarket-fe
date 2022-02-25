@@ -26,7 +26,7 @@ const NoticeView = () => {
     
   return info ? (
     <NoticeViewStyle>
-    <KmfHeader headerText="" prev />
+    <KmfHeader headerText="공지사항" prev />
     <div className="notice-cont">
       <NoticeHead type={info.no_type} date={info.created_at} title={info.no_title} />
       <div className="body">

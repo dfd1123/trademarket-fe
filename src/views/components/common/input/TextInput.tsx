@@ -8,7 +8,7 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   reset?: boolean;
   number?:boolean;
-  autocomplete?:'on'|'off'
+  autocomplete?:'on'|'off';
   onEnter?: (value : any , name?: any) => void;
   onChange?: (value : any , name?: any) => void;
 }
