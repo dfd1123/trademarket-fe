@@ -12,6 +12,7 @@ import useService from '@/hooks/useService';
 import { useTypedSelector } from '@/store/index';
 import { imageFileUpload } from '@/utils/fileUtils';
 import { UserInfo } from '@/store/auth/types/auth';
+import useToast from '@/hooks/useToast';
 
 const ManageProfile = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -20,6 +21,7 @@ const ManageProfile = () => {
   const [imgUrl, setImgUrl] = useState(userInfo.profile_img ? `${process.env.VITE_STORAGE_URL}${userInfo.profile_img}` : basicProfile );
   const loginOs = window.navigator.userAgent;
   const service = useService();
+  const {toast} = useToast();
 
   const handleChangeFile = async (e: any) => {
     const {file, dataUrl} = await imageFileUpload(e);
@@ -37,6 +39,8 @@ const ManageProfile = () => {
   const onSave = async () => {
     if(!Array.isArray(userInfo.profile_img)) userInfo.profile_img = [];
     await service.user.modifyProfile(userInfo);
+
+    toast('회원 정보를 업데이트 하였습니다.', {type: 'success'});
   };
 
   return (

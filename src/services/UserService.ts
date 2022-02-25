@@ -9,13 +9,16 @@ import {
 import cookieService from './CookieService';
 import { ConstructorParamsType } from './types/Service';
 import { UserInfo } from '@/store/auth/types/auth';
+import { setAuth } from '@/store/auth/auth';
 class UserService {
   #api;
   #cookie;
+  #dispatch;
 
   constructor({ api, cookie, dispatch }: ConstructorParamsType) {
     this.#api = api;
     this.#cookie = cookie;
+    this.#dispatch = dispatch;
   }
 
   async emailLogin(body: { email: string; password: string }) {
@@ -66,8 +69,18 @@ class UserService {
     return this.#api.get('/user/list', params);
   }
 
-  modifyProfile(body: ProfileInput) {
-    return this.#api.put('/user/update', body);
+  async modifyProfile(body: ProfileInput) {
+    const frm = new FormData();
+    for (const [key, value] of Object.entries(body)) {
+      frm.append(key, value);
+    }
+    const user = await this.#api.put('/user/update', frm);
+    const auth = {
+      user: user,
+      access_token: this.#cookie.getAccessToken()
+    }
+
+    this.#dispatch(setAuth(auth));
   }
 }
 

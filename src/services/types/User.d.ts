@@ -42,7 +42,7 @@ export interface ProfileInput extends UserInfo {
   address1: string;
   address2: string;
   manage_artist: string | null;
-  profile_img: File[] | string | null;
+  profile_img: any;
 }
 
 export interface GetUserListRequest {
