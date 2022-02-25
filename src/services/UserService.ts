@@ -41,8 +41,10 @@ class UserService {
     return result;
   }
 
-  logout() {
-    return this.#api.post('/logout');
+  async logout() {
+    await this.#api.post('/logout');
+    this.#dispatch(setAuth({}));
+    this.#cookie.removeAccessToken();
   }
 
   findId(body: FindIdInput) {

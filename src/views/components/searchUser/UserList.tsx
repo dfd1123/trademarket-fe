@@ -9,7 +9,7 @@ interface PropsType {
 const UserList = ({user}: PropsType) => {
     const image = user.profile_img ? process.env.VITE_STORAGE_URL + JSON.parse(user.profile_img)[0] : defaultProfileImg;
     return (
-        <UserListStyle>
+        <UserListStyle className={`type-${user.status}`}>
             <div className="info">
                 <div className="name">{user.name || '알수없음'} {user.cardinal_num}</div>
                 <span className="company">{user.company || '-'}</span>
@@ -28,6 +28,21 @@ const UserListStyle = styled.div`
     background-color: #FBFFEA;
     box-shadow: 0px 2px 4px rgba(167, 205, 16, 0.15);
     border-radius: 5px;
+
+    &.type-{
+        &1{
+            background-color: #FBFFEA;
+            box-shadow: 0px 2px 4px rgba(167, 205, 16, 0.15);
+        }
+        &2{
+            background-color: #E8F5FF;
+            box-shadow: 0px 2px 4px rgba(21, 116, 189, 0.15);
+        }
+        &3{
+            background-color: #F3F3F3;
+            box-shadow: 0px 2px 4px rgba(53, 53, 53, 0.15);
+        }
+    }
 
     .info{
         padding:8px 0;
@@ -58,6 +73,7 @@ const UserListStyle = styled.div`
         height:62px;
         margin:9px;
         border-radius: 50%;
+        background-color: #d8d8d8;
         overflow:hidden;
 
         >img{

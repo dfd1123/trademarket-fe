@@ -25,7 +25,6 @@ const MyPage = () => {
 
     if (result) {
       await services.user.logout();
-      services.cookie.removeAccessToken();
       navigate('/login');
     }
   };
