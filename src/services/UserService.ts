@@ -73,10 +73,18 @@ class UserService {
 
   async modifyProfile(body: ProfileInput) {
     const frm = new FormData();
+    frm.append('_method', 'put');
     for (const [key, value] of Object.entries(body)) {
       frm.append(key, value);
+      if(key === 'profile_img') {
+        frm.append('profile_img[]', value);
+      }
     }
-    const user = await this.#api.put('/user/update', frm);
+    const user = await this.#api.post('/user/update', frm, {
+      headers: {
+        'Content-type': 'application/json; multipart/form-data;'
+      }
+    });
     const auth = {
       user: user,
       access_token: this.#cookie.getAccessToken()

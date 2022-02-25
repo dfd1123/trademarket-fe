@@ -28,7 +28,8 @@ const ManageProfile = () => {
 
     if(file){
       setImgUrl(dataUrl);
-      onChangeHandler('profile_img', [file]);
+      console.log(file);
+      onChangeHandler('profile_img', file);
     }
   };
 
@@ -37,7 +38,6 @@ const ManageProfile = () => {
   };
 
   const onSave = async () => {
-    if(!Array.isArray(userInfo.profile_img)) userInfo.profile_img = [];
     await service.user.modifyProfile(userInfo);
 
     toast('회원 정보를 업데이트 하였습니다.', {type: 'success'});
