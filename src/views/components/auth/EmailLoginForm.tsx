@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { setAuth } from '@/store/auth/auth';
 import TextInput from '@/views/components/common/input/TextInput';
 import FooterButton from '@/views/components/common/FooterButton';
-import { setPushAlarm } from '@/utils/notificationUtil';
 
 const intialInput = {
   email: '',
@@ -29,8 +28,6 @@ const EmailLoginForm = () => {
       const user = await services.user.getMyUserInfo();
 
       dispatch(setAuth({ user, access_token }));
-
-      setPushAlarm(user.flag_alarm !== 0);
 
       navigate('/notice');
     }

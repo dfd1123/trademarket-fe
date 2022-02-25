@@ -10,6 +10,7 @@ import cookieService from './CookieService';
 import { ConstructorParamsType } from './types/Service';
 import { UserInfo } from '@/store/auth/types/auth';
 import { setAuth } from '@/store/auth/auth';
+import { setPushAlarm } from '@/utils/notificationUtil';
 class UserService {
   #api;
   #cookie;
@@ -26,6 +27,7 @@ class UserService {
 
     if (result.access_token) {
       this.#cookie.setAccessToken(result.access_token);
+      setPushAlarm(result.user.flag_alarm !== 0);
     }
 
     return result;
@@ -87,8 +89,8 @@ class UserService {
     });
     const auth = {
       user: user,
-      access_token: this.#cookie.getAccessToken()
-    }
+      access_token: this.#cookie.getAccessToken(),
+    };
 
     this.#dispatch(setAuth(auth));
   }
