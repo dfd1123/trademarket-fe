@@ -3,13 +3,17 @@ import styled from 'styled-components';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange?: (value: any) => void;
+  defaultInput: boolean;
 }
 
-export const Switch = ({onChange}: PropsType) => {
-
+export const Switch = ({ onChange, defaultInput }: PropsType) => {
   return (
     <SwitchStyle className="switch-button">
-      <input type="checkbox" onChange={onChange} />
+      <input
+        type="checkbox"
+        checked={defaultInput}
+        onChange={(e) => onChange(e)}
+      />
       <span className="on-off"></span>
     </SwitchStyle>
   );
