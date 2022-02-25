@@ -38,8 +38,10 @@ export default function RouterView() {
   const dispatch = useDispatch();
   const services = useService();
   
-  services.notice.getUnreadList();
-  services.reference.getUnreadList();
+  if(services.cookie.getAccessToken()){
+    services.notice.getUnreadList();
+    services.reference.getUnreadList();
+  }
 
   /**
    * @description route middleware 함수이며 각 route module에서

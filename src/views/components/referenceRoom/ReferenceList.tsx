@@ -22,14 +22,11 @@ const ReferenceList = ({ info }: PropsType) => {
       const fileArr = file[0].split('/');
       const filename = fileArr[fileArr.length - 1];
 
-      const blob = new Blob([`${process.env.VITE_STORAGE_URL}${file[0]}`], {type: 'text/plain'});
-      const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url;
+      a.href = `${process.env.VITE_STORAGE_URL}${file[0]}`;
       a.download = filename;
       a.click();
       a.remove();
-      window.URL.revokeObjectURL(url);
     }
   }
 
