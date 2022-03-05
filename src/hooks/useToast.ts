@@ -1,16 +1,16 @@
-import useModal from "@/hooks/useModal";
-import { useDispatch } from "react-redux";
-import { ToastType } from "@/store/modal/types/toast";
-import { addToast, removeToast } from "@/store/modal/toast";
-import { removeModal } from "@/store/modal/modal";
+import useModal from '@/hooks/useModal';
+import { useDispatch } from 'react-redux';
+import { ToastType } from '@/store/modal/types/toast';
+import { addToast, removeToast } from '@/store/modal/toast';
+import { removeModal } from '@/store/modal/modal';
 
 export interface ToastOption {
-  type?: "success" | "warning";
+  type?: 'success' | 'warning';
   duration?: number;
 }
 
 export interface ToastFunctionType {
-  toast: (msg: string, options?: ToastOption) => void
+  toast: (msg: string, options?: ToastOption) => void;
 }
 
 const useToast = () => {
@@ -19,7 +19,7 @@ const useToast = () => {
   const toast = (
     msg: string,
     options: ToastOption | undefined = {
-      type: "warning",
+      type: 'warning',
       duration: 1000,
     }
   ) => {

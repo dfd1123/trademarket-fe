@@ -9,7 +9,7 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
     className?: string;
     reset?: boolean;
-    onChange?: (value: unknown, name?: any) => void;
+    onChange?: (value: any, name?: any) => void;
   }
 
 const AddressInput = ({

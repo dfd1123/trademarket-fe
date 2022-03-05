@@ -89,8 +89,6 @@ const CheckBox = ({
       }
     }
 
-    console.log(changeValue);
-
     if (onChange) onChange(changeValue);
     // handleCheck(changeValue);
   };
@@ -151,6 +149,7 @@ export const ButtonCheckBox = styled(BasicCheckBox)`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+
   > input {
     display: none;
 

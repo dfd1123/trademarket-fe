@@ -18,8 +18,8 @@ const ModalContainer = () => {
   );
 
   useEffect(() => {
-    dispatch(removeDialog({ scrollRelease }));
-  }, [pathname]);
+    // dispatch(removeDialog({ scrollRelease }));
+  }, []);
 
   return (
     <Portal elementId="dialog-root">

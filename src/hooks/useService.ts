@@ -4,6 +4,7 @@ import ApiConnection from '@/modules/ApiConnection';
 import ReferenceService from '@/services/ReferenceService';
 import NoticeService from '@/services/NoticeService';
 import BusinessService from '@/services/BusinessService';
+import SettingService from '@/services/SettingService';
 import { useDispatch } from 'react-redux';
 import { setLoadingStatus } from '@/store/info/infoReducer';
 import CookieService from '@/services/CookieService';
@@ -35,6 +36,7 @@ const useService = () => {
     reference: new ReferenceService(serviceParams),
     notice: new NoticeService(serviceParams),
     business: new BusinessService(serviceParams),
+    setting: new SettingService(serviceParams),
   };
 
   return { ...services };
