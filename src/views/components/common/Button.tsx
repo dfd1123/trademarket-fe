@@ -39,6 +39,8 @@ export const BasicButton = styled(Button)`
       min-height: inherit;
       width:inherit;
       height:inherit;
+      font-size:inherit;
+      font-weight:inherit;
       color:inherit;
     }
 `;
@@ -48,7 +50,7 @@ export const NoBorderButton = styled(BasicButton)`
 `;
 
 export const YellowButton = styled(BasicButton)`
-color: #fff;
+  color: #fff;
   background-color: rgb(255, 171, 46);
   border: 1px solid rgb(255, 171, 46);
 

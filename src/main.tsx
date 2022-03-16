@@ -8,6 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import store from "@/store";
 import App from "@/App";
+import '@/plugins/i18n';
 
 let persistor = persistStore(store);
 

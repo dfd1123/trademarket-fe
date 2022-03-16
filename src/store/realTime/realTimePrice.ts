@@ -16,7 +16,7 @@ const realTimePrice = createSlice({
         updatePriceData:{
             reducer(state, action: PayloadAction<CoinOutput>){
                 const symbol = action.payload.szSymbol as keyof RealTimePriceState;
-                state[symbol] = action.payload;
+                if(state[symbol]?.szClose !== action.payload.szClose && (Number(action.payload.szTime) - Number(state[symbol]?.szTime || 0) > 500)) state[symbol] = action.payload;
             },
             prepare({Output1} : {Output1: CoinOutput}){
                 Output1 = Object.keys(Output1).reduce((acc, key) => {

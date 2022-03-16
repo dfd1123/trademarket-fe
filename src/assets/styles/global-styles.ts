@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, menu, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, main, menu, nav, output, ruby, section, summary, time, mark, audio, video{
-    font-family: 'Roboto';
+    font-family: 'NotoSans', 'Roboto';
   }
 
   h1, h2, h3, h4, h5, h6, p{
@@ -79,16 +79,16 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #wrapper{
-    /* min-height:100%;
+    min-height:100%;
     margin-top:-74px;
     margin-bottom: -300px;
     padding-top:74px;
-    padding-bottom: 300px; */
+    padding-bottom: 300px;
 
-    /* &.hide-{
+    &.hide-{
       &header{ margin-top:0; padding-top:0; }
       &footer{ margin-bottom:0; padding-bottom:0; }
-    } */
+    }
 
     >div{
 
@@ -104,15 +104,15 @@ const GlobalStyle = createGlobalStyle`
 
   @media (max-width: ${TABLET_SIZE}) {
     #wrapper{
-      /* margin-top:-43px;
+      margin-top:-43px;
       margin-bottom: -225px;
       padding-top:43px;
-      padding-bottom: 225px; */
+      padding-bottom: 225px; 
 
-      /* &.hide-{
+      &.hide-{
         &header{ margin-top:0; padding-top:0; }
         &footer{ margin-bottom:0; padding-bottom:0; }
-      } */
+      }
     }
   }
 `;

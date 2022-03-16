@@ -228,6 +228,8 @@ export const MerterialInput = styled(BasicInput)`
   }
 
   input {
+    border: 1px solid #000000;
+    
     &::-webkit-input-placeholder,
     &:-moz-placeholder,
     &::-moz-placeholder,
@@ -259,4 +261,4 @@ export const MerterialInput = styled(BasicInput)`
   }
 `;
 
-export default BasicInput;
+export default MerterialInput;

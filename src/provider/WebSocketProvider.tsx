@@ -3,6 +3,7 @@ import { batch, useDispatch } from "react-redux";
 import { updatePriceData } from "@/store/realTime/realTimePrice";
 import { updateAsyncData } from "@/store/asyncData/asyncData";
 import { TransactionInputType } from "@/types/TransactionType";
+import { updateCoinInfo } from "@/store/coinInfo/coinInfoSlice";
 
 export interface TrdWebSocket extends WebSocket {
   waitSendList: TransactionInputType[];
@@ -69,6 +70,8 @@ export default function WebSocketProvider({
         switch (trcode) {
           case "91":
             return dispatch(updatePriceData(data));
+          case "t5511":
+            return dispatch(updateCoinInfo(data));
           default:
             return dispatch(updateAsyncData(data));
         }

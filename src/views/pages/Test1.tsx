@@ -1,5 +1,4 @@
 import {Link, Outlet} from 'react-router-dom';
-import realTime from '@/services/RealTimeService';
 import useGetRealTimePrice from '@/hooks/useGetRealTimePrice';
 import useModal from '@/hooks/useModal';
 import useToast from "@/hooks/useToast";
@@ -8,13 +7,16 @@ import TestModal from '@/views/components/common/modal/Test';
 import {BasicButton} from '@/views/components/common/Button';
 import CircleLoading from '@/views/components/common/CircleLoading';
 import Loading from '../components/common/Loading';
+import useService from '@/hooks/useService';
 
 
 function Test1() {
-  realTime.coinPrice();
+  const services = useService();
   const {openModal} = useModal();
   const { toast } = useToast();
-  const {alert, confirm, prompt} = useDialog()
+  const {alert, confirm, prompt} = useDialog();
+
+  services.realTime.coinPrice();
 
   const openTestModal = async() => {
     const result = await openModal(TestModal, {animation:{in: false, class: 'fade', duration:250}});

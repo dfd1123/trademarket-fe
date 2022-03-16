@@ -7,61 +7,12 @@ export interface EmailLoginResponse {
 }
 
 export interface RegisterInput {
-  name: string;
-  email: string;
-  birth: string;
-  phone: string;
-  company: string;
-  address1: string;
-  address2: string;
-  password: string;
-  password_confirmation: string;
-}
-
-export interface FindIdInput {
-  name: string;
-  phone: string;
-}
-
-export interface SendResetPasswordEmailInput {
-  email: string;
-}
-
-export interface ResetPwInput {
-  email: string;
-  token: string;
-  password: string;
-  password_confirmation: string;
-}
-export interface ProfileInput extends UserInfo {
-  id: number;
-  name: string;
-  birth: string;
-  phone: string;
-  company: string;
-  address1: string;
-  address2: string;
-  manage_artist: string | null;
-  profile_img: any;
-}
-
-export interface GetUserListRequest {
-  offset: number;
-  limit: number;
-  searchKeyword?: string;
-  orderBy: string;
-}
-
-export interface UserListInfo {
-  id: number;
-  name: string | null;
-  cardinal_num: string;
-  company: string | null;
-  profile_img: string | null;
-  status: number;
-}
-
-export interface GetUserListResponse {
-  users_count: number;
-  users: UserListInfo[];
+  szCustNo: string;
+  szFamilyName: string;
+  szMemberNo: string;
+  szNation_Name: string;
+  szPasswd: string;
+  szPasswd1: string;
+  szTelNo2: string;
+  szUserName: string;
 }

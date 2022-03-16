@@ -8,7 +8,9 @@ import dialogSlice from '@/store/modal/dialog';
 import toastSlice from '@/store/modal/toast';
 import infoReducer from '@/store/info/infoReducer';
 import authSlice from '@/store/auth/auth';
-import noticeSlice from '@/store/notice/notice';
+import asyncData from '@/store/asyncData/asyncData';
+import realTimePrice from '@/store/realTime/realTimePrice';
+import coinInfoSlice from '@/store/coinInfo/coinInfoSlice';
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Selector<T> = (state: RootState) => T;
@@ -19,7 +21,9 @@ const reducers = combineReducers({
   toastSlice,
   infoReducer,
   authSlice,
-  noticeSlice
+  asyncData,
+  realTimePrice,
+  coinInfoSlice
 });
 
 const persistConfig = { 

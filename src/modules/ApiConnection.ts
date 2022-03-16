@@ -44,7 +44,7 @@ interface ApiResponse {
 interface ApiContructorParams {
   toast: (msg: string, options?: ToastOption) => void,
   cookie: CookieService,
-  setLoadStatus: (status: boolean) => void
+
 }
 
 export default class ApiConnection {
@@ -52,13 +52,11 @@ export default class ApiConnection {
   #baseURL: string = process.env.VITE_API_URL || '';
   #toast;
   #cookie;
-  #setLoadStatus;
 
-  constructor({toast, cookie, setLoadStatus}: ApiContructorParams) {
+  constructor({toast, cookie}: ApiContructorParams) {
     this.#axios = axios.create({ baseURL: this.#baseURL });
     this.#toast = toast;
     this.#cookie = cookie;
-    this.#setLoadStatus = setLoadStatus;
 
     this.#axios.interceptors.request.use(function (config) {
       const accessToken = cookie.getAccessToken();
@@ -72,8 +70,6 @@ export default class ApiConnection {
   }
 
   #responseHandler = (promise: Promise<ApiResponse>, silent?: boolean) =>{
-    this.#setLoadStatus(true);
-
     return new Promise((resolve, reject) => {
       promise
         .then((response) => {
@@ -87,7 +83,7 @@ export default class ApiConnection {
 
           reject({ error: data, code });
         }).finally(() => {
-          this.#setLoadStatus(false);
+          //
         });
     });
   }

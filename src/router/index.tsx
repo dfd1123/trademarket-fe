@@ -1,15 +1,6 @@
-import auth from '@/router/auth';
-import businessInfo from "@/router/businessInfo";
 import common from '@/router/common';
-import referenceRoom from "@/router/referenceRoom";
-import myPage from "@/router/myPage";
-import commonInfo from "@/router/commonInfo";
-import serviceInfo from "@/router/serviceInfo";
-import manageProfile from "@/router/manageProfile";
-import passwordChange from '@/router/passwordChange';
-import notice from "@/router/notice";
-import searchUser from "@/router/searchUser";
 import test from '@/router/test';
+import auth from '@/router/auth';
 import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
 import { useEffect } from "react";
@@ -20,29 +11,15 @@ import useService from '@/hooks/useService';
 
 const routeList : Route[] = [
     ...test,
-    ...auth,
     ...common,
-    ...businessInfo,
-    ...referenceRoom,
-    ...myPage,
-    ...notice,
-    ...searchUser,
-    // 아래의 두 라우터는 같은 컴포넌트 입니다. props로 받을 내용에 따라 페이지만 분리해야 하는 페이지 컴포인데 일단 임시로 이렇게 해 두었습니다. 나중에 변경 예정입니다.
-    ...commonInfo,
-    ...serviceInfo,
-    ...manageProfile,
-    ...passwordChange,
+    ...auth,
 ];
 
 export default function RouterView() {
   const dispatch = useDispatch();
   const services = useService();
+  services.coinInfo.reqAllCoinInfo();
   
-  if(services.cookie.getAccessToken()){
-    services.notice.getUnreadList();
-    services.reference.getUnreadList();
-  }
-
   /**
    * @description route middleware 함수이며 각 route module에서
    * import 해온 배열 정보 중 meta 필드를 확인하는 방식으로 작동

@@ -14,10 +14,7 @@ export interface CoinOutput {
 }
 
 export interface RealTimePriceState {
-    BTCUSDT: CoinOutput | null;
-    ETHUSDT: CoinOutput | null;
-    DOGEUSDT: CoinOutput | null;
-    XRPUSDT: CoinOutput | null;
+    [key: string]: CoinOutput | null;
 }
 
 export type CoinOutputKey = keyof CoinOutput;

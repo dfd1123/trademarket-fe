@@ -1,10 +1,20 @@
 import { useContext, useEffect } from 'react';
 import { WebSocketContext } from '@/provider/WebSocketProvider';
 import { TransactionInputType } from '@/types/TransactionType';
+import { ConstructorParamsType } from './types/Service';
 
 class RealTimeService {
+  #ws;
+  #cookie;
+  #dispatch;
+
+  constructor({ ws, cookie, dispatch }: ConstructorParamsType) {
+    this.#ws = ws;
+    this.#cookie = cookie;
+    this.#dispatch = dispatch;
+  }
+
   coinPrice() {
-    const ws = useContext(WebSocketContext);
     const input: TransactionInputType = {
       Header: {
         function: 'A',
@@ -25,17 +35,16 @@ class RealTimeService {
     };
 
     useEffect(() => {
-      ws.sendInput(disConnectInput);
+      this.#ws.sendInput(disConnectInput);
       setTimeout(() => {
-        ws.sendInput(input);
+        this.#ws.sendInput(input);
       }, 5);
 
       return () => {
-        ws.sendInput(disConnectInput);
+        this.#ws.sendInput(disConnectInput);
       };
     }, []);
   }
 }
 
-
-export default new RealTimeService();
+export default RealTimeService;

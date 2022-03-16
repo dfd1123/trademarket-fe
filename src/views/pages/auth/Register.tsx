@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import RegisterForm from '@/views/components/auth/RegisterForm';
+import useTranslate from '@/hooks/useTranslate';
 
 const Register = () => {
+    const {t} = useTranslate('auth.register');
+
     return (
         <RegisterStyle>
             <div className="register-cont">
-                <h1 className="tit">KMF 멤버스 가입신청</h1>
-                <p className="sub-info">가입신청 후 협회승인시 서비스를 이용하실 수 있습니다. <br />협회에 등록하신 정보와 동일하게 작성해주세요.</p>
+                <h1 className="tit">{t('_.title')}</h1>
                 <RegisterForm />
             </div>
         </RegisterStyle>

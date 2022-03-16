@@ -59,7 +59,8 @@ const StyleHeader = styled.header`
     text-align: center;
 
     span {
-      font-size: 40px;
+      font-size: 30px;
+      font-weight: 600;
       color: ${(props) => props.theme.header.color};
       ${(props) =>
         props.theme.name === 'dark'

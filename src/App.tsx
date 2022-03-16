@@ -5,6 +5,9 @@ import ModalContainer from '@/views/components/common/modal/ModalContainer';
 import DialogContainer from '@/views/components/common/dialog/DialogContainer';
 import ToastContainer from '@/views/components/common/toast/ToastContainer';
 import useRouteMeta from '@/hooks/useRouteMeta';
+import Header from './views/components/layouts/Header';
+import Footer from './views/components/layouts/Footer';
+import '@/plugins/i18n';
 
 function App() {
   const theme = useRouteMeta('theme');
@@ -12,7 +15,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
         <GlobalStyle />
+        <Header theme={theme} />
         <RouterView />
+        <Footer />
         <ModalContainer />
         <DialogContainer />
         <ToastContainer />
