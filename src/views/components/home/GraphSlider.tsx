@@ -5,6 +5,7 @@ import 'swiper/css';
 import { useTypedSelector } from '@/store';
 import SmallGraph from '@/views/components/home/SmallGraph';
 import useService from '@/hooks/useService';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 const GraphSlider = () => {
   const symbols = useTypedSelector(
@@ -41,6 +42,16 @@ const GraphSliderStyle = styled.div`
     } */
     > div {
       margin: 0 auto;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    margin: 0px auto 0;
+    padding-bottom: 55px;
+
+    .swiper-slide{
+      margin: 0 2%;
+      margin-bottom: 2rem;
     }
   }
 `;

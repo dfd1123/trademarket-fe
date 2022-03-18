@@ -15,6 +15,7 @@ import speakerIcon from '@/assets/img/icon/ico-speaker.svg';
 import sectionLiFirShape from '@/assets/img/bg/section5-list1-shape.png';
 import sectionLiSecShape from '@/assets/img/bg/section5-list2-shape.png';
 import sectionLiThirdShape from '@/assets/img/bg/section5-list3-shape.png';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 function Home() {
   const services = useService();
@@ -413,6 +414,204 @@ const HomeStyle = styled.div`
         border-radius: 6px;
       }
     }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    .visual-holder {
+      margin-top: -43px;
+      .intro-cont {
+        padding: 150px 20px 70px;
+        padding-top: 95px;
+        background-size: 45%;
+
+        .tit {
+          font-size: 20px;
+          line-height: 33px;
+        }
+
+        .sub-tit {
+          margin: 15px 0;
+          font-size: 14px;
+          line-height: 20px;
+        }
+
+        ${YellowButton} {
+          width: 135px;
+          height: 40px;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .double-layout {
+      .holder {
+        display: block;
+        max-width: 680px;
+        min-height: 0;
+        margin: 0 auto;
+        padding: 68px 20px;
+        text-align: center;
+        > div {
+          img {
+            max-width: 200px;
+            max-height: 300px;
+            margin-bottom: 20px;
+          }
+          h2 {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 19px;
+            line-height: 24px;
+          }
+          h4 {
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 20px;
+          }
+          p {
+            margin-bottom: 22px;
+            font-size: 14px;
+            line-height: 18px;
+          }
+          ${YellowButton} {
+            width: 150px;
+            height: 40px;
+            font-size: 14px;
+          }
+        }
+      }
+
+      &.reverse {
+        .holder {
+          > div {
+            &:last-child {
+              padding-right: 0;
+            }
+          }
+        }
+      }
+
+      &.third {
+        .holder {
+          > div {
+            &:first-child {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+
+      &.forth {
+        .holder {
+          > div {
+            img {
+              max-width: 200px;
+              max-height: 300px;
+            }
+            &:first-child {
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+
+    .high-review {
+      .holder {
+        display: block;
+        min-height: 0;
+        margin: 0 auto;
+        padding: 30px 20px;
+        text-align: center;
+
+        .intro {
+          max-width: none;
+          padding-right: 0;
+          h2 {
+            font-size: 19px;
+            line-height: 24px;
+          }
+
+          p {
+            margin: 12px 0;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 18px;
+          }
+
+          img {
+            width: 153px;
+          }
+        }
+
+        .review-list-cont {
+          max-width: 640px;
+          margin: 0 auto;
+          margin-top: 40px;
+
+          .review-box {
+            margin-bottom: 10px;
+            padding: 10px;
+
+            > span {
+              padding-left: 25px;
+              font-size: 12px;
+              line-height: 17px;
+              background-position: left 3px;
+              background-size: 12px;
+              text-align: left;
+            }
+          }
+        }
+      }
+    }
+
+    .faq-main-qa {
+      .holder {
+        padding: 45px 20px;
+        ul {
+          display: block;
+          max-width: 680px;
+          margin:0 auto;
+        }
+        li {
+          width: 100%;
+          margin-bottom: 25px;
+          box-shadow: 0px 6px 13px rgb(0 0 0 / 10%);
+          border-radius: 6px;
+          img {
+            max-height: 100px;
+            margin: 0 auto 22px;
+          }
+          span {
+            font-size: 15px;
+            line-height: 16px;
+
+            &::before {
+              top: 10px;
+            }
+          }
+        }
+      }
+    }
+
+    .last-sec {
+    .holder {
+      padding: 60px 0;
+
+      h2 {
+        margin-bottom: 36px;
+        font-size: 18px;
+        line-height: 21px;
+      }
+
+      ${YellowButton} {
+        width: 120px;
+        height: 42px;
+        font-size: 13px;
+      }
+    }
+  }
   }
 `;
 

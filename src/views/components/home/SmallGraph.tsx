@@ -15,6 +15,7 @@ import useService from '@/hooks/useService';
 import { useTypedSelector } from '@/store';
 import { useEffect, useState } from 'react';
 import { formatNumber } from '@/utils/numberUtils';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 ChartJS.register(
   CategoryScale,
@@ -209,6 +210,39 @@ const SmallGraphStyle = styled.div`
       .price {
         color: rgb(86, 180, 192);
       }
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    width: 155px;
+    height: 120px;
+    border-radius: 6px;
+
+    .coin-info {
+      padding: 10px;
+      .info{
+        margin-bottom: 0;
+        .name{
+          font-size: 14px;
+          line-height: 18px;
+        }
+        .percent{
+          min-width: 50px;
+          padding: 4px 5px;
+          font-size: 11px;
+          line-height: 14px;
+        }
+      }
+      .price{
+        font-size:19px;
+        line-height: 25px;
+      }
+    }
+
+    .graph-cont{
+      height: 74px;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
     }
   }
 `;
