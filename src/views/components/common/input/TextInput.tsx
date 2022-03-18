@@ -25,7 +25,7 @@ const TextInput = ({
   tabIndex = 0,
   reset = false,
   number = false,
-  autoComplete = 'off',
+  autoComplete = 'new-password',
   onEnter,
   onChange,
   onClick
@@ -77,7 +77,7 @@ const TextInput = ({
   };
 
   return (
-    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
+    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text || (input.current && input.current.value)) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
       <div className="inp-cont">
         <input
           ref={input}
@@ -116,6 +116,8 @@ export const BasicInput = styled(TextInput)`
 
   .inp-cont {
     position: relative;
+    width:inherit;
+    height:inherit;
   }
 
   label {
@@ -127,7 +129,8 @@ export const BasicInput = styled(TextInput)`
     color:#828282;
   }
   input {
-    width: 100%;
+    width:inherit;
+    height:inherit;
     padding: 10px;
     border: 1px solid #F4F4F4;
     border-radius: 5px;
@@ -229,6 +232,7 @@ export const MerterialInput = styled(BasicInput)`
 
   input {
     border: 1px solid #000000;
+    background-color:#fff;
     
     &::-webkit-input-placeholder,
     &:-moz-placeholder,

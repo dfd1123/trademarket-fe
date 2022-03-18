@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 import darkLogo from '@/assets/img/logo/imcosun-logo.svg';
 import PcGnb from '@/views/components/layouts/PcGnb';
@@ -13,6 +13,7 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const logoText = true;
   const logoImage = theme.name === 'dark' ? darkLogo : darkLogo; // TODO:: whiteLogo 만들기
   const headerHide = useRouteMeta('headerHide');
+  const navigate = useNavigate();
   const {openModal} = useModal();
 
   const mobileMenuOpen = () => {
@@ -31,7 +32,7 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
     </div>
     <PcGnb theme={theme} />
     <div className="btn-cont">
-      <YellowButton className="btn-login">Login</YellowButton>
+      <YellowButton className="btn-login" onClick={() => navigate('/login')}>Login</YellowButton>
       <button className="btn-mobile-menu" onClick={mobileMenuOpen}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <rect x="3" y="5" width="18" height="2" fill="#FFFFFF"></rect>

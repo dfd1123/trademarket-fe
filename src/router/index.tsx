@@ -70,7 +70,7 @@ export default function RouterView() {
 
   useEffect(() => {
     dispatch(setRouteInfo({routeInfo}));
-  }, []);
+  }, [routeInfo]);
 
   const headerHide = meta.headerHide ? 'hide-header' : '';
   const footerHide = meta.headerHide ? 'hide-footer' : '';

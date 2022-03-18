@@ -1,4 +1,4 @@
-import {RegisterInput} from './types/User';
+import {LoginInput, RegisterInput} from './types/User';
 import cookieService from './CookieService';
 import { ConstructorParamsType } from './types/Service';
 import { UserInfo } from '@/store/auth/types/auth';
@@ -17,6 +17,43 @@ import { useEffect } from 'react';
       this.#ws = ws;
       this.#cookie = cookie;
       this.#dispatch = dispatch;
+    }
+
+    login(params : LoginInput){
+      const {userid, passwd} = params;
+      const input : TransactionInputType = {
+        Header: { function: 'D', termtype: 'HTS', trcode: 'login' },
+        Input1: {
+          userid: userid,
+          passwd: passwd,
+          // ipaddr: "211.13.238.186",
+          ibno: '000',
+          usertype: '4',
+          demo: '0',
+          retry: '1',
+          usecert: '',
+          version: '00',
+          mac_addr: '',
+        },
+      }
+
+      const {resultKey: loginTrCode, fetchData} = useAsyncData(input);
+        const loginRes = useTypedSelector(state => state.asyncData[loginTrCode]);
+    
+        const loginFetchData = (params : LoginInput | undefined = undefined) => {
+          if(params) input.Input1 = {...input.Input1, userid: params.userid, passwd: params.passwd};
+          fetchData(input);
+        };
+    
+        useEffect(() => {
+            if(loginRes){
+              if(loginRes.Message.flag === 'E'){
+                alert(loginRes.Message.data);
+              }
+            }
+        }, [loginRes]);
+    
+        return { loginRes, loginFetchData };
     }
   
     register(params : RegisterInput) {

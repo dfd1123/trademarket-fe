@@ -1,5 +1,9 @@
 import { UserInfo } from '@/store/auth/types/auth';
 
+export interface LoginInput {
+  userid: string;
+  passwd: string;
+}
 export interface EmailLoginResponse {
   access_token?: string;
   token_type?: 'bearer';
