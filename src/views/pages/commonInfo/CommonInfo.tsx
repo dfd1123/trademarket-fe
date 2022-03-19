@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import KmfFooter from '@/views/components/layouts/KmfFooter';
-import KmfHeader from '@/views/components/layouts/KmfHeader';
+import KmfFooter from '@/views/layouts/KmfFooter';
+import KmfHeader from '@/views/layouts/KmfHeader';
 
 const loremContent = `Nisi reprehenderit nulla est elit velit adipisicing eu voluptate ut et aute. Culpa sunt velit ipsum nostrud. Cillum ea proident occaecat excepteur eiusmod ad commodo adipisicing adipisicing cillum proident. Ipsum cupidatat fugiat ullamco duis dolore laborum proident reprehenderit sunt amet ex nostrud. Velit excepteur aute aute tempor.\n\n
 
