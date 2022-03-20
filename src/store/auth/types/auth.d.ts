@@ -1,6 +1,38 @@
+export type ScreenSizeType = 'xs' | 'sm' | 'md' | 'xl';
+export type LanguageType = 'KOR' | 'ENG';
+
 export interface AuthState {
-    accessToken: string | null;
-    user: UserInfo | null;
+  isLoggedIn: boolean;
+  language: LanguageType;
+  screenSize?: ScreenSizeType;
+  data: {
+    szAccNo: string;
+    szBankAccNo: string;
+    szPasswd: string;
+    jwt: string;
+    email: string;
+    exp: number;
+    fromDt: string;
+    toDt: string;
+  };
+  operatingHour: {
+    ['nCurBusiDate(pin)']: number;
+    ['nPrevBusiDate(pin)']: number;
+    ['nNextBusiDate(pin)']: number;
+  };
+  favorites: { data: Array<any>; trReceived: boolean };
+}
+
+export interface SetUserType {
+  szAccNo: string;
+  szBankAccNo: string;
+  email: string;
+  szPasswd: string;
+  jwt: string;
+  exp: number;
+  location: string;
+  fromDt: string;
+  toDt: string;
 }
 
 export interface UserInfo {

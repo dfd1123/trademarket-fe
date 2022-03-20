@@ -199,6 +199,7 @@ const HomeStyle = styled.div`
   }
 
   .double-layout {
+    background-color: #fff;
     .holder {
       display: flex;
       flex-direction: row;
@@ -344,6 +345,7 @@ const HomeStyle = styled.div`
   }
 
   .faq-main-qa {
+    background-color:#fff;
     .holder {
       max-width: 1450px;
       margin: 0 auto;

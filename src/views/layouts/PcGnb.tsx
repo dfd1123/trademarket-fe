@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import gnbList from '@/data/gnbList';
 import styled, { DefaultTheme } from 'styled-components';
-import Gnb from '@/views/components/layouts/Gnb';
+import Gnb from '@/views/layouts/Gnb';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 function PcGnb({ theme }: { theme: DefaultTheme }) {
@@ -17,13 +17,14 @@ const StyledPcGnb = styled.div`
     display: flex;
     align-items: center;
     padding: 0 170px;
+    padding-right: 400px;
     > li {
       position: relative;
       display: flex;
       align-items: center;
       height: 74px;
-      margin: 0 35px;
-      font-size: 18px;
+      margin: 0 22px;
+      font-size: 16px;
       color: ${(props) => props.theme.header.color};
       cursor: pointer;
 
@@ -90,13 +91,17 @@ const StyledPcGnb = styled.div`
         transition: max-height 0.2s;
 
         > ul {
-          padding: 10px;
+          padding: 10px 0;
           > li {
-            padding: 6px 5px;
+            padding: 6px 15px;
             > a {
               font-size: 16px;
               color:#fff;
               line-height: 19px;
+            }
+
+            &:hover{
+              background-color: rgba(0, 0, 0, 0.04);
             }
           }
         }

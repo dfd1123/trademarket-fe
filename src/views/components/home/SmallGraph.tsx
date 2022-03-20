@@ -16,6 +16,7 @@ import { useTypedSelector } from '@/store';
 import { useEffect, useState } from 'react';
 import { formatNumber } from '@/utils/numberUtils';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import React from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -35,14 +36,11 @@ interface PropsType {
 const SmallGraph = ({ coinInfo }: PropsType) => {
   const services = useService();
   const { tradeHistory }: { tradeHistory: any[] } =
-    services.chart.getTradeHistory(coinInfo.CUR_NO, 1, 200);
-  const [priceHistory, setPriceHistory] = useState<number[]>([]);
+    services.chart.getTradeHistory(coinInfo.CUR_NO, 1, 300);
   const [changePerc, setChangePerc] = useState('0.00');
   const [price, setPrice] = useState('0');
   const realTimeCoinInfo = useTypedSelector(
-    (state) => state.realTimePrice[coinInfo.CUR_NO],
-    (a, b) => a?.szClose === b?.szClose || tradeHistory.length > 0
-  );
+    (state) => state.realTimePrice[coinInfo.CUR_NO]);
 
   useEffect(() => {
     if (realTimeCoinInfo) {
@@ -61,12 +59,8 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
     }
   }, [realTimeCoinInfo]);
 
-  useEffect(() => {
-    setPriceHistory(tradeHistory.map((trade) => trade[4]));
-  }, [tradeHistory]);
-
   const data = {
-    labels: priceHistory,
+    labels: tradeHistory.map((trade) => trade[4]),
     datasets: [
       {
         label: coinInfo.CUR_NO,
@@ -77,7 +71,7 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
             ? 'rgba(86, 180, 192, 0.5)'
             : 'rgba(255, 107, 107, 0.5)',
         fill: true,
-        data: priceHistory,
+        data: tradeHistory.map((trade) => trade[4]),
       },
     ],
   };
@@ -101,8 +95,16 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
         },
       },
       y: {
-        min: Math.min.apply(Math, priceHistory) / 1.2,
-        max: Math.max.apply(Math, priceHistory) * 1.1,
+        min:
+          Math.min.apply(
+            Math,
+            tradeHistory.map((trade) => trade[4])
+          ) / 1.2,
+        max:
+          Math.max.apply(
+            Math,
+            tradeHistory.map((trade) => trade[4])
+          ) * 1.1,
         display: false,
         grid: {
           display: false,
@@ -135,8 +137,10 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
         <b className="price">${price}</b>
       </div>
       <div className="graph-cont">
-        {priceHistory.length && (
+        {tradeHistory.length ? (
           <Line options={options} data={data} height={100} />
+        ) : (
+          ''
         )}
       </div>
     </SmallGraphStyle>
@@ -159,7 +163,7 @@ const SmallGraphStyle = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom:3px;
+      margin-bottom: 3px;
       .name {
         font-size: 16px;
         line-height: 18px;
@@ -202,8 +206,8 @@ const SmallGraphStyle = styled.div`
 
   &.down {
     .coin-info {
-      .info{
-        .percent{
+      .info {
+        .percent {
           background-color: rgb(86, 180, 192);
         }
       }
@@ -214,35 +218,35 @@ const SmallGraphStyle = styled.div`
   }
 
   @media (max-width: ${TABLET_SIZE}) {
-    width: 155px;
+    width: 180px;
     height: 120px;
     border-radius: 6px;
 
     .coin-info {
       padding: 10px;
-      .info{
+      .info {
         margin-bottom: 0;
-        .name{
+        .name {
           font-size: 14px;
           line-height: 18px;
         }
-        .percent{
+        .percent {
           min-width: 50px;
           padding: 4px 5px;
           font-size: 11px;
           line-height: 14px;
         }
       }
-      .price{
-        font-size:19px;
+      .price {
+        font-size: 19px;
         line-height: 25px;
       }
     }
 
-    .graph-cont{
+    .graph-cont {
       height: 74px;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
     }
   }
 `;

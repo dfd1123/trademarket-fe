@@ -14,7 +14,7 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange?: (value: any) => void;
 }
 
-const CheckBox = ({
+const CheckBox = React.memo(({
   data,
   type = 'checkbox',
   label,
@@ -31,7 +31,7 @@ const CheckBox = ({
   const inpRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (data) {
+    if (data !== null && typeof data !== 'undefined') {
       if (type === 'checkbox') {
         const uniqData = [...new Set(data)];
         if (onChange && JSON.stringify(uniqData) !== JSON.stringify(data))
@@ -53,10 +53,8 @@ const CheckBox = ({
         inpRef.current.checked = changeData;
         setCheck(changeData);
       } else {
-        if (data === value) {
-          inpRef.current.checked = true;
-          setCheck(true);
-        }
+        inpRef.current.checked = data === value;
+        setCheck(data === value);
       }
     }
   };
@@ -97,7 +95,8 @@ const CheckBox = ({
     <Ripples
       className={`btn ${className}`}
       color={ripple.color}
-      during={ripple.during}>
+      during={ripple.during}
+    >
       <input
         ref={inpRef}
         id={uniqueId}
@@ -110,7 +109,8 @@ const CheckBox = ({
       />
       <label
         htmlFor={uniqueId}
-        className={`${className} ${check ? 'checked' : ''}`}>
+        className={`${className} ${check ? 'checked' : ''}`}
+      >
         {label}
       </label>
     </Ripples>
@@ -128,12 +128,13 @@ const CheckBox = ({
       />
       <label
         htmlFor={uniqueId}
-        className={`${className} ${check ? 'checked' : ''}`}>
+        className={`${className} ${check ? 'checked' : ''}`}
+      >
         {label}
       </label>
     </div>
   );
-};
+});
 
 export const BasicCheckBox = styled(CheckBox)`
   display: inline-block;

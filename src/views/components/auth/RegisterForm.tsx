@@ -41,7 +41,6 @@ const RegisterForm = () => {
 
   const submitHandler = async () => {
     // const result = await services.user.register(inputs);
-
     // if (result.access_token) {
     //   dispatch(setAuth(result));
     //   toast('회원가입이 완료되었습니다. 관리자 승인 후 이용 가능하십니다.', {
@@ -60,7 +59,7 @@ const RegisterForm = () => {
   }, [inputs]);
 
   return (
-    <PasswordResetFormStyle>
+    <RegisterFormStyle>
       <div className="article">
         <TextInput
           type="email"
@@ -78,9 +77,7 @@ const RegisterForm = () => {
         />
         {inputs.szPasswd &&
         (inputs.szPasswd.length < 8 || inputs.szPasswd.length > 20) ? (
-          <span className={`status incorrect`}>
-            {t('_.passwordRule')}
-          </span>
+          <span className={`status incorrect`}>{t('_.passwordRule')}</span>
         ) : (
           ''
         )}
@@ -132,14 +129,12 @@ const RegisterForm = () => {
       <YellowButton disabled={!correct || !validate} onClick={submitHandler}>
         {t('_.request')}
       </YellowButton>
-    </PasswordResetFormStyle>
+    </RegisterFormStyle>
   );
 };
 
-const PasswordResetFormStyle = styled.div`
-  padding-bottom: 80px;
+const RegisterFormStyle = styled.div`
   .article {
-    margin-bottom: 56px;
     h6 {
       margin-bottom: 16px;
       font-size: 13px;
@@ -151,25 +146,29 @@ const PasswordResetFormStyle = styled.div`
     ${TextInput} {
       width: 100%;
       margin-bottom: 13px;
-      font-size:13px;
+      font-size: 13px;
 
-      input{
+      input {
         height: 50px;
         padding: 0 10px;
       }
 
-      label{
+      label {
         left: 10px;
       }
 
       &.focus-value {
-        label { top: -11px; color:#000; }
+        label {
+          top: -11px;
+          color: #000;
+        }
       }
     }
 
     .status {
       display: block;
       margin-top: -5px;
+      margin-bottom: 15px;
       padding: 0 3px;
       font-size: 12px;
       &.correct {
@@ -179,6 +178,21 @@ const PasswordResetFormStyle = styled.div`
       &.incorrect {
         color: red;
       }
+    }
+  }
+
+  ${YellowButton} {
+    max-width: 380px;
+    width: 100%;
+    height: 48px;
+    margin: 0 auto;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 4px;
+
+    &.disabled{
+      border:1px solid #ccc;
+      background-color:#ccc;
     }
   }
 `;

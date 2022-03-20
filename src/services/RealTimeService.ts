@@ -1,7 +1,7 @@
-import { useContext, useEffect } from 'react';
-import { WebSocketContext } from '@/provider/WebSocketProvider';
+import { useEffect } from 'react';
 import { TransactionInputType } from '@/types/TransactionType';
 import { ConstructorParamsType } from './types/Service';
+import useCoinList from '@/hooks/useCoinList';
 
 class RealTimeService {
   #ws;
@@ -15,6 +15,8 @@ class RealTimeService {
   }
 
   coinPrice() {
+    const {symbols} = useCoinList();
+
     const input: TransactionInputType = {
       Header: {
         function: 'A',
@@ -22,12 +24,12 @@ class RealTimeService {
         trcode: '91',
       },
       Input1: {
-        Key1: 'BTCUSDT',
-        Key2: 'ETHUSDT',
-        Key3: 'XRPUSDT',
-        Key4: 'DOGEUSDT',
       },
     };
+
+    for(let i = 0; i < symbols.length; i++){
+      input.Input1[`Key${i + 1}`] = symbols[i];
+    }
 
     const disConnectInput: TransactionInputType = {
       ...input,
@@ -40,6 +42,12 @@ class RealTimeService {
         this.#ws.sendInput(input);
       }, 5);
 
+      return () => {
+        this.#ws.sendInput(disConnectInput);
+      };
+    }, [symbols]);
+
+    useEffect(() => {
       return () => {
         this.#ws.sendInput(disConnectInput);
       };

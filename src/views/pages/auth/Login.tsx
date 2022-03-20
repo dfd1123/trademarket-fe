@@ -1,32 +1,38 @@
-import useService from '@/hooks/useService';
-import { YellowButton } from '@/views/components/common/Button';
-import MerterialInput, {
-  BasicInput,
-} from '@/views/components/common/input/TextInput';
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import useService from '@/hooks/useService';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import { YellowButton } from '@/views/components/common/Button';
+import MerterialInput from '@/views/components/common/input/TextInput';
+import useUserData from '@/hooks/useUserData';
 
 const initialInputs = {
-    userid: '',
-    passwd: '',
-    otp_token: '',
+  userid: '',
+  passwd: '',
+  otp_token: '',
 };
 
 const Login = () => {
-    const [inputs, setInputs] = useState(initialInputs);
-    const navigate = useNavigate();
-    const services = useService();
-    const {loginFetchData} = services.user.login(inputs);
+  const [inputs, setInputs] = useState(initialInputs);
+  const navigate = useNavigate();
+  const services = useService();
+  const { isLoggedIn } = useUserData();
+  const { loginFetchData } = services.user.login(inputs);
 
-    const handleInputChange = (value: any, name: string) => {
-        setInputs({ ...inputs, [name]: value });
-      };
+  const handleInputChange = (value: any, name: string) => {
+    setInputs({ ...inputs, [name]: value });
+  };
 
-      const loginSubmit = () => {
-        loginFetchData(inputs);
-      }
+  const loginSubmit = () => {
+    loginFetchData(inputs);
+  };
 
+  useEffect(() => {
+    if(isLoggedIn){
+      navigate('/');
+    }
+  }, [isLoggedIn]);
 
   return (
     <LoginStyle>
@@ -34,13 +40,26 @@ const Login = () => {
         <h1 className="tit">Login</h1>
         <div className="login-form">
           <div className="holder">
-            <MerterialInput label="Email" type="email" name="userid" onChange={handleInputChange} />
-            <MerterialInput label="Password" type="password" name="passwd" onChange={handleInputChange} />
+            <MerterialInput
+              label="Email"
+              type="email"
+              name="userid"
+              onChange={handleInputChange}
+            />
+            <MerterialInput
+              label="Password"
+              type="password"
+              name="passwd"
+              onChange={handleInputChange}
+              onEnter={loginSubmit}
+            />
             <YellowButton onClick={loginSubmit}>Login</YellowButton>
           </div>
         </div>
         <div className="btn-con">
-        <YellowButton onClick={() => navigate('/register')}>Register</YellowButton>
+          <YellowButton onClick={() => navigate('/register')}>
+            Register
+          </YellowButton>
         </div>
       </div>
     </LoginStyle>
@@ -52,7 +71,7 @@ const LoginStyle = styled.div`
     max-width: 700px;
     min-height: calc(100vh - 74px);
     margin: 0 auto;
-    padding:0 10px;
+    padding: 0 10px;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -104,11 +123,11 @@ const LoginStyle = styled.div`
       }
     }
 
-    .btn-con{
-        max-width: 400px;
-        width:100%;
-        margin: 0 auto;
-        padding:0 10px;
+    .btn-con {
+      max-width: 400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 10px;
     }
 
     ${YellowButton} {
@@ -119,6 +138,12 @@ const LoginStyle = styled.div`
       font-size: 15px;
       font-weight: 700;
       border-radius: 4px;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    .cont {
+      min-height: calc(100vh - 43px);
     }
   }
 `;

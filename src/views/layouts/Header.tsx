@@ -2,12 +2,14 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { DefaultTheme } from 'styled-components';
 import darkLogo from '@/assets/img/logo/imcosun-logo.svg';
-import PcGnb from '@/views/components/layouts/PcGnb';
+import PcGnb from '@/views/layouts/PcGnb';
 import { YellowButton } from '@/views/components/common/Button';
-import MobileGnb from '@/views/components/layouts/MobileGnb';
+import MobileGnb from '@/views/layouts/MobileGnb';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import useModal from '@/hooks/useModal';
 import useRouteMeta from '@/hooks/useRouteMeta';
+import { useTypedSelector } from '@/store';
+import UserInfo from '@/views/layouts//UserInfo';
 
 const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const logoText = true;
@@ -15,6 +17,7 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const headerHide = useRouteMeta('headerHide');
   const navigate = useNavigate();
   const {openModal} = useModal();
+  const userInfo = useTypedSelector((state) => state.authSlice);
 
   const mobileMenuOpen = () => {
     openModal(MobileGnb);
@@ -32,7 +35,10 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
     </div>
     <PcGnb theme={theme} />
     <div className="btn-cont">
-      <YellowButton className="btn-login" onClick={() => navigate('/login')}>Login</YellowButton>
+      {userInfo.isLoggedIn ? (<UserInfo info={userInfo} />):(
+        <YellowButton className="btn-login" onClick={() => navigate('/login')}>Login</YellowButton>
+      )}
+      
       <button className="btn-mobile-menu" onClick={mobileMenuOpen}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <rect x="3" y="5" width="18" height="2" fill="#FFFFFF"></rect>

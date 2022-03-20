@@ -1,6 +1,7 @@
 import common from '@/router/common';
 import test from '@/router/test';
 import auth from '@/router/auth';
+import trade from '@/router/trade';
 import { setRouteInfo } from "@/store/info/infoReducer";
 import { Route, RouteMeta } from "@/types/Route";
 import { useEffect } from "react";
@@ -13,6 +14,7 @@ const routeList : Route[] = [
     ...test,
     ...common,
     ...auth,
+    ...trade,
 ];
 
 export default function RouterView() {

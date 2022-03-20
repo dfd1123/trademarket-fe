@@ -9,7 +9,8 @@ interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   reset?: boolean;
   number?:boolean;
   autocomplete?:'on'|'off';
-  onEnter?: (value : any , name?: any) => void;
+  onEnter?: (value?: any , name?: any) => void;
+  onInput?: (value : any , name?: any) => void;
   onChange?: (value : any , name?: any) => void;
 }
 
@@ -25,9 +26,12 @@ const TextInput = ({
   tabIndex = 0,
   reset = false,
   number = false,
+  min,
+  max,
   autoComplete = 'new-password',
   onEnter,
   onChange,
+  onInput,
   onClick
 }: PropsType) => {
   const isSearch = type === "search";
@@ -59,10 +63,13 @@ const TextInput = ({
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let {value, name} = e.target;
+    let {value, name} : {value: string | number, name: string} = e.target;
     if(number) {
-      value = value.replace(/[^0-9]/g,'');
+      value = Number(value.replace(/[^0-9]/g,''));
+      if(min && value < min) value = min;
+      if(max && value > max) value = max;
     }
+    console.log(value);
     setText(value);
     if (onChange) onChange(value, name);
   };
@@ -77,7 +84,7 @@ const TextInput = ({
   };
 
   return (
-    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text || (input.current && input.current.value)) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
+    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text || '') || (input.current && input.current.value) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
       <div className="inp-cont">
         <input
           ref={input}
@@ -87,9 +94,9 @@ const TextInput = ({
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}
-          tabIndex={tabIndex}
           autoComplete={autoComplete}
           onKeyPress={handleKeyPress}
+          onInput={handleValueChange}
           onChange={handleValueChange}
           onFocus={() => toggleFocus(true)}
           onBlur={() => toggleFocus(false)}
@@ -227,12 +234,14 @@ export const MerterialInput = styled(BasicInput)`
     pointer-events: none;
     transition: font-size 0.2s, top 0.2s;
     font-size: 1em;
+    color: #000;;
     transform: translate(0px, 0px);
   }
 
   input {
     border: 1px solid #000000;
     background-color:#fff;
+    outline: #000 !important;
     
     &::-webkit-input-placeholder,
     &:-moz-placeholder,
@@ -251,6 +260,10 @@ export const MerterialInput = styled(BasicInput)`
     &::-webkit-search-results-button,
     &::-webkit-search-results-decoration {
       display: none;
+    }
+
+    &:focus{
+      border:2px solid #000;
     }
   }
 

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+import { ModalComponentPropsType } from '@/store/modal/types/modal';
 import { NoBorderButton, YellowButton } from '@/views/components/common/Button';
 import { FullScreenModalStyle } from '@/views/components/common/modal/ModalTemplate';
-import Gnb from '@/views/components/layouts/Gnb';
-import { ModalComponentPropsType } from '@/store/modal/types/modal';
+import Gnb from '@/views/layouts/Gnb';
 
 const MobileGnb = ({ close, className }: ModalComponentPropsType) => {
   return (

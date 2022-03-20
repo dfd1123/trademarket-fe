@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ConstructorParamsType } from './types/Service';
 import { TransactionInputType } from '@/types/TransactionType';
 import useAsyncData from '@/hooks/useAsyncData';
@@ -17,6 +17,7 @@ class ChartService {
   }
 
   getTradeHistory(symbol: string, nMinTerm: string | number, nReqCnt: string | number) {
+    const [reqData, setReqData] = useState(false);
     const trid = tridList.findIndex((id) => id === symbol);
     const tradeHistory = useTypedSelector(
       (state) => state.asyncData[`t9731_${symbol}`]
@@ -30,7 +31,7 @@ class ChartService {
         function: 'D',
         termtype: 'HTS',
         trcode: 't9731',
-        trid: String(trid),
+        trid: String(trid === -1 ? 1 : trid),
       },
       Input1: {
         szCurNo: symbol,
@@ -44,7 +45,10 @@ class ChartService {
 
     const {fetchData} = useAsyncData(input);
 
-    if(!tradeHistory) fetchData();
+    if(!tradeHistory && !reqData) {
+      fetchData();
+      setReqData(true);
+    }
     
     return {tradeHistory : tradeHistory?.Output1 || []};
   }

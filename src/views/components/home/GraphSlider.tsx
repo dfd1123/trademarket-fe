@@ -1,22 +1,17 @@
 import styled from 'styled-components';
-import { FreeMode } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { useTypedSelector } from '@/store';
 import SmallGraph from '@/views/components/home/SmallGraph';
-import useService from '@/hooks/useService';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useCoinList from '@/hooks/useCoinList';
 
 const GraphSlider = () => {
-  const symbols = useTypedSelector(
-    (state) => Object.values(state.coinInfoSlice.symbols),
-    (a, b) => JSON.stringify(a) === JSON.stringify(b)
-  );
+  const {coinList} = useCoinList();
 
   return (
     <GraphSliderStyle>
       <Swiper slidesPerView="auto">
-        {symbols.map((coin) => (
+        {coinList.map((coin) => (
           <SwiperSlide key={coin.CUR_NO}>
             <SmallGraph coinInfo={coin} />
           </SwiperSlide>
@@ -28,7 +23,8 @@ const GraphSlider = () => {
 
 const GraphSliderStyle = styled.div`
   max-width: 1429px;
-  margin: 80px auto 100px;
+  margin:0 auto;
+  padding: 80px 0 100px;
   /* padding:0 14px; */
   .swiper-wrapper{
     

@@ -64,7 +64,7 @@ const coinInfoSlice = createSlice({
                     symbols[curNo] = coinInfo;
                 }
             }
-            state.symbols = symbols as CoinInfo;
+            state.symbols = symbols;
             state.symbolCount = Number(Output1?.szCnt ?? 0);
         }
     }

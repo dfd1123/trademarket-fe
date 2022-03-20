@@ -7,7 +7,7 @@ export interface GnbMenuType {
 }
 
 let gnbList : GnbMenuType[] = [
-  { id: "trade", name: "Feature Trade", path: "/" },
+  { id: "trade", name: "Feature Trade", path: "/trade" },
   {
     id: "wallet",
     name: "Wallet",

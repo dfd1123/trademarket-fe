@@ -12,11 +12,11 @@ interface PropTypes extends React.HTMLAttributes<HTMLButtonElement | HTMLElement
 }
 
 const Button = ({ children, ripple = true, color, during, className, onClick, disabled}: PropTypes) => {
-  color = color ?? "rgba(0, 0, 0, .3)";
+  color = color ?? "rgba(255,255,255,0.3)";
   during = during ?? 900;
 
   return ripple ? (
-    <Ripples className={`btn ${className}`} color={color} during={during}  onClick={onClick}>
+    <Ripples className={`btn ${className} ${disabled && 'disabled'}`} color={color} during={during} onClick={onClick}>
       <button disabled={disabled}>{children}</button>
     </Ripples>
   ) : (
@@ -42,6 +42,10 @@ export const BasicButton = styled(Button)`
       font-size:inherit;
       font-weight:inherit;
       color:inherit;
+
+      &:disabled{
+        cursor: no-drop;
+      }
     }
 `;
 

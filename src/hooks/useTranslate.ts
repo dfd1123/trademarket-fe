@@ -8,7 +8,6 @@ const useTranslate = (key: string) => {
 
     const t = (str: string) => {
         if(str.substring(0, 2) === '_.') str = str.replace('_.', `${key}.`);
-        console.log(i18n.t(str), str);
         return i18n.t(str);
     };
 
