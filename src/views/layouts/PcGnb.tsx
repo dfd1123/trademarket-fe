@@ -30,8 +30,9 @@ const StyledPcGnb = styled.div`
 
       .react-ripples {
         display:block !important;
-        padding: 10px 5px;
         > a {
+          display:block;
+          padding: 10px 5px;
           color: inherit;
           ${(props) =>
             props.theme.name === 'dark'

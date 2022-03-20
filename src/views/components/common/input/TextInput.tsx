@@ -69,7 +69,6 @@ const TextInput = ({
       if(min && value < min) value = min;
       if(max && value > max) value = max;
     }
-    console.log(value);
     setText(value);
     if (onChange) onChange(value, name);
   };

@@ -37,6 +37,7 @@ const LeverageSetModal = ({
           max={max}
           number
           onChange={setNewLeverage}
+          onEnter={submitLeverage}
         />
       </div>
       <div>
