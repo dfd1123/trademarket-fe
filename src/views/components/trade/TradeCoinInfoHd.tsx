@@ -20,6 +20,7 @@ const TradeCoinInfoHdStyle = styled.div`
   position: relative;
   min-height: 68px;
   margin-top: 10px;
+  margin-bottom: 5px;
   padding: 14px 20px;
   background-color: rgb(30, 31, 35);
 

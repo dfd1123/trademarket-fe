@@ -16,7 +16,7 @@ class ChartService {
     this.#dispatch = dispatch;
   }
 
-  getTradeHistory(symbol: string, nMinTerm: string | number, nReqCnt: string | number) {
+  getTradeHistory(symbol: string, nMinTerm: string | number = 1, cTermDiv: string | number, nReqCnt: string | number = 500) {
     const [reqData, setReqData] = useState(false);
     const trid = tridList.findIndex((id) => id === symbol);
     const tradeHistory = useTypedSelector(
@@ -24,7 +24,7 @@ class ChartService {
     );
     nReqCnt = nReqCnt.toString();
     nMinTerm = nMinTerm.toString();
-    const cTermDiv = ['1', '7', '30'].includes(nMinTerm) ? '3' : '2';
+    cTermDiv = cTermDiv.toString();
 
     const input: TransactionInputType = {
       Header: {
@@ -45,12 +45,20 @@ class ChartService {
 
     const {fetchData} = useAsyncData(input);
 
+    const tradeHistoryFetchData = (nMinTerm: string | number, cTermDiv: string | number, nReqCnt: string | number = 500) => {
+      input.Input1.nReqCnt = nReqCnt.toString();
+      input.Input1.nMinTerm = nMinTerm.toString();
+      input.Input1.cTermDiv = cTermDiv.toString();
+
+      fetchData({...input});
+    }
+
     if(!tradeHistory && !reqData) {
       fetchData();
       setReqData(true);
     }
     
-    return {tradeHistory : tradeHistory?.Output1 || []};
+    return {tradeHistory : tradeHistory?.Output1 || [], tradeHistoryFetchData};
   }
 }
 

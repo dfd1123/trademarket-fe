@@ -26,6 +26,7 @@
     "i18next": "^21.6.13",
     "js-cookie": "^3.0.1",
     "lodash": "4.17.21",
+    "moment": "^2.29.1",
     "query-string": "7.1.1",
     "react": "^17.0.2",
     "react-calendar": "^3.7.0",

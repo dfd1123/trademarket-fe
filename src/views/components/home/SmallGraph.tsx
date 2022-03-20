@@ -36,7 +36,7 @@ interface PropsType {
 const SmallGraph = ({ coinInfo }: PropsType) => {
   const services = useService();
   const { tradeHistory }: { tradeHistory: any[] } =
-    services.chart.getTradeHistory(coinInfo.CUR_NO, 1, 300);
+    services.chart.getTradeHistory(coinInfo.CUR_NO, 1, 3, 300);
   const [changePerc, setChangePerc] = useState('0.00');
   const [price, setPrice] = useState('0');
   const realTimeCoinInfo = useTypedSelector(
