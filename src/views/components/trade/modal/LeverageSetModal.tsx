@@ -6,6 +6,7 @@ import { BasicInput } from '@/views/components/common/input/TextInput';
 import { ButtonCheckBox } from '@/views/components/common/input/CheckBox';
 import { YellowButton, BasicButton } from '@/views/components/common/Button';
 import RangeInput from '../../common/input/RangeInput';
+import { MOBILE_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 interface PropsType extends ModalComponentPropsType {
   leverage?: number;
@@ -17,14 +18,14 @@ const LeverageSetModal = ({
   close,
   resolve,
 }: PropsType) => {
-    const min = 0;
-    const max = 100;
+  const min = 0;
+  const max = 100;
   const radioCheckList = [1, 5, 10, 25, 50, 75, 100];
   const [newLeverage, setNewLeverage] = useState(leverage ?? min);
 
   const submitLeverage = () => {
-      resolve && resolve(newLeverage);
-  }
+    resolve && resolve(newLeverage);
+  };
 
   return (
     <LeverageSetModalStyle close={close} nonModal={nonModal}>
@@ -39,7 +40,20 @@ const LeverageSetModal = ({
         />
       </div>
       <div>
-          <RangeInput name="leverage-range" step={1} min={min} max={max} value={newLeverage} trackHeight={4} trackColor="#A1A1A1" thumbWidth={20} thumbHeight={20} thumbColor="#fff" showLabel onChange={setNewLeverage} />
+        <RangeInput
+          name="leverage-range"
+          step={1}
+          min={min}
+          max={max}
+          value={newLeverage}
+          trackHeight={4}
+          trackColor="#A1A1A1"
+          thumbWidth={20}
+          thumbHeight={20}
+          thumbColor="#fff"
+          showLabel
+          onChange={setNewLeverage}
+        />
       </div>
       <div className="radio-btn-cont">
         {radioCheckList.map((radio) => (
@@ -56,8 +70,8 @@ const LeverageSetModal = ({
       </div>
       <div className="info">Please manage your risk accordingly</div>
       <div className="btn-cont">
-          <YellowButton onClick={submitLeverage}>Apply</YellowButton>
-          <BasicButton onClick={close}>Cancel</BasicButton>
+        <YellowButton onClick={submitLeverage}>Apply</YellowButton>
+        <BasicButton onClick={close}>Cancel</BasicButton>
       </div>
     </LeverageSetModalStyle>
   );
@@ -95,7 +109,7 @@ const LeverageSetModalStyle = styled(ModalStyle)`
     .radio-btn-cont {
       ${ButtonCheckBox} {
         label {
-          width:70px;
+          width: 70px;
           margin: 5px;
           padding: 0 0;
           font-size: 13px;
@@ -125,29 +139,44 @@ const LeverageSetModalStyle = styled(ModalStyle)`
       text-align: center;
     }
 
-    .btn-cont{
+    .btn-cont {
+      text-align: center;
+      ${YellowButton} {
+        max-width: 100px;
+        width: 100%;
+        height: 40px;
+        margin-right: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
         text-align: center;
-        ${YellowButton}{
-            max-width: 100px;
-            width: 100%;
-            height: 40px;
-            margin-right: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            color:#fff;
-            text-align: center;
-        }
+      }
 
-        ${BasicButton}{
-            max-width: 100px;
-            width: 100%;
-            height: 40px;
-            margin-right: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            color:#fff;
-            text-align: center;
+      ${BasicButton} {
+        max-width: 100px;
+        width: 100%;
+        height: 40px;
+        margin-right: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+      }
+    }
+  }
+
+  @media (max-width: ${MOBILE_SIZE}) {
+    .cont {
+      margin: 0 10px;
+
+      .radio-btn-cont {
+      ${ButtonCheckBox} {
+          width:calc(100% / 4);
+        label {
+            width:100%;
         }
+      }
+    }
     }
   }
 `;
