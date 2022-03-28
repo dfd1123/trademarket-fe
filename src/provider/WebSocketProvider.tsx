@@ -1,6 +1,6 @@
 import React from "react";
 import { batch, useDispatch } from "react-redux";
-import { updatePriceData } from "@/store/realTime/realTimePrice";
+import { updatePriceData } from "@/store/realTime/realTimeData";
 import { updateAsyncData } from "@/store/asyncData/asyncData";
 import { TransactionInputType } from "@/types/TransactionType";
 import { updateCoinInfo } from "@/store/coinInfo/coinInfoSlice";

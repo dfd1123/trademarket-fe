@@ -9,7 +9,7 @@ import toastSlice from '@/store/modal/toast';
 import infoReducer from '@/store/info/infoReducer';
 import authSlice from '@/store/auth/auth';
 import asyncData from '@/store/asyncData/asyncData';
-import realTimePrice from '@/store/realTime/realTimePrice';
+import realTimeData from '@/store/realTime/realTimeData';
 import coinInfoSlice from '@/store/coinInfo/coinInfoSlice';
 
 export type RootState = ReturnType<typeof store.getState>;
@@ -22,12 +22,12 @@ const reducers = combineReducers({
   infoReducer,
   authSlice,
   asyncData,
-  realTimePrice,
+  realTimeData,
   coinInfoSlice
 });
 
 const persistConfig = { 
-  key: 'root', 
+  key: 'elpist', 
   storage, 
   whitelist:['authSlice']
 };

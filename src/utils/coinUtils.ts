@@ -1,6 +1,7 @@
-import { CoinOutput } from "@/store/realTime/types/realTimePrice";
+import { CoinOutput, RealTimeCoinOutput } from "@/store/realTime/types/realTimeData";
+import { formatNumber } from "./numberUtils";
 
-export const formatSymbolData = (obj : CoinOutput, pipLowest = 2) => {
+export const formatSymbolData = (obj : RealTimeCoinOutput, pipLowest = 2) => {
     if (!obj) return {};
   
     const getChangePerc = () => {

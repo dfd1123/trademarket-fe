@@ -40,7 +40,7 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
   const [changePerc, setChangePerc] = useState('0.00');
   const [price, setPrice] = useState('0');
   const realTimeCoinInfo = useTypedSelector(
-    (state) => state.realTimePrice[coinInfo.CUR_NO]);
+    (state) => state.realTimeData.price[coinInfo.CUR_NO]);
 
   useEffect(() => {
     if (realTimeCoinInfo) {

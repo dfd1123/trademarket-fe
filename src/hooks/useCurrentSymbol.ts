@@ -5,7 +5,7 @@ const useCurrentSymbol = (symbol: string) => {
   const { PIP_LOWEST, MAX_ORDCNT } = useTypedSelector(
     (state) => state.coinInfoSlice.symbols[symbol] || {}
   );
-  const coin = useTypedSelector((state) => state.realTimePrice[symbol]);
+  const coin = useTypedSelector((state) => state.realTimeData.price[symbol]);
 
   if (!coin) return {};
 

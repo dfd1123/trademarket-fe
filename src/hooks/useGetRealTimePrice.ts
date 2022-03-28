@@ -1,8 +1,8 @@
 import { useTypedSelector } from '@/store';
-import {getRealTimePrice} from '@/store/realTime/realTimePrice';
-import { RealTimePriceState } from '@/store/realTime/types/realTimePrice';
+import {getRealTimePrice} from '@/store/realTime/realTimeData';
+import { RealTimeDataState } from '@/store/realTime/types/realTimeData';
 
-const useGetRealTimePrice = (symbol: keyof RealTimePriceState, equalityFn?: (left: unknown, right: unknown) => boolean) => {
+const useGetRealTimePrice = (symbol: string, equalityFn?: (left: unknown, right: unknown) => boolean) => {
     return useTypedSelector(getRealTimePrice(symbol), equalityFn);
 }
 
