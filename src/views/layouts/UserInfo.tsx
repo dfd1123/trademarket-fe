@@ -73,6 +73,8 @@ const UserInfoStyle = styled.div`
   }
 
   ${BasicButton} {
+    display: inline-block !important;
+    vertical-align: middle;
     width: 90px;
     height: 32px;
     margin-left: 10px;

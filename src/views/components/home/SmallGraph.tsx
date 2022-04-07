@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import { formatNumber } from '@/utils/numberUtils';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import React from 'react';
+import { TradeHistoryData } from '@/services/types/Trade';
 
 ChartJS.register(
   CategoryScale,
@@ -35,8 +36,8 @@ interface PropsType {
 
 const SmallGraph = ({ coinInfo }: PropsType) => {
   const services = useService();
-  const { tradeHistory }: { tradeHistory: any[] } =
-    services.chart.getTradeHistory(coinInfo.CUR_NO, 1, 3, 300);
+  const { tradeHistoryArr }: { tradeHistoryArr: TradeHistoryData[] } =
+    services.trade.getTradeHistory(coinInfo.CUR_NO, 1, 3, 300);
   const [changePerc, setChangePerc] = useState('0.00');
   const [price, setPrice] = useState('0');
   const realTimeCoinInfo = useTypedSelector(
@@ -60,7 +61,7 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
   }, [realTimeCoinInfo]);
 
   const data = {
-    labels: tradeHistory.map((trade) => trade[4]),
+    labels: tradeHistoryArr.map((trade) => trade.close),
     datasets: [
       {
         label: coinInfo.CUR_NO,
@@ -71,7 +72,7 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
             ? 'rgba(86, 180, 192, 0.5)'
             : 'rgba(255, 107, 107, 0.5)',
         fill: true,
-        data: tradeHistory.map((trade) => trade[4]),
+        data: tradeHistoryArr.map((trade) => trade.close),
       },
     ],
   };
@@ -98,12 +99,12 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
         min:
           Math.min.apply(
             Math,
-            tradeHistory.map((trade) => trade[4])
+            tradeHistoryArr.map((trade) => trade.close)
           ) / 1.2,
         max:
           Math.max.apply(
             Math,
-            tradeHistory.map((trade) => trade[4])
+            tradeHistoryArr.map((trade) => trade.close)
           ) * 1.1,
         display: false,
         grid: {
@@ -137,7 +138,7 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
         <b className="price">${price}</b>
       </div>
       <div className="graph-cont">
-        {tradeHistory.length ? (
+        {tradeHistoryArr.length ? (
           <Line options={options} data={data} height={100} />
         ) : (
           ''

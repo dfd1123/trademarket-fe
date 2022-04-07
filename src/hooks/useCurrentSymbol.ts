@@ -45,6 +45,7 @@ const useCurrentSymbol = (symbol: string) => {
     changePerc,
     isUp,
     maxOrderCount,
+    pipLowest
   };
 };
 

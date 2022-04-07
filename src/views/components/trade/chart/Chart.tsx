@@ -4,14 +4,11 @@ import styled from 'styled-components';
 import useService from '@/hooks/useService';
 import { useParams } from 'react-router';
 import { widget } from './lib/charting_library';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTypedSelector } from '@/store';
 import makeDataFeed from './datafeed';
-
-const UP_COLOR = '#41DA78';
-const DOWN_COLOR = '#F8585A';
-const PRIMARY_COLOR = '#1E1F23';
-const LINE_COLOR = '#33353B';
+import { PRIMARY_COLOR, LINE_COLOR, UP_COLOR, DOWN_COLOR } from '@/data/colorData';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 const Chart = ({
   container_id = 'chart_container',
@@ -29,19 +26,22 @@ const Chart = ({
     (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
   );
   const services = useService();
-  const { tradeHistory, tradeHistoryFetchData } =
-    services.chart.getTradeHistory(selectedSymbol as string, 1, 3, 500);
-  const [interval, setInterval] = useState('D');
+  const { tradeHistoryArr, tradeHistoryFetchData } =
+    services.trade.getTradeHistory(selectedSymbol as string, 1, 2, 500);
+  const [chartInterval, setChartInterval] = useState('1');
+
+  useLayoutEffect(() => {
+    tradeHistoryFetchData(1, 2);
+  }, []);
 
   useEffect(() => {
-    console.log('JW', tradeHistory.length);
-    let datafeed = makeDataFeed(tradeHistory, currentCoin);
+    let datafeed = makeDataFeed(tradeHistoryArr, currentCoin);
 
     const widgetOptions = {
       debug: false,
       symbol: selectedSymbol,
       datafeed: datafeed,
-      interval: interval,
+      interval: chartInterval,
       container_id: container_id,
       library_path: libraryPath,
       precision: 0.001,
@@ -103,16 +103,16 @@ const Chart = ({
         .onIntervalChanged()
         .subscribe(null, (interval, timeframeObj) => {
           let nMinTerm = '1';
-          // console.log('JW SSS',['1D', '1W', '1M'].includes(interval));
+
           if (['1D', '1W', '1M'].includes(interval)) {
-            setInterval(interval.replace('1', ''));
+            setChartInterval(interval.replace('1', ''));
             if (interval === '1D') nMinTerm = '1';
             else if (interval === '1W') nMinTerm = '7';
             else if (interval === '1M') nMinTerm = '30';
-            console.log('JW SSS', nMinTerm, 3);
+
             tradeHistoryFetchData(nMinTerm, 3);
           } else {
-            setInterval(interval);
+            setChartInterval(interval);
             nMinTerm = interval;
             tradeHistoryFetchData(nMinTerm, 2);
           }
@@ -122,7 +122,7 @@ const Chart = ({
     return () => {
       tvWidget.remove();
     };
-  }, [tradeHistory, interval]);
+  }, [tradeHistoryArr, chartInterval, currentCoin]);
 
   return (
     <ChartStyle>
@@ -132,10 +132,15 @@ const Chart = ({
 };
 
 const ChartStyle = styled.div`
-  width: 50%;
+  width: calc(100% - 720px);
   height: 493px;
   .chart-cont {
     height: 100%;
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    width: 100%;
+    height: 350px;
   }
 `;
 

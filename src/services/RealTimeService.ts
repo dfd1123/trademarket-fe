@@ -36,6 +36,30 @@ class RealTimeService {
       Header: { ...input.Header, function: 'U' },
     };
 
+    this.connectNdisconnect({input, disConnectInput}, [symbols]);
+  }
+
+  orderData(symbol: string){
+    const input: TransactionInputType = {
+      Header: {
+        function: "A",
+        termtype: "HTS",
+        trcode: "92"
+      },
+      Input1: {
+        Key1: symbol
+      },
+    };
+
+    const disConnectInput: TransactionInputType = {
+      ...input,
+      Header: { ...input.Header, function: 'U' },
+    };
+
+    this.connectNdisconnect({input, disConnectInput});
+  }
+
+  connectNdisconnect({input, disConnectInput} : {input: TransactionInputType, disConnectInput: TransactionInputType}, dependency : any[] = []){
     useEffect(() => {
       this.#ws.sendInput(disConnectInput);
       setTimeout(() => {
@@ -45,7 +69,7 @@ class RealTimeService {
       return () => {
         this.#ws.sendInput(disConnectInput);
       };
-    }, [symbols]);
+    }, [...dependency]);
 
     useEffect(() => {
       return () => {

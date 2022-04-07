@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Range } from 'react-range';
+import _debounce from 'lodash/debounce';
 
 interface PropsType {
   name: string;
@@ -40,10 +41,10 @@ const RangeInput = React.memo(
       [value]
     );
 
-    const handleChange = (values: number[]) => {
+    const handleChange = _debounce(function(values: number[]) {
       setData(values[0]);
       onChange(values[0], name);
-    };
+    }, 10);
 
     useEffect(() => {
       setData(value);
@@ -116,6 +117,7 @@ const RangeInputStyle = styled.div<{ height: number }>`
       width: 150%;
       left: -27%;
       text-align: center;
+      background-color: rgb(255, 171, 46) !important;
       &.draged {
         display: block;
       }
@@ -123,6 +125,7 @@ const RangeInputStyle = styled.div<{ height: number }>`
     &:hover {
       .label {
         display: block;
+        background-color: rgb(255, 171, 46) !important;
       }
     }
   }

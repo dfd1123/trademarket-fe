@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import basicResetClose from "@/assets/img/icon/ico-circle-close.svg";
 import searchIcon from "@/assets/img/kmf/ico/ico-search2.svg";
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  type?: "email" | "search" | "tel" | "text" | "url" | "none" | "numeric" | "decimal";
   className?: string;
   reset?: boolean;
   number?:boolean;
@@ -65,12 +66,16 @@ const TextInput = ({
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let {value, name} : {value: string | number, name: string} = e.target;
     if(number) {
-      value = Number(value.replace(/[^0-9]/g,''));
+      value = value.replace(/[^-\.0-9]/g, "");
+      console.log(value)
+      if(value === '.') value = '0.';
       if(min && value < min) value = min;
       if(max && value > max) value = max;
+      value = String(value).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     }
     setText(value);
-    if (onChange) onChange(value, name);
+    if (onChange) onChange(number ?  Number(value.replace(/,/g, '')) : value, name);
+    if (onInput) onInput(number ?  Number(value.replace(/,/g, '')) : value, name);
   };
 
   const handleReset = () => {
@@ -82,6 +87,11 @@ const TextInput = ({
     }
   };
 
+  useEffect(() => {
+    console.log(value);
+    setText(value);
+  }, [value]);
+
   return (
     <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text || '') || (input.current && input.current.value) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
       <div className="inp-cont">
@@ -91,6 +101,7 @@ const TextInput = ({
           name={name}
           value={value || text}
           placeholder={placeholder}
+          inputMode={`${number ? 'numeric' : type}`}
           readOnly={readOnly}
           disabled={disabled}
           autoComplete={autoComplete}
@@ -141,6 +152,7 @@ export const BasicInput = styled(TextInput)`
     border: 1px solid #F4F4F4;
     border-radius: 5px;
     background-color: #F4F4F4;
+    outline: transparent;
 
     &::placeholder{
       color:#BFBFBF;

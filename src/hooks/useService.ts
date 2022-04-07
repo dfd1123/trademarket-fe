@@ -6,9 +6,9 @@ import CookieService from '@/services/CookieService';
 import UserService from '@/services/UserService';
 import RealTimeService from '@/services/RealTimeService';
 import CoinInfoService from '@/services/CoinInfoService';
+import TradeService from '@/services/TradeService';
 import { useContext } from 'react';
 import { WebSocketContext } from '@/provider/WebSocketProvider';
-import ChartService from '@/services/ChartService';
 
 const useService = () => {
   const { toast }: { toast: (msg: string, options?: ToastOption) => void } =
@@ -27,6 +27,7 @@ const useService = () => {
     ws: ws,
     cookie: cookie,
     dispatch,
+    toast,
   };
 
   const services = {
@@ -34,7 +35,7 @@ const useService = () => {
     user: new UserService(serviceParams),
     realTime: new RealTimeService(serviceParams),
     coinInfo: new CoinInfoService(serviceParams),
-    chart: new ChartService(serviceParams),
+    trade: new TradeService(serviceParams)
   };
 
   return { ...services };

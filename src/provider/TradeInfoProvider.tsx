@@ -5,8 +5,8 @@ interface PropsType {
 }
 
 const defaultValue = {
-  marginType: 'cross',
-  setMarginType: (value: 'cross' | 'iso'): void => {},
+  marginType: '0',
+  setMarginType: (value: '0' | '1'): void => {},
   leverage: 10,
   setLeverage: (value: number): void => {},
 };
@@ -14,7 +14,7 @@ const defaultValue = {
 export const TradeInfoContext = createContext(defaultValue);
 
 const TradeInfoProvider = ({ children }: PropsType) => {
-  const [marginType, setMarginType] = useState<'cross' | 'iso'>('cross');
+  const [marginType, setMarginType] = useState<'0' | '1'>('1');
   const [leverage, setLeverage] = useState(10);
 
   return (

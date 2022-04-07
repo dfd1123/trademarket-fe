@@ -1,3 +1,4 @@
+import { TradeHistoryData } from "@/services/types/Trade";
 import moment from "moment";
 
 const EXCHANGE = 'BMX';
@@ -20,7 +21,7 @@ const configurationData = {
   ],
 };
 
-export default function makeDataFeed(tradeHistory: any[], currentSymbolData: CoinInfo) {
+export default function makeDataFeed(tradeHistoryArr: TradeHistoryData[], currentSymbolData: CoinInfo) {
   const currentSymbol = currentSymbolData.CUR_NO;
   const precision = currentSymbolData.PIP_LOWEST;
   return {
@@ -62,29 +63,17 @@ export default function makeDataFeed(tradeHistory: any[], currentSymbolData: Coi
     },
 
     getBars: async (symbolInfo: any, resolution: any, from: any, to: any, onHistoryCallback: (arg0: never[], arg1: { noData: boolean; }) => void, onErrorCallback: any, firstDataRequest = false) => {
-      if (tradeHistory.length === 0) {
+      if (!tradeHistoryArr.length) {
         onHistoryCallback([], { noData: true });
-        return;
       } else {
-        sessionStorage.bulkEnd = tradeHistory
-          ? moment(Number(tradeHistory[tradeHistory.length - 1][0])).format('HHmmssSSS')
+        sessionStorage.bulkEnd = tradeHistoryArr.length
+          ? moment(Number(tradeHistoryArr[tradeHistoryArr.length - 1].time)).format('HHmmssSSS')
           : null;
         sessionStorage.chartEnd = moment(to * 1000).format('HHmmssSSS');
         sessionStorage.time = 1;
         sessionStorage.pre_time = 'null';
 
-        const bars = tradeHistory.map((bar: any[]) => {
-          return {
-            time: Number(bar[0]),
-            low: bar[3],
-            high: bar[2],
-            open: bar[1],
-            close: bar[4],
-            volume: bar[5],
-          };
-        });
-
-        onHistoryCallback(bars as any, { noData: false });
+         onHistoryCallback(tradeHistoryArr as any, { noData: false });
       }
     },
     subscribeBars: (symbolInfo: any, resolution: any, onRealtimeCallback: (arg0: { close: number; high: number; isBarClosed: boolean; isLastBar: boolean; low: number; open: number; time: any; volume: number; }) => void, subscribeUID: any, onResetCacheNeededCallback: any) => {

@@ -76,8 +76,9 @@ export default function RouterView() {
 
   const headerHide = meta.headerHide ? 'hide-header' : '';
   const footerHide = meta.headerHide ? 'hide-footer' : '';
+  const theme = meta.theme ?? 'light';
 
-  return <div id={`wrapper`} className={`${headerHide} ${footerHide}`}>{routing}</div>;
+  return <div id={`wrapper`} className={`${headerHide} ${footerHide} ${theme}`}>{routing}</div>;
 }
 
 

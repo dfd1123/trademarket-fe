@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 import useCurrentSymbol from '@/hooks/useCurrentSymbol';
 import { MOBILE_SIZE, SMALL_MOBILE_SIZE, TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import { UP_COLOR, DOWN_COLOR } from '@/data/colorData';
 
 const CoinInfoPannel = React.memo(() => {
   const { symbol: selectedSymbol } = useParams();
@@ -52,10 +53,10 @@ const CoinInfoPannelStyle = styled.div`
     color: #41da78;
 
     &.up {
-      color: #f8585a;
+      color: ${UP_COLOR};
     }
     &.down {
-      color: #41da78;
+      color: ${DOWN_COLOR};
     }
   }
 
@@ -76,10 +77,10 @@ const CoinInfoPannelStyle = styled.div`
 
         > em {
           &.up {
-            color: #f8585a;
+            color: ${UP_COLOR};
           }
           &.down {
-            color: #41da78;
+            color: ${DOWN_COLOR};
           }
         }
       }
@@ -109,10 +110,10 @@ const CoinInfoPannelStyle = styled.div`
     margin-left: 0;
     margin-top: 19px;
 
-    .close-price.down {
+    .close-price {
       display: block;
       position: absolute;
-      top: 15px;
+      top: 17px;
       right: 0;
       z-index: 1;
     }

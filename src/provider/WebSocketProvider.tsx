@@ -1,6 +1,6 @@
 import React from "react";
 import { batch, useDispatch } from "react-redux";
-import { updatePriceData } from "@/store/realTime/realTimeData";
+import { updateOrderData, updatePriceData } from "@/store/realTime/realTimeData";
 import { updateAsyncData } from "@/store/asyncData/asyncData";
 import { TransactionInputType } from "@/types/TransactionType";
 import { updateCoinInfo } from "@/store/coinInfo/coinInfoSlice";
@@ -70,6 +70,8 @@ export default function WebSocketProvider({
         switch (trcode) {
           case "91":
             return dispatch(updatePriceData(data));
+          case "92":
+            return dispatch(updateOrderData(data));
           case "t5511":
             return dispatch(updateCoinInfo(data));
           default:

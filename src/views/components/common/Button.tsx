@@ -63,4 +63,24 @@ export const YellowButton = styled(BasicButton)`
   }
 `;
 
+export const GreenButton = styled(BasicButton)`
+  color: #fff;
+  background-color: #41DA78;
+  border: 1px solid #41DA78;
+
+  >button{
+    color: #fff;
+  }
+`;
+
+export const RedButton = styled(BasicButton)`
+  color: #fff;
+  background-color: #F8585A;
+  border: 1px solid #F8585A;
+
+  >button{
+    color: #fff;
+  }
+`;
+
 export default BasicButton;
