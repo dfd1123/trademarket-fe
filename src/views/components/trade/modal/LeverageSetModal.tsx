@@ -5,7 +5,7 @@ import { ModalComponentPropsType } from '@/store/modal/types/modal';
 import { BasicInput } from '@/views/components/common/input/TextInput';
 import { ButtonCheckBox } from '@/views/components/common/input/CheckBox';
 import { YellowButton, BasicButton } from '@/views/components/common/Button';
-import RangeInput from '../../common/input/RangeInput';
+import RangeInput from '@/views/components/common/input/RangeInput';
 import { MOBILE_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 interface PropsType extends ModalComponentPropsType {
