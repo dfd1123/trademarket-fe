@@ -5,6 +5,7 @@ import TextInput, {MerterialInput} from '@/views/components/common/input/TextInp
 import ModalDatePicker from '@/views/components/common/modal/ModalDatePicker';
 import DateSelectInput from '@/views/components/common/input/DateSelectInput';
 import CheckBox, {ButtonCheckBox} from '@/views/components/common/input/CheckBox';
+import Loading from '../components/common/Loading';
 
 function CommonComponents() {
 
@@ -49,6 +50,7 @@ function CommonComponents() {
 
   return (
     <CommonComponentsStyle>
+      <Loading scale={0.8} loading={true} />
       <h1>컴포넌트's</h1>
       <div className="contents">
         {name}

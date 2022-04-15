@@ -122,7 +122,7 @@ const Chart = ({
     return () => {
       tvWidget.remove();
     };
-  }, [tradeHistoryArr, chartInterval, currentCoin]);
+  }, [tradeHistoryArr, chartInterval]);
 
   return (
     <ChartStyle>

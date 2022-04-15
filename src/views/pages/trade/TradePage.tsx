@@ -8,6 +8,9 @@ import Chart from '@/views/components/trade/chart/Chart';
 import OrderNTrade from '@/views/components/trade/orderNtrade/OrderNTrade';
 import OrderBox from '@/views/components/trade/orderBox/OrderBox';
 import MobileChartLine from '@/views/components/trade/mobile/MobileChartLine';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import TradeTables from '@/views/components/trade/tradeTables/TradeTables';
+import MarginDetail from '@/views/components/trade/marginDetail/MarginDetail';
 
 const TradePage = () => {
   const services = useService();
@@ -16,9 +19,8 @@ const TradePage = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1180);
 
   const handleSize = _debounce(function () {
-    console.log('awdadw');
     setIsMobile(window.innerWidth < 1180);
-  }, 200);
+  }, 800);
 
   useEffect(() => {
     window.addEventListener('resize', handleSize);
@@ -41,6 +43,10 @@ const TradePage = () => {
             <OrderBox />
           </div>
         )}
+        <div className="history-pannel-cont">
+          <TradeTables />
+          <MarginDetail mobile={isMobile} />
+        </div>
       </TradeInfoProvider>
     </TradePageStyle>
   );
@@ -51,6 +57,20 @@ const TradePageStyle = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 5px 0;
+  }
+
+  .history-pannel-cont{
+    margin: 5px 0; 
+    overflow:hidden;
+    >div{
+      float:left;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    .chart-line {
+      display:none;
+    }
   }
 `;
 

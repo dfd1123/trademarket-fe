@@ -1,9 +1,9 @@
-import { createGlobalStyle } from "styled-components";
-import { normalize } from "styled-normalize";
-import { reset } from "styled-reset";
-import RobotoFont from "@/assets/font/Roboto/font.css";
-import NotoSansFont from "@/assets/font/NotoSans/font.css";
-import { TABLET_SIZE } from "@/assets/styles/responsiveBreakPoint";
+import { createGlobalStyle } from 'styled-components';
+import { normalize } from 'styled-normalize';
+import { reset } from 'styled-reset';
+import RobotoFont from '@/assets/font/Roboto/font.css';
+import NotoSansFont from '@/assets/font/NotoSans/font.css';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 const GlobalStyle = createGlobalStyle`
   ${reset}

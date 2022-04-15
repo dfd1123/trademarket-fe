@@ -37,8 +37,8 @@ export const BasicButton = styled(Button)`
     >button{
       min-width: inherit;
       min-height: inherit;
-      width:inherit;
-      height:inherit;
+      width:100%;
+      height:100%;
       font-size:inherit;
       font-weight:inherit;
       color:inherit;
@@ -60,6 +60,16 @@ export const YellowButton = styled(BasicButton)`
 
   >button{
     color: #fff;
+  }
+`;
+
+export const YellowBorderButton = styled(BasicButton)`
+  color: #fff;
+  background-color: #1e1f23;
+  border: 1px solid rgb(255, 171, 46);
+
+  >button{
+    color: rgb(255, 171, 46);
   }
 `;
 

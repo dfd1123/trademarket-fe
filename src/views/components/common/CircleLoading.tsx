@@ -52,8 +52,8 @@ const CircleLoadingStyle = styled.div<{scale?: number}>`
     height: 100%;
     width: 100%;
     clip: rect(0, 32px, 32px, 16px);
-    -webkit-animation: loader-1-2 1.2s linear infinite;
-    animation: loader-1-2 1.2s linear infinite;
+    -webkit-animation: loader-1-2 1.5s linear infinite;
+    animation: loader-1-2 1.5s linear infinite;
 
     &::after {
       content: '';
@@ -68,9 +68,9 @@ const CircleLoadingStyle = styled.div<{scale?: number}>`
       clip: rect(0, 32px, 32px, 16px);
       border: 3px solid #1574bd;
       border-radius: 50%;
-      -webkit-animation: loader-1-3 1.2s cubic-bezier(0.77, 0, 0.175, 1)
+      -webkit-animation: loader-1-3 1.5s cubic-bezier(0.77, 0, 0.175, 1)
         infinite;
-      animation: loader-1-3 1.2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+      animation: loader-1-3 1.5s cubic-bezier(0.77, 0, 0.175, 1) infinite;
     }
 
     /* &::before {

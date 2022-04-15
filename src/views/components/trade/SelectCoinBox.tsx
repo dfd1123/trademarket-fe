@@ -80,7 +80,7 @@ const SelectCoinBoxStyle = styled.div`
     position: absolute;
     top: calc(100% + 10px);
     left: 0;
-    z-index: 1;
+    z-index: 2;
     max-height: 500px;
     width: 200px;
     padding: 10px 0;

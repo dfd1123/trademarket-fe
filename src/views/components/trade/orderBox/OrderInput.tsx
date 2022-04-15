@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { BasicInput } from '@/views/components/common/input/TextInput';
 import IntegerInput from '@/views/components/common/input/IntegerInput';
 import { formatNumber } from '@/utils/numberUtils';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 interface PropsType {
   className?: string;
@@ -26,7 +27,9 @@ const OrderInputComp = ({
   const priceSteps = decimalCnt > 2 ? priceStepsForFour : priceStepsFourTwo;
   const amountSteps = [1, 5, 10, 15, 20];
 
-  const [step, setStep] = useState(name === 'price' ? priceSteps[0] : amountSteps[0]);
+  const [step, setStep] = useState(
+    name === 'price' ? priceSteps[0] : amountSteps[0]
+  );
 
   return (
     <div className={`${className} inp-box`}>
@@ -52,10 +55,22 @@ const OrderInputComp = ({
           <ul className="drop-box">
             {name === 'price'
               ? priceSteps.map((price) => (
-                  <li key={price} className={`${price === step && 'active'}`} onClick={() => setStep(price)}>{formatNumber(price)}</li>
+                  <li
+                    key={price}
+                    className={`${price === step && 'active'}`}
+                    onClick={() => setStep(price)}
+                  >
+                    {formatNumber(price)}
+                  </li>
                 ))
               : amountSteps.map((amount) => (
-                  <li key={amount} className={`${amount === step && 'active'}`} onClick={() => setStep(amount)}>{formatNumber(amount)}</li>
+                  <li
+                    key={amount}
+                    className={`${amount === step && 'active'}`}
+                    onClick={() => setStep(amount)}
+                  >
+                    {formatNumber(amount)}
+                  </li>
                 ))}
           </ul>
         </div>
@@ -120,7 +135,8 @@ const OrderInput = styled(OrderInputComp)`
           color: #ffffff;
           background-color: #1e1f23;
           cursor: pointer;
-          &:hover, &.active {
+          &:hover,
+          &.active {
             background-color: #33353b;
           }
         }
@@ -129,6 +145,27 @@ const OrderInput = styled(OrderInputComp)`
       &:hover {
         .drop-box {
           display: block;
+        }
+      }
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .label {
+      margin-bottom: 6px;
+    }
+    .inp {
+      max-width: 100%;
+      width: 100%;
+      >div{
+        height: 40px;
+      }
+      ${IntegerInput} {
+        input{
+          height: 40px;
         }
       }
     }

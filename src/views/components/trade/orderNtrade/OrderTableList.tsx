@@ -49,7 +49,7 @@ const OrderTableList = ({
 
 const OrderListGraphStyle = styled.div<OrderListGraphProps>`
   position: absolute;
-  top: 0;
+  top: 2.5px;
   bottom: 0;
   left: 0;
   right: 0;

@@ -4,6 +4,8 @@ import OrderTableList from './OrderTableList';
 import { useParams } from 'react-router';
 import { useTypedSelector } from '@/store';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
+import { useEffect } from 'react';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 interface PropsType {
   className?: string;
@@ -12,6 +14,9 @@ interface PropsType {
 const OrderTable = ({className} : PropsType) => {
   const services = useService();
   const { symbol: selectedSymbol } = useParams();
+
+  services.realTime.orderData(selectedSymbol as string);
+
   const { PIP_LOWEST } = useTypedSelector(
     (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
   );
@@ -94,6 +99,42 @@ const OrderTableStyle = styled.div`
       color: #fff;
       line-height: 28px;
       border-bottom: 1px solid #33353b;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    height: 408px;
+    margin-bottom:10px;
+    .tb-hd {
+      .td{
+        line-height: 28px;
+        &:last-child{
+          display:none;
+        }
+      }
+    }
+    .tb-bd{
+      .td{
+        line-height: 22px;
+      }
+      .td-box{
+        &:last-child{
+          display:none;
+        }
+      }
+    }
+
+    .td {
+      &.price {
+        width: 60%;
+        padding-left: 15px;
+        text-align: left;
+      }
+      &.amount {
+        padding-right: 15px;
+        width: 40%;
+
+      }
     }
   }
 `;

@@ -2,8 +2,14 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { YellowTabStyle } from '@/views/components/common/tab/Tab';
 import NewOrder from './newOrder/NewOrder';
+import StopLimit from './StopLimit/StopLimit';
+import ModifyCancel from './ModifyCancel/ModifyCancel';
 
-const OrderBox = () => {
+interface PropsType {
+  mobile?: boolean;
+}
+
+const OrderBox = ({mobile}:PropsType) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -14,6 +20,8 @@ const OrderBox = () => {
       />
       <div className="content-box">
           {tabIndex === 0 && (<NewOrder />)}
+          {tabIndex === 1 && (<StopLimit />)}
+          {tabIndex === 2 && (<ModifyCancel />)}
       </div>
     </OrderBoxStyle>
   );
@@ -31,6 +39,7 @@ const OrderBoxStyle = styled.div`
   }
 
   .content-box {
+    position:relative;
     height: 453px;
     padding: 14px 20px 10px 20px;
     background-color: #1e1f23;

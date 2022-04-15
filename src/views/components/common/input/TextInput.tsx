@@ -5,7 +5,7 @@ import searchIcon from "@/assets/img/kmf/ico/ico-search2.svg";
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  type?: "email" | "search" | "tel" | "text" | "url" | "none" | "numeric" | "decimal";
+  type?: string;
   className?: string;
   reset?: boolean;
   number?:boolean;
@@ -101,7 +101,7 @@ const TextInput = ({
           name={name}
           value={value || text}
           placeholder={placeholder}
-          inputMode={`${number ? 'numeric' : type}`}
+          inputMode={`${number ? 'numeric' : 'text'}`}
           readOnly={readOnly}
           disabled={disabled}
           autoComplete={autoComplete}

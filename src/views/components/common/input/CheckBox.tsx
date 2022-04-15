@@ -5,7 +5,7 @@ import Ripples from 'react-ripples';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   data?: any;
-  type?: 'checkbox' | 'radio';
+  type?: string;
   label: string;
   name: string;
   value?: string | number | string[];

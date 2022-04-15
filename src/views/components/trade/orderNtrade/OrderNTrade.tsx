@@ -11,8 +11,6 @@ const OrderBooks = () => {
   const { symbol: selectedSymbol } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
 
-  services.realTime.orderData(selectedSymbol as string);
-
   return (
     <OrderBookStyle>
       <YellowTabStyle list={['Order Book', 'Trades']} onChange={setTabIndex} />

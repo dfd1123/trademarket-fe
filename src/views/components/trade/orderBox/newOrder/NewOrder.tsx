@@ -13,6 +13,13 @@ import { GreenButton, RedButton } from '@/views/components/common/Button';
 import { TradeInfoContext } from '@/provider/TradeInfoProvider';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import useToast from '@/hooks/useToast';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import DarkSelectBox from '@/views/components/common/input/SelectBox';
+import OrderTable from '@/views/components/trade/orderNtrade/OrderTable';
+
+interface PropsType {
+  mobile?: boolean;
+}
 
 const initialValue = {
   price: 0,
@@ -20,7 +27,7 @@ const initialValue = {
   orderType: 'UOE',
 };
 
-const NewOrder = () => {
+const NewOrder = ({ mobile }: PropsType) => {
   const radioCheckList = [10, 25, 50, 75, 100, 0];
 
   const services = useService();
@@ -31,10 +38,11 @@ const NewOrder = () => {
   );
   const context = useContext(TradeInfoContext);
   const { marginType, leverage } = context;
+  const { marginData } = services.user.getUserMarginData();
+
   const { buyNewOrder, sellNewOrder } = services.trade.reqNewOrder(
     selectedSymbol as string
   );
-  const { marginData } = services.user.getUserMarginData();
 
   const [inputs, setInputs] = useState(initialValue);
   const [percent, setPercent] = useState(0);
@@ -90,107 +98,123 @@ const NewOrder = () => {
 
   return (
     <NewOrderStyle>
-      <div className="info">
-        <b className="symbol">BTCUSDT</b>
-        <span className="leverage">
-          leverage <em>x {leverage}</em>
-        </span>
-      </div>
-      <div className="inp-holder">
-        <div className="tab-cont">
-          <CheckBox
-            type="radio"
-            name="orderType"
-            label="Market Order"
-            value="UOM"
-            data={inputs.orderType}
-            onChange={handleChange}
-            ripple={null}
-          />
-          <CheckBox
-            type="radio"
-            name="orderType"
-            label="Limit Order"
-            value="UOE"
-            data={inputs.orderType}
-            onChange={handleChange}
-            ripple={null}
-          />
+      <div className="order-cont">
+        <div className="info">
+          <b className="symbol">BTCUSDT</b>
+          <span className="leverage">
+            leverage <em>x {leverage}</em>
+          </span>
         </div>
-        <div className="inp-cont">
-          <div className="qault">
-            <OrderInput
-              name="price"
-              label="Price(USDT)"
-              value={inputs.price}
-              decimalCnt={PIP_LOWEST}
+        <div className="inp-holder">
+          <div className="tab-cont">
+            <CheckBox
+              type="radio"
+              name="orderType"
+              label="Market Order"
+              value="UOM"
+              data={inputs.orderType}
               onChange={handleChange}
+              ripple={null}
             />
-            <span className="convert-usdt">{convertUsdt} USDT</span>
-          </div>
-          <div className="qault">
-            <OrderInput
-              name="amount"
-              label="Amount"
-              value={inputs.amount}
-              decimalCnt={PIP_LOWEST}
+            <CheckBox
+              type="radio"
+              name="orderType"
+              label="Limit Order"
+              value="UOE"
+              data={inputs.orderType}
+              onChange={handleChange}
+              ripple={null}
+            />
+            <DarkSelectBox
+              name="orderType"
+              value={inputs.orderType}
+              list={[
+                { name: 'Market Order', value: 'UOM' },
+                { name: 'Limit Order', value: 'UOE' },
+              ]}
               onChange={handleChange}
             />
           </div>
-        </div>
-        <div className="control-box">
-          <div className="easy-control">
-            <div>
-              <RangeInput
-                name="percent-range"
-                step={1}
-                min={0}
-                max={100}
-                value={percent}
-                trackHeight={4}
-                trackColor="#A1A1A1"
-                trackActiveColor="#FFAB2E"
-                thumbWidth={20}
-                thumbHeight={20}
-                thumbColor="#FFAB2E"
-                showLabel
-                onChange={handleAvailableMarginPercent}
+          <div className="inp-cont">
+            <div className="qault">
+              <OrderInput
+                name="price"
+                label="Price(USDT)"
+                value={inputs.price}
+                decimalCnt={PIP_LOWEST}
+                onChange={handleChange}
+              />
+              <span className="convert-usdt">{convertUsdt} USDT</span>
+            </div>
+            <div className="qault">
+              <OrderInput
+                name="amount"
+                label="Amount"
+                value={inputs.amount}
+                decimalCnt={PIP_LOWEST}
+                onChange={handleChange}
               />
             </div>
-            <div className="radio-btn-cont">
-              {radioCheckList.map((radio) => (
-                <ButtonCheckBox
-                  key={radio}
-                  type="radio"
-                  name="percent"
-                  label={`${
-                    radio === 100 ? 'MAX' : radio === 0 ? 'RESET' : `${radio}%`
-                  }`}
-                  value={radio}
-                  data={percent}
+          </div>
+          <div className="control-box">
+            <div className="easy-control">
+              <div>
+                <RangeInput
+                  name="percent-range"
+                  step={1}
+                  min={0}
+                  max={100}
+                  value={percent}
+                  trackHeight={4}
+                  trackColor="#A1A1A1"
+                  trackActiveColor="#FFAB2E"
+                  thumbWidth={20}
+                  thumbHeight={20}
+                  thumbColor="#FFAB2E"
+                  showLabel
                   onChange={handleAvailableMarginPercent}
                 />
-              ))}
+              </div>
+              <div className="radio-btn-cont">
+                {radioCheckList.map((radio) => (
+                  <ButtonCheckBox
+                    key={radio}
+                    type="radio"
+                    name="percent"
+                    label={`${
+                      radio === 100
+                        ? 'MAX'
+                        : radio === 0
+                        ? 'RESET'
+                        : `${radio}%`
+                    }`}
+                    value={radio}
+                    data={percent}
+                    onChange={handleAvailableMarginPercent}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="pannel-cont">
+              <div className="pannel">
+                <span className="label">Order Value</span>
+                <b className="value">{orderValue} USDT</b>
+              </div>
+              <div className="pannel">
+                <span className="label">Available Margin</span>
+                <b className="value">{availableMargin} USDT</b>
+              </div>
             </div>
           </div>
-          <div className="pannel-cont">
-            <div className="pannel">
-              <span className="label">Order Value</span>
-              <b className="value">{orderValue} USDT</b>
-            </div>
-            <div className="pannel">
-              <span className="label">Available Margin</span>
-              <b className="value">{availableMargin} USDT</b>
-            </div>
+          <div className="error-msg">
+            <span></span>
           </div>
         </div>
-        <div className="error-msg">
-          <span></span>
-        </div>
-        <div className="btn-cont">
-          <GreenButton onClick={buyOrder}>BUY</GreenButton>
-          <RedButton onClick={sellOrder}>SELL</RedButton>
-        </div>
+      </div>
+      {Boolean(mobile) && <OrderTable className="order-table" />}
+      <div className="btn-cont">
+        <GreenButton onClick={buyOrder}>BUY</GreenButton>
+        <RedButton onClick={sellOrder}>SELL</RedButton>
       </div>
     </NewOrderStyle>
   );
@@ -240,6 +264,11 @@ const NewOrderStyle = styled.div`
             top: 7px;
           }
         }
+      }
+
+      ${DarkSelectBox} {
+        display: none;
+        width: calc(100% - 18px);
       }
     }
 
@@ -318,7 +347,7 @@ const NewOrderStyle = styled.div`
     height: 15px;
   }
 
-  .btn-cont {
+  >.btn-cont {
     display: flex;
     justify-content: space-between;
     .btn {
@@ -327,6 +356,60 @@ const NewOrderStyle = styled.div`
       height: 40px;
       font-size: 14px;
       font-weight: 700;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    display: flex;
+    flex-wrap: wrap;
+
+    .order-cont {
+      width: 55%;
+      padding: 0 15px;
+    }
+
+    .order-table {
+      width: 45%;
+    }
+
+    .info {
+      display: none;
+    }
+
+    .inp-holder {
+      .tab-cont {
+        ${CheckBox} {
+          display: none;
+        }
+        ${DarkSelectBox} {
+          display: block;
+        }
+      }
+    }
+
+    .control-box {
+      .easy-control {
+        width: 100%;
+
+        .radio-btn-cont {
+          ${ButtonCheckBox} {
+            label {
+              width: 45px;
+            }
+          }
+        }
+      }
+    }
+    .pannel-cont {
+      display: none;
+    }
+
+    >.btn-cont {
+      width: 100%;
+      padding: 0 14px 15px;
+      .btn {
+        width: calc(50% - 3.5px);
+      }
     }
   }
 `;
