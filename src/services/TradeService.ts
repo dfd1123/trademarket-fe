@@ -6,8 +6,9 @@ import { useTypedSelector } from '@/store';
 import tridList from '@/data/tridList';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
 import { formatNumber } from '@/utils/numberUtils';
-import { OrderBookData, TradeHistoryData } from './types/Trade';
+import { OpenOrderRowData, OrderBookData, PointPositionRowData, TradeHistoryData } from './types/Trade';
 import useUserData from '@/hooks/useUserData';
+import { translateSzPoCode } from '@/utils/translateUtils';
 
 class TradeHistory {
   #ws;
@@ -172,8 +173,9 @@ class TradeHistory {
       input.Input1.szOrdType = orderType.toString();
       input.Input1.szDealDiv = deal;
 
-      if(!price || price < 0) return this.#toast('Please Check Price!');
-      else if(!amount || amount < 0) return this.#toast('Please Check Amount!');
+      if (!price || price < 0) return this.#toast('Please Check Price!');
+      else if (!amount || amount < 0)
+        return this.#toast('Please Check Amount!');
 
       if (input.Header.userid) fetchData({ ...input });
     };
@@ -265,6 +267,119 @@ class TradeHistory {
       }));
 
     return { buyOrder, sellOrder };
+  }
+
+  getPositionDetail() {
+    const { email, szAccNo } = useUserData();
+    const positionDetailOutput = useTypedSelector((state) => state.asyncData[`t3720`]);
+    const myConclusion = useTypedSelector(
+      (state) => state.realTimeData.myConclusion
+    );
+    const myNewOrder = useTypedSelector(
+      (state) => state.realTimeData.myNewOrder
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3720',
+        userid: email,
+        token: '',
+      },
+      Input1: {
+        szAccNo: szAccNo,
+      },
+    };
+
+    const { fetchData: getPositionDetail } = useAsyncData(input);
+
+    const parseData = (output) : PointPositionRowData[] =>  {
+      const outputData = output?.Output2 || [];
+
+      return outputData.map(row => {
+        const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
+
+        const pointPosition = newD[18];
+
+        const result : PointPositionRowData = {
+          symbol: newD[1],
+          lot: newD[2],
+          side: translateSzPoCode(newD[3], false),
+          price: newD[4],
+          currentPrice: newD[5],
+          priceDiffrence: newD[6],
+          grossPnL: newD[9],
+          commision: newD[12],
+          netPl: newD[14],
+          pointPosition
+        }
+
+        return result;
+      })
+    }
+
+    useEffect(() => {
+      getPositionDetail({...input});
+    }, [myConclusion, myNewOrder]);
+
+
+    return {positionDetail: parseData(positionDetailOutput), getPositionDetail};
+  }
+
+  getOpenOrders(){
+    const { szAccNo } = useUserData();
+    const openOrdersOutput = useTypedSelector((state) => state.asyncData[`t3600`]);
+    const myConclusion = useTypedSelector(
+      (state) => state.realTimeData.myConclusion
+    );
+    const myNewOrder = useTypedSelector(
+      (state) => state.realTimeData.myNewOrder
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: "D",
+        termtype: "HTS",
+        trcode: "t3600",
+      },
+      Input1: {
+        szAccNo: szAccNo,
+      },
+    };
+
+    const { fetchData: getOpenOrders } = useAsyncData(input);
+
+    const parseData = (output) : OpenOrderRowData[] =>  {
+      const outputData = output?.Output2 || [];
+
+      return outputData.map(row => {
+        const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
+
+        const result : OpenOrderRowData = {
+          orderNo: newD[0].slice(15, 21),
+          symbol: newD[1],
+          side: translateSzPoCode(newD[2], false),
+          price: newD[3],
+          lot: newD[4],
+          currentPrice: newD[5],
+          stop: newD[6],
+          limit: newD[7],
+          crossIso: newD[8],
+          orderTime: newD[9],
+          leverage: newD[10]
+        }
+
+        return result;
+      })
+    }
+
+    useEffect(() => {
+      getOpenOrders({...input});
+    }, [myNewOrder, myConclusion]);
+
+
+    return {openOrders: parseData(openOrdersOutput), getOpenOrders};
   }
 }
 

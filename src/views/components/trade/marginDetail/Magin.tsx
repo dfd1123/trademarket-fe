@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useTypedSelector } from '@/store';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useService from '@/hooks/useService';
+import { formatNumber } from '@/utils/numberUtils';
 
 const Margin = () => {
   const userInfo = useTypedSelector((state) => state.authSlice);
+  const services = useService();
+
+  const { marginData, getMarginData } = services.user.getUserMarginData();
+
+  useEffect(() => {
+    getMarginData()
+  }, []);
+
 
   return (
     <MarginStyle>
@@ -12,35 +22,35 @@ const Margin = () => {
         <>
           <div className="pannel">
             <span className="label">Balance</span>
-            <span className="value"></span>
+            <span className="value">{marginData.balance}</span>
           </div>
           <div className="pannel">
             <span className="label">Open Position Margin</span>
-            <span className="value"></span>
+            <span className="value">{marginData.openPositionMargin}</span>
           </div>
           <div className="pannel">
             <span className="label">Gross P&L</span>
-            <span className="value"></span>
+            <span className="value">{marginData.grossPnL}</span>
           </div>
           <div className="pannel">
             <span className="label">Valuation Equity</span>
-            <span className="value"></span>
+            <span className="value">{marginData.possibleWithdraw}</span>
           </div>
           <div className="pannel">
             <span className="label">Required Order Margin</span>
-            <span className="value"></span>
+            <span className="value">{marginData.maintenMargin}</span>
           </div>
           <div className="pannel">
             <span className="label">Maintenance Position Margin</span>
-            <span className="value"></span>
+            <span className="value">{marginData.marginForUse}</span>
           </div>
           <div className="pannel">
             <span className="label">Available Margin</span>
-            <span className="value"></span>
+            <span className="value">{marginData.availableMargin}</span>
           </div>
           <div className="pannel">
             <span className="label">Margin Call rate(%)</span>
-            <span className="value"></span>
+            <span className="value">{marginData.marginCallRate}</span>
           </div>
         </>
       ) : (

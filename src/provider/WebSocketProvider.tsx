@@ -1,9 +1,14 @@
-import React from "react";
-import { batch, useDispatch } from "react-redux";
-import { updateOrderData, updatePriceData } from "@/store/realTime/realTimeData";
-import { updateAsyncData } from "@/store/asyncData/asyncData";
-import { TransactionInputType } from "@/types/TransactionType";
-import { updateCoinInfo } from "@/store/coinInfo/coinInfoSlice";
+import React from 'react';
+import { batch, useDispatch } from 'react-redux';
+import {
+  updateMyConclusion,
+  updateMyNewOrder,
+  updateOrderData,
+  updatePriceData,
+} from '@/store/realTime/realTimeData';
+import { updateAsyncData } from '@/store/asyncData/asyncData';
+import { TransactionInputType } from '@/types/TransactionType';
+import { updateCoinInfo } from '@/store/coinInfo/coinInfoSlice';
 
 export interface TrdWebSocket extends WebSocket {
   waitSendList: TransactionInputType[];
@@ -42,10 +47,10 @@ export default function WebSocketProvider({
     ws.onopen = () => {
       if (!ws) return;
       ws.connect = true;
-      console.log("web socket Connected!", ws);
+      console.log('web socket Connected!', ws);
       ws.waitSendList.forEach((input, index) => {
         ws && ws.sendInput(input);
-        if(ws.waitSendList.length === index + 1) ws.waitSendList = [];
+        if (ws.waitSendList.length === index + 1) ws.waitSendList = [];
       });
 
       setInterval(() => ws.send("{'event':'ping'}"), 50000);
@@ -53,26 +58,30 @@ export default function WebSocketProvider({
 
     ws.onclose = (event) => {
       if (event.wasClean) {
-        console.log("web socket 커넥션 종료됨");
+        console.log('web socket 커넥션 종료됨');
       } else {
-        if(ws.connect) window.location.reload();
-        console.log("web socket 커넥션 error", event);
+        if (ws.connect) window.location.reload();
+        console.log('web socket 커넥션 error', event);
       }
     };
 
-    ws.onmessage = ({ data }: { data: MessageEvent["data"] }): undefined => {
+    ws.onmessage = ({ data }: { data: MessageEvent['data'] }): undefined => {
       data = JSON.parse(data);
       const trcode = data.Header.trcode;
 
-      if(trcode === '00000') return;
+      if (trcode === '00000') return;
 
       batch(() => {
         switch (trcode) {
-          case "91":
+          case '91':
             return dispatch(updatePriceData(data));
-          case "92":
+          case '92':
             return dispatch(updateOrderData(data));
-          case "t5511":
+          case '95':
+            return dispatch(updateMyConclusion(data));
+          case '96':
+            return dispatch(updateMyNewOrder(data));
+          case 't5511':
             return dispatch(updateCoinInfo(data));
           default:
             return dispatch(updateAsyncData(data));
@@ -87,7 +96,7 @@ export default function WebSocketProvider({
     };
 
     ws.onerror = (error) => {
-      console.error("Socket error in WebSocketProvider: ", error);
+      console.error('Socket error in WebSocketProvider: ', error);
     };
   }
 

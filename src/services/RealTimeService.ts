@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { TransactionInputType } from '@/types/TransactionType';
 import { ConstructorParamsType } from './types/Service';
 import useCoinList from '@/hooks/useCoinList';
+import useUserData from '@/hooks/useUserData';
 
 class RealTimeService {
   #ws;
@@ -15,7 +16,7 @@ class RealTimeService {
   }
 
   coinPrice() {
-    const {symbols} = useCoinList();
+    const { symbols } = useCoinList();
 
     const input: TransactionInputType = {
       Header: {
@@ -23,11 +24,10 @@ class RealTimeService {
         termtype: 'HTS',
         trcode: '91',
       },
-      Input1: {
-      },
+      Input1: {},
     };
 
-    for(let i = 0; i < symbols.length; i++){
+    for (let i = 0; i < symbols.length; i++) {
       input.Input1[`Key${i + 1}`] = symbols[i];
     }
 
@@ -36,18 +36,18 @@ class RealTimeService {
       Header: { ...input.Header, function: 'U' },
     };
 
-    this.connectNdisconnect({input, disConnectInput}, [symbols]);
+    this.connectNdisconnect({ input, disConnectInput }, [symbols]);
   }
 
-  orderData(symbol: string){
+  orderData(symbol: string) {
     const input: TransactionInputType = {
       Header: {
-        function: "A",
-        termtype: "HTS",
-        trcode: "92"
+        function: 'A',
+        termtype: 'HTS',
+        trcode: '92',
       },
       Input1: {
-        Key1: symbol
+        Key1: symbol,
       },
     };
 
@@ -56,10 +56,58 @@ class RealTimeService {
       Header: { ...input.Header, function: 'U' },
     };
 
-    this.connectNdisconnect({input, disConnectInput});
+    this.connectNdisconnect({ input, disConnectInput });
   }
 
-  connectNdisconnect({input, disConnectInput} : {input: TransactionInputType, disConnectInput: TransactionInputType}, dependency : any[] = []){
+  getMyConclusion() {
+    const { szAccNo } = useUserData();
+    const input: TransactionInputType = {
+      Header: {
+        function: 'A',
+        termtype: 'HTS',
+        trcode: '95',
+      },
+      Input1: {
+        Key1: szAccNo,
+      },
+    };
+
+    const disConnectInput: TransactionInputType = {
+      ...input,
+      Header: { ...input.Header, function: 'U' },
+    };
+
+    this.connectNdisconnect({ input, disConnectInput });
+  }
+
+  getMyNewOrder(){
+    const { szAccNo } = useUserData();
+    const input: TransactionInputType = {
+      Header: {
+        function: 'A',
+        termtype: 'HTS',
+        trcode: '96',
+      },
+      Input1: {
+        Key1: szAccNo,
+      },
+    };
+
+    const disConnectInput: TransactionInputType = {
+      ...input,
+      Header: { ...input.Header, function: 'U' },
+    };
+
+    this.connectNdisconnect({ input, disConnectInput });
+  }
+
+  connectNdisconnect(
+    {
+      input,
+      disConnectInput,
+    }: { input: TransactionInputType; disConnectInput: TransactionInputType },
+    dependency: any[] = []
+  ) {
     useEffect(() => {
       this.#ws.sendInput(disConnectInput);
       setTimeout(() => {

@@ -5,6 +5,7 @@ export {};
 declare global {
     interface Window {
         ws?: TrdWebSocket;
+        __TEMP_STORE__: any;
       }
     namespace NodeJS {
         interface ProcessEnv {

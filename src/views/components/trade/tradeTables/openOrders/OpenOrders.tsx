@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import TableHd from '../TableHd';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useService from '@/hooks/useService';
+import OpenOrderList from './OpenOrderList';
+import TableBd from '../TableBd';
 
 interface PropsType {}
 
@@ -20,10 +23,22 @@ const tableHdLabel = [
 ];
 
 const OpenOrders = () => {
+  const services = useService();
+  const {openOrders, getOpenOrders} = services.trade.getOpenOrders();
+
+  useEffect(() => {
+    getOpenOrders();
+  }, []);
+  
   return (
     <OpenOrdersStyle>
       <div>
         <TableHd list={tableHdLabel} />
+        <TableBd>
+          {openOrders.map(row => (
+            <OpenOrderList info={row} tableHdInfo={tableHdLabel} />
+          ))}
+        </TableBd>
       </div>
     </OpenOrdersStyle>
   );

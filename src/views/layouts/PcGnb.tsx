@@ -16,14 +16,14 @@ const StyledPcGnb = styled.div`
   .pc-gnb {
     display: flex;
     align-items: center;
-    padding: 0 170px;
+    padding: 0 153px;
     padding-right: 400px;
     > li {
       position: relative;
       display: flex;
       align-items: center;
       height: 74px;
-      margin: 0 22px;
+      margin: 0 3%;
       font-size: 16px;
       color: ${(props) => props.theme.header.color};
       cursor: pointer;

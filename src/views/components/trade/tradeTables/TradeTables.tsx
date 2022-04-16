@@ -7,12 +7,18 @@ import TradingHistory from './tradingHistory/TradingHistory';
 import OpenPositions from './openPositions/OpenPositions';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import { useTypedSelector } from '@/store';
+import useService from '@/hooks/useService';
 
 interface PropsType {}
 
 const TradeTables = () => {
+  const services = useService();
   const userInfo = useTypedSelector((state) => state.authSlice);
   const [tabIndex, setTabIndex] = useState(0);
+
+  services.realTime.getMyConclusion();
+  services.realTime.getMyNewOrder();
+  
   return (
     <TradeTablesStyle>
       <YellowTabStyle

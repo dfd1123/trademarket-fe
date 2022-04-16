@@ -23,7 +23,7 @@ const useCurrentSymbol = (symbol: string) => {
     }
   };
 
-  const close = formatNumber(Number(coin.szClose), pipLowest);
+  const close = formatNumber(Number(coin.szClose ?? 0), pipLowest);
   const volume = coin.szVolume;
   const curNo = coin.szSymbol;
   const szHigh = formatNumber(coin.szHigh, pipLowest);

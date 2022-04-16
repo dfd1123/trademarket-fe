@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TableHd from '../TableHd';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useService from '@/hooks/useService';
+import TableBd from '../TableBd';
+import PositionDetailList from './PositionDetailList';
 
 interface PropsType {}
 
@@ -20,10 +23,23 @@ const tableHdLabel = [
 ];
 
 const PositionDetail = () => {
+  const services = useService();
+  const {positionDetail, getPositionDetail} = services.trade.getPositionDetail();
+
+  useEffect(() => {
+    getPositionDetail();
+  }, []);
+
+
   return (
     <PositionDetailStyle>
       <div>
         <TableHd list={tableHdLabel} />
+        <TableBd>
+          {positionDetail.map(row => (
+            <PositionDetailList info={row} tableHdInfo={tableHdLabel} />
+          ))}
+        </TableBd>
       </div>
     </PositionDetailStyle>
   );
