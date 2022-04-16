@@ -12,6 +12,7 @@ const TableHdComp = ({ className, list }: PropsType) => {
     <div className={`tb-hd ${className}`}>
       {list.map((hd) => (
         <span
+          key={`hd-${hd.label}`}
           className={hd.label
             .replace(/ /gi, '')
             .replace(/[\{\}\[\]\/?.,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/gi, '')

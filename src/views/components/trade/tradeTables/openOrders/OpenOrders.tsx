@@ -35,8 +35,8 @@ const OpenOrders = () => {
       <div>
         <TableHd list={tableHdLabel} />
         <TableBd>
-          {openOrders.map(row => (
-            <OpenOrderList info={row} tableHdInfo={tableHdLabel} />
+          {openOrders.map((row, index) => (
+            <OpenOrderList key={`row-${row.symbol}${index}`} info={row} tableHdInfo={tableHdLabel} />
           ))}
         </TableBd>
       </div>

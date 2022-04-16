@@ -36,8 +36,8 @@ const PositionDetail = () => {
       <div>
         <TableHd list={tableHdLabel} />
         <TableBd>
-          {positionDetail.map(row => (
-            <PositionDetailList info={row} tableHdInfo={tableHdLabel} />
+          {positionDetail.map((row, index) => (
+            <PositionDetailList key={`row-${row.symbol}${index}`} info={row} tableHdInfo={tableHdLabel} />
           ))}
         </TableBd>
       </div>
