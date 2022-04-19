@@ -64,3 +64,24 @@ export interface MyTradeHistoryRowData {
   excuteTime: string;
   pointPosition: number;
 }
+
+export interface OpenPositionRowData {
+  ticketNo: string;
+  symbol: string;
+  side: string;
+  price: number | string;
+  lot: number;
+  currentPrice: number | string;
+  stop: number;
+  limit: number;
+  priceDiffrence: number | string;
+  grossPnl: number | string;
+  leverage: number;
+  crossIso: string;
+  market: string;
+  orderTime: string;
+  orderNo: string;
+  stopNo: string;
+  limitNo: string;
+  businessDate: string | number;
+}
