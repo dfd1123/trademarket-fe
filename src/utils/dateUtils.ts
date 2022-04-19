@@ -6,6 +6,16 @@ export const liveDataDateFormat = (szDate: string, szTime: string) => {
     return `${date} ${time}`;
 };
 
+export const getToday = () => {
+    return new Date();
+}
+
+export const getDiffDate = (fromDate: string | Date, term: number) => {
+    term = term * 86400000;
+    const diffDate = new Date(fromDate).getTime() - term;
+    return new Date(diffDate);
+}
+
 export const dateFormat = (date: Date, formating: string | undefined = 'Y-MM-dd') => {
     return format(date, formating)
 }

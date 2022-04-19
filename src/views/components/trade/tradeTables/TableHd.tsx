@@ -28,7 +28,12 @@ const TableHdComp = ({ className, list }: PropsType) => {
 
 const TableHd = styled(TableHdComp)`
   width: 100%;
+  background-color: #1e1f23;
   border-bottom: 1px solid #33353b;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
   span {
     display: inline-block;
     padding: 15px 0;

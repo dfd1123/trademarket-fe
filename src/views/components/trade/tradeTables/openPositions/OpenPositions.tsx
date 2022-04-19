@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import TableHd from '../TableHd';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useService from '@/hooks/useService';
+import OpenPositionList from './OpenPositionList';
+import TableHd from '../TableHd';
+import TableBd from '../TableBd';
 
 interface PropsType {}
 
@@ -27,10 +30,22 @@ const tableHdLabel = [
 ];
 
 const OpenPositions = () => {
+  const services = useService();
+  const {openPosition, getOpenPosition} = services.trade.getOpenPosition();
+
+  useEffect(() => {
+    getOpenPosition();
+  }, []);
+  
   return (
     <OpenPositionsStyle>
       <div>
         <TableHd list={tableHdLabel} />
+        <TableBd>
+          {openPosition.map((row, index) => (
+            <OpenPositionList key={`row-${row.symbol}${index}`} info={row} tableHdInfo={tableHdLabel} />
+          ))}
+        </TableBd>
       </div>
     </OpenPositionsStyle>
   );

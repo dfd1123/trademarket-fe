@@ -12,7 +12,7 @@ const CoinInfoPannel = React.memo(() => {
 
   return (
     <CoinInfoPannelStyle className={`${!close && 'skeleton'}`}>
-      <strong className={`close-price ${isUp ? 'up' : 'down'}`}>$ {close}</strong>
+      <strong className={`close-price ${isUp ? 'up' : 'down'}`}>{close}</strong>
       <div className="pannel-box">
         <span className="label">Max Contract Volume</span>
         <span className="value">{maxOrderCount}</span>

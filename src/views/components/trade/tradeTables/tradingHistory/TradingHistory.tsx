@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TableHd from '../TableHd';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useService from '@/hooks/useService';
+import TableBd from '../TableBd';
+import TradeHistoryList from './TradeHistoryList';
+import { useTypedSelector } from '@/store';
+import { getDiffDate } from '@/utils/dateUtils';
 
 interface PropsType {}
 
@@ -21,11 +26,35 @@ const tableHdLabel = [
 ];
 
 const TradingHistory = () => {
+  const services = useService();
+  const { myTradeHistory, getMyTradeHistory } =
+    services.trade.getMyTradeHistory();
+
+  const myConclusion = useTypedSelector(
+    (state) => state.realTimeData.myConclusion
+  );
+
+  useEffect(() => {
+    const endDate = new Date();
+    const startDate = getDiffDate(endDate, 1);
+
+    getMyTradeHistory(startDate, endDate);
+  }, [myConclusion]);
+
   return (
     <TradingHistoryStyle>
       <div>
-                <TableHd list={tableHdLabel} />
-            </div>
+        <TableHd list={tableHdLabel} />
+        <TableBd>
+          {myTradeHistory.map((row, index) => (
+            <TradeHistoryList
+              key={`row-${row.symbol}${index}`}
+              info={row}
+              tableHdInfo={tableHdLabel}
+            />
+          ))}
+        </TableBd>
+      </div>
     </TradingHistoryStyle>
   );
 };

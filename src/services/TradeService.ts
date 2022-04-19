@@ -9,13 +9,15 @@ import { formatNumber } from '@/utils/numberUtils';
 import {
   MyTradeHistoryRowData,
   OpenOrderRowData,
+  OpenPositionRowData,
   OrderBookData,
   PointPositionRowData,
   TradeHistoryData,
 } from './types/Trade';
 import useUserData from '@/hooks/useUserData';
-import { translateSzPoCode } from '@/utils/translateUtils';
+import { translateOrderType, translateSzPoCode } from '@/utils/translateUtils';
 import { resetSpecificState } from '@/store/asyncData/asyncData';
+import { dateFormat } from '@/utils/dateUtils';
 
 class TradeHistory {
   #ws;
@@ -408,54 +410,122 @@ class TradeHistory {
   }
 
   getMyTradeHistory() {
-    // const { szAccNo, email } = useUserData();
-    // const tradeHistoryOutput = useTypedSelector((state) => state.asyncData[`t3612`]);
-    // const myNewOrder = useTypedSelector(
-    //   (state) => state.realTimeData.myNewOrder
-    // );
-    // const input: TransactionInputType = {
-    //   Header: {
-    //     function: 'D',
-    //     termtype: 'HTS',
-    //     trcode: 't3612',
-    //     userid: email,
-    //     token: '',
-    //   },
-    //   Input1: {
-    //     szAccNo: szAccNo,
-    //     nFromDate: '',
-    //     nToDate: '',
-    //   },
-    // };
-    // const { fetchData: getOpenOrders } = useAsyncData(input);
-    // const parseData = (output) : MyTradeHistoryRowData[] =>  {
-    //   const outputData = output?.Output2 || [];
-    //   return outputData.map(row => {
-    //     const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
-    //     const result : MyTradeHistoryRowData = {
-    //       orderNo: newD[0].slice(15, 21),
-    //       excuteNo: newD[1].slice(10, 16),
-    //       symbol: newD[2],
-    //       orderLot: newD[3],
-    //       excuteLot: newD[4],
-    //       orderKinds: translateSzPoCode(newD[5], false)
-    //       symb: translateSzPoCode(newD[2], false),
-    //       price: newD[3],
-    //       lot: newD[4],
-    //       currentPrice: newD[5],
-    //       stop: newD[6],
-    //       limit: newD[7],
-    //       crossIso: newD[8],
-    //       orderTime: newD[9],
-    //       leverage: newD[10]
-    //     }
-    //     return result;
-    //   })
-    // }
-    // useEffect(() => {
-    //   getOpenOrders({...input});
-    // }, [myNewOrder]);
-    // return {openOrders: parseData(openOrdersOutput), getOpenOrders};
+    const { szAccNo, email } = useUserData();
+    const tradeHistoryOutput = useTypedSelector((state) => state.asyncData[`t3612`]);
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3612',
+        userid: email,
+        token: '',
+      },
+      Input1: {
+        szAccNo: szAccNo,
+        nFromDate: '',
+        nToDate: '',
+      },
+    };
+    const { fetchData } = useAsyncData(input);
+
+    const getMyTradeHistory = (startDate: Date, endDate: Date) => {
+      input.Input1.nFromDate = dateFormat(startDate, 'YMMdd');
+      input.Input1.nToDate = dateFormat(endDate, 'YMMdd');
+
+      fetchData({...input});
+    }
+
+    const parseData = (output) : MyTradeHistoryRowData[] =>  {
+      const outputData = output?.Output2 || [];
+      return outputData.map(row => {
+        const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
+        const result : MyTradeHistoryRowData = {
+          orderNo: newD[0].slice(15, 21),
+          excuteNo: newD[1].slice(10, 16),
+          symbol: newD[2],
+          orderLot: newD[3],
+          excuteLot: newD[4],
+          orderKinds: translateSzPoCode(newD[5], false),
+          orderPrice: newD[6],
+          excutePrice:newD[7],
+          orderType: translateOrderType(newD[8], false),
+          orderTime: newD[9],
+          excuteTime: newD[10],
+          pointPosition: newD[11],
+        }
+        return result;
+      })
+    }
+    
+    return {myTradeHistory: parseData(tradeHistoryOutput), getMyTradeHistory};
+  }
+
+  getOpenPosition(){
+    const { szAccNo, szPasswd: szAccNoPW } = useUserData();
+    const openOrdersOutput = useTypedSelector(
+      (state) => state.asyncData[`t3602`]
+    );
+    const myConclusion = useTypedSelector(
+      (state) => state.realTimeData.myConclusion
+    );
+    const myNewOrder = useTypedSelector(
+      (state) => state.realTimeData.myNewOrder
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3602',
+      },
+      Input1: {
+        szAccNo,
+        szAccNoPW,
+        szCurNo: '',
+      },
+    };
+
+    const { fetchData: getOpenPosition } = useAsyncData(input);
+
+    const parseData = (output): OpenPositionRowData[] => {
+      const outputData = output?.Output2 || [];
+
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
+
+        const result: OpenPositionRowData = {
+          ticketNo: newD[0].slice(10),
+          symbol: newD[1],
+          side: translateSzPoCode(newD[2], false),
+          price: newD[3],
+          lot: newD[4],
+          currentPrice: newD[5],
+          stop: newD[6],
+          limit: newD[7],
+          priceDiffrence: newD[8],
+          grossPnl: newD[9],
+          leverage: newD[10],
+          crossIso: newD[11],
+          market: 'Market',
+          orderTime: newD[12],
+          orderNo: newD[13].slice(15, 21),
+          stopNo: newD[14],
+          limitNo: newD[15],
+          businessDate: newD[16],
+        };
+
+        return result;
+      });
+    };
+
+    useEffect(() => {
+      getOpenPosition({ ...input });
+    }, [myNewOrder, myConclusion]);
+
+    return { openPosition: parseData(openOrdersOutput), getOpenPosition };
   }
 }
 

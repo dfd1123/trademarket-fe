@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { OpenOrderRowData } from '@/services/types/Trade';
+import { MyTradeHistoryRowData, OpenOrderRowData } from '@/services/types/Trade';
 import useCurrentSymbol from '@/hooks/useCurrentSymbol';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import useService from '@/hooks/useService';
@@ -12,10 +12,10 @@ interface PropsType {
     label: string;
     ratio: number;
   }[];
-  info: OpenOrderRowData;
+  info: MyTradeHistoryRowData;
 }
 
-const OpenOrderList = React.memo(
+const TradeHistoryList = React.memo(
   ({ className, tableHdInfo, info }: PropsType) => {
     const services = useService();
     const { close } = useCurrentSymbol(info.symbol);
@@ -27,11 +27,11 @@ const OpenOrderList = React.memo(
 
     const row = useMemo(() => {
       const newInfo = { ...info };
-      const pointPosition = PIP_LOWEST;
-      const currentPrice = unformatNumber(close ?? '0');
 
-      newInfo.currentPrice = formatNumber(currentPrice, pointPosition);
-      newInfo.price = formatNumber(newInfo.price, pointPosition);
+      const pointPosition = newInfo.pointPosition;
+
+      newInfo.orderPrice = formatNumber(info.orderPrice, pointPosition);
+      newInfo.excutePrice = formatNumber(info.excutePrice, pointPosition);
 
       return newInfo;
     }, [info, close]);
@@ -48,7 +48,7 @@ const OpenOrderList = React.memo(
     }, []);
 
     return (
-      <OpenOrderListStyle className={`${className}`}>
+      <TradeHistoryListStyle className={`${className}`}>
         {Object.values(row).map((data, index) => (
           <span
             key={`${row.symbol}${index}`}
@@ -58,15 +58,11 @@ const OpenOrderList = React.memo(
             {data}
           </span>
         ))}
-      </OpenOrderListStyle>
+      </TradeHistoryListStyle>
     );
   }
 );
 
-const OpenOrderListStyle = styled.div`
-  span{
-    cursor: pointer;
-  }
-`;
+const TradeHistoryListStyle = styled.div``;
 
-export default OpenOrderList;
+export default TradeHistoryList;

@@ -13,14 +13,20 @@ const TableBdComp = ({ className, children }: PropsType) => {
 const TableBd = styled(TableBdComp)`
   > div {
     width: 100%;
+    border: 1px solid transparent;
     border-bottom: 1px solid #33353b;
     span {
       display: inline-block;
       vertical-align: middle;
       padding: 5px 0;
       font-size: 12px;
+      line-height: 16px;
       color: #fff;
       text-align: center;
+    }
+
+    &:hover{
+      border:1px solid rgb(141, 146, 221);
     }
   }
 `;
