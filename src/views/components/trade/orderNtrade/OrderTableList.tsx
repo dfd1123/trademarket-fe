@@ -61,10 +61,10 @@ const OrderListGraphStyle = styled.div<OrderListGraphProps>`
     props.type === 'buy'
       ? `background-color: ${DOWN_COLOR};`
       : `background-color: ${UP_COLOR};`}
-  border-top-left-radius: 0px;
+  /* border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 5px; */
   transform: scaleX(${(props) => props.rate});
   transform-origin: left;
   opacity: 0.3;
@@ -84,10 +84,10 @@ const OrderTableListStyle = styled.div<{
     display: inline;
     &:nth-of-type(1) {
       ${OrderListGraphStyle} {
-        border-top-left-radius: 7px;
+        /* border-top-left-radius: 7px;
         border-bottom-left-radius: 7px;
         border-top-right-radius: 0px;
-        border-bottom-right-radius: 0px;
+        border-bottom-right-radius: 0px; */
         transform-origin: right;
       }
     }

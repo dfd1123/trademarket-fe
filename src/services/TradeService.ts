@@ -6,9 +6,16 @@ import { useTypedSelector } from '@/store';
 import tridList from '@/data/tridList';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
 import { formatNumber } from '@/utils/numberUtils';
-import { OpenOrderRowData, OrderBookData, PointPositionRowData, TradeHistoryData } from './types/Trade';
+import {
+  MyTradeHistoryRowData,
+  OpenOrderRowData,
+  OrderBookData,
+  PointPositionRowData,
+  TradeHistoryData,
+} from './types/Trade';
 import useUserData from '@/hooks/useUserData';
 import { translateSzPoCode } from '@/utils/translateUtils';
+import { resetSpecificState } from '@/store/asyncData/asyncData';
 
 class TradeHistory {
   #ws;
@@ -56,21 +63,19 @@ class TradeHistory {
     cTermDiv: string | number,
     nReqCnt: string | number = 500
   ) {
-    const [reqData, setReqData] = useState(false);
-    const trid = tridList.findIndex((id) => id === symbol);
-    const tradeHistory = useTypedSelector(
-      (state) => state.asyncData[`t9731_${symbol}`]
-    );
+    const tradeHistory = useTypedSelector((state) => state.asyncData[`t9731_${symbol}`]);
     nReqCnt = nReqCnt.toString();
     nMinTerm = nMinTerm.toString();
     cTermDiv = cTermDiv.toString();
+
+    const tridIndex = tridList.findIndex((preSymbol) => preSymbol === symbol);
 
     const input: TransactionInputType = {
       Header: {
         function: 'D',
         termtype: 'HTS',
         trcode: 't9731',
-        trid: String(trid === -1 ? 1 : trid),
+        trid: String(tridIndex === -1 ? 1 : tridIndex),
       },
       Input1: {
         szCurNo: symbol,
@@ -96,10 +101,21 @@ class TradeHistory {
       fetchData({ ...input });
     };
 
-    if (!tradeHistory && !reqData) {
-      fetchData();
-      setReqData(true);
-    }
+    useEffect(() => {
+      if (!tradeHistory) {
+        fetchData({ ...input });
+      }
+
+      return () => {
+        this.#dispatch(resetSpecificState({ trcode: `t9731_${symbol}` }));
+      }
+    }, [symbol, nMinTerm, cTermDiv, nReqCnt]);
+
+    // if (!tradeHistory) {
+    //   console.log('JW:ewq!!!', tradeHistory);
+    //   // fetchData();
+    //   // setReqData(true);
+    // }
 
     const tradeHistoryArr: TradeHistoryData[] = (
       tradeHistory?.Output1 || []
@@ -271,7 +287,9 @@ class TradeHistory {
 
   getPositionDetail() {
     const { email, szAccNo } = useUserData();
-    const positionDetailOutput = useTypedSelector((state) => state.asyncData[`t3720`]);
+    const positionDetailOutput = useTypedSelector(
+      (state) => state.asyncData[`t3720`]
+    );
     const myConclusion = useTypedSelector(
       (state) => state.realTimeData.myConclusion
     );
@@ -294,15 +312,17 @@ class TradeHistory {
 
     const { fetchData: getPositionDetail } = useAsyncData(input);
 
-    const parseData = (output) : PointPositionRowData[] =>  {
+    const parseData = (output): PointPositionRowData[] => {
       const outputData = output?.Output2 || [];
 
-      return outputData.map(row => {
-        const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
 
         const pointPosition = newD[18];
 
-        const result : PointPositionRowData = {
+        const result: PointPositionRowData = {
           symbol: newD[1],
           lot: newD[2],
           side: translateSzPoCode(newD[3], false),
@@ -312,24 +332,28 @@ class TradeHistory {
           grossPnL: newD[9],
           commision: newD[12],
           netPl: newD[14],
-          pointPosition
-        }
+          pointPosition,
+        };
 
         return result;
-      })
-    }
+      });
+    };
 
     useEffect(() => {
-      getPositionDetail({...input});
+      getPositionDetail({ ...input });
     }, [myConclusion, myNewOrder]);
 
-
-    return {positionDetail: parseData(positionDetailOutput), getPositionDetail};
+    return {
+      positionDetail: parseData(positionDetailOutput),
+      getPositionDetail,
+    };
   }
 
-  getOpenOrders(){
+  getOpenOrders() {
     const { szAccNo } = useUserData();
-    const openOrdersOutput = useTypedSelector((state) => state.asyncData[`t3600`]);
+    const openOrdersOutput = useTypedSelector(
+      (state) => state.asyncData[`t3600`]
+    );
     const myConclusion = useTypedSelector(
       (state) => state.realTimeData.myConclusion
     );
@@ -339,9 +363,9 @@ class TradeHistory {
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t3600",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3600',
       },
       Input1: {
         szAccNo: szAccNo,
@@ -350,13 +374,15 @@ class TradeHistory {
 
     const { fetchData: getOpenOrders } = useAsyncData(input);
 
-    const parseData = (output) : OpenOrderRowData[] =>  {
+    const parseData = (output): OpenOrderRowData[] => {
       const outputData = output?.Output2 || [];
 
-      return outputData.map(row => {
-        const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
 
-        const result : OpenOrderRowData = {
+        const result: OpenOrderRowData = {
           orderNo: newD[0].slice(15, 21),
           symbol: newD[1],
           side: translateSzPoCode(newD[2], false),
@@ -367,19 +393,69 @@ class TradeHistory {
           limit: newD[7],
           crossIso: newD[8],
           orderTime: newD[9],
-          leverage: newD[10]
-        }
+          leverage: newD[10],
+        };
 
         return result;
-      })
-    }
+      });
+    };
 
     useEffect(() => {
-      getOpenOrders({...input});
+      getOpenOrders({ ...input });
     }, [myNewOrder, myConclusion]);
 
+    return { openOrders: parseData(openOrdersOutput), getOpenOrders };
+  }
 
-    return {openOrders: parseData(openOrdersOutput), getOpenOrders};
+  getMyTradeHistory() {
+    // const { szAccNo, email } = useUserData();
+    // const tradeHistoryOutput = useTypedSelector((state) => state.asyncData[`t3612`]);
+    // const myNewOrder = useTypedSelector(
+    //   (state) => state.realTimeData.myNewOrder
+    // );
+    // const input: TransactionInputType = {
+    //   Header: {
+    //     function: 'D',
+    //     termtype: 'HTS',
+    //     trcode: 't3612',
+    //     userid: email,
+    //     token: '',
+    //   },
+    //   Input1: {
+    //     szAccNo: szAccNo,
+    //     nFromDate: '',
+    //     nToDate: '',
+    //   },
+    // };
+    // const { fetchData: getOpenOrders } = useAsyncData(input);
+    // const parseData = (output) : MyTradeHistoryRowData[] =>  {
+    //   const outputData = output?.Output2 || [];
+    //   return outputData.map(row => {
+    //     const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
+    //     const result : MyTradeHistoryRowData = {
+    //       orderNo: newD[0].slice(15, 21),
+    //       excuteNo: newD[1].slice(10, 16),
+    //       symbol: newD[2],
+    //       orderLot: newD[3],
+    //       excuteLot: newD[4],
+    //       orderKinds: translateSzPoCode(newD[5], false)
+    //       symb: translateSzPoCode(newD[2], false),
+    //       price: newD[3],
+    //       lot: newD[4],
+    //       currentPrice: newD[5],
+    //       stop: newD[6],
+    //       limit: newD[7],
+    //       crossIso: newD[8],
+    //       orderTime: newD[9],
+    //       leverage: newD[10]
+    //     }
+    //     return result;
+    //   })
+    // }
+    // useEffect(() => {
+    //   getOpenOrders({...input});
+    // }, [myNewOrder]);
+    // return {openOrders: parseData(openOrdersOutput), getOpenOrders};
   }
 }
 

@@ -75,7 +75,7 @@ const LogoutTimerStyle = styled.div`
   > svg {
     width: 13px;
     margin-left: 5px;
-    fill: #fff;
+    fill: ${(props) => props.theme.header.color};
   }
 `;
 

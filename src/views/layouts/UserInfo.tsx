@@ -65,11 +65,15 @@ const UserInfoStyle = styled.div`
   > span {
     display: inline-block;
     vertical-align: middle;
+    color: ${(props) => props.theme.header.color};
+    path{
+      fill: ${(props) => props.theme.header.color};
+    }
   }
   .name {
     margin-left: 5px;
     font-size: 16px;
-    color: #fff;
+    color: ${(props) => props.theme.header.color};
   }
 
   ${BasicButton} {
@@ -80,8 +84,8 @@ const UserInfoStyle = styled.div`
     margin-left: 10px;
     font-size: 17px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.62);
-    border:1px solid rgba(255,255,255,0.62);
+    color: ${(props) => props.theme.name === 'dark' ? 'rgba(255, 255, 255, 0.62)':'rgba(0, 0, 0, 0.87)'};
+    border:1px solid ${(props) => props.theme.name === 'dark' ? 'rgba(255, 255, 255, 0.62)':'rgba(0, 0, 0, 0.87)'};
   }
 
   @media (max-width: ${TABLET_SIZE}) {

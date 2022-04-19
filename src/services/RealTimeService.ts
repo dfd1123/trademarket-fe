@@ -40,23 +40,28 @@ class RealTimeService {
   }
 
   orderData(symbol: string) {
+    const { symbols } = useCoinList();
+
     const input: TransactionInputType = {
       Header: {
         function: 'A',
         termtype: 'HTS',
         trcode: '92',
       },
-      Input1: {
-        Key1: symbol,
-      },
+      Input1: {},
     };
+
+    for (let i = 0; i < symbols.length; i++) {
+      input.Input1[`Key${i + 1}`] = symbols[i];
+    }
+
 
     const disConnectInput: TransactionInputType = {
       ...input,
       Header: { ...input.Header, function: 'U' },
     };
 
-    this.connectNdisconnect({ input, disConnectInput });
+    this.connectNdisconnect({ input, disConnectInput }, [symbols]);
   }
 
   getMyConclusion() {

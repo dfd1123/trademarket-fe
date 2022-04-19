@@ -49,3 +49,18 @@ export interface OpenOrderRowData {
   orderTime: string;
   leverage: string;
 }
+
+export interface MyTradeHistoryRowData {
+  orderNo: string;
+  excuteNo: string;
+  symbol: string;
+  orderLot: number;
+  excuteLot: number;
+  orderKinds: number | string;
+  orderPrice: number | string;
+  excutePrice: number | string;
+  orderType: string;
+  orderTime: string;
+  excuteTime: string;
+  pointPosition: number;
+}
