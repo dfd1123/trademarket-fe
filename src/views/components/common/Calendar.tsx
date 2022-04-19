@@ -25,7 +25,7 @@ const Calendar = ({date, disabled = false, disableFuture = false, disablePast = 
     const minDate = new Date(min ?? '1900-01-01');
     const maxDate = new Date(max ?? '2100-01-01');
     const handleDateChange = (value : Date | null) => {
-        let result = null;
+        let result = '';
         if(value) result = dateFormat(value, format);
         if(onChange) onChange(result);
 

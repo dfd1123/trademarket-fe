@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import basicResetClose from "@/assets/img/icon/ico-circle-close.svg";
-import searchIcon from "@/assets/img/kmf/ico/ico-search2.svg";
+import searchIcon from "@/assets/img/icon/ico-search.svg";
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;

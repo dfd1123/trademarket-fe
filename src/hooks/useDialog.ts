@@ -33,9 +33,11 @@ const useDialog = (): DialogHookReturn => {
     switch(type){
       case 'alert':
         basicButton.no = undefined;
+        break;
       case 'confirm':
         basicButton.yes = '확인';
         basicButton.no = '취소';
+        break;
       case 'prompt':
         basicButton.yes = '확인';
         basicButton.no = '취소';

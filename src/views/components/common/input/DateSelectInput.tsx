@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useEffect, useState } from "react";
-import icoCalender from '@/assets/img/kmf/ico/ico-calender.svg';
+// import icoCalender from '@/assets/img/kmf/ico/ico-calender.svg';
 import useModal from "@/hooks/useModal";
 import TextInput from "@/views/components/common/input/TextInput";
 import ModalDatePicker from "@/views/components/common/modal/ModalDatePicker";
@@ -61,7 +61,6 @@ const DateSelectInputStyle = styled.span`
 ${TextInput}{
   input{
     padding-right:38px;
-    background-image: url(${icoCalender});
     background-repeat: no-repeat;
     background-position: calc(100% - 8px) center;
   }

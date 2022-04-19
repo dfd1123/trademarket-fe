@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import icoAlertSuccess from '@/assets/img/kmf/ico/ico-alert-success.svg';
+import icoAlertSuccess from '@/assets/img/icon/ico-alert-success.svg';
 import BasicButton from '../Button';
 
 interface PropsType {
