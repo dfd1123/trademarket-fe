@@ -117,12 +117,6 @@ class TradeHistory {
       };
     }, [symbol, nMinTerm, cTermDiv, nReqCnt]);
 
-    // if (!tradeHistory) {
-    //   console.log('JW:ewq!!!', tradeHistory);
-    //   // fetchData();
-    //   // setReqData(true);
-    // }
-
     const tradeHistoryArr: TradeHistoryData[] = (
       tradeHistory?.Output1 || []
     ).map((history) => ({
@@ -277,7 +271,10 @@ class TradeHistory {
         ...order,
         price: formatNumber(order.price, decimal),
         amountPerc: formatNumber(Number(order.rem / buyTotalAmount), decimal),
-        totalPerc: formatNumber(Number((order.acc as number) / buyTotalAmount), decimal),
+        totalPerc: formatNumber(
+          Number((order.acc as number) / buyTotalAmount),
+          decimal
+        ),
       }));
     sellOrder = sellOrder
       .filter((order) => order.price !== 0)
@@ -285,7 +282,10 @@ class TradeHistory {
         ...order,
         price: formatNumber(order.price, decimal),
         amountPerc: formatNumber(Number(order.rem / sellTotalAmount), decimal),
-        totalPerc: formatNumber(Number((order.acc as number) / sellTotalAmount), decimal),
+        totalPerc: formatNumber(
+          Number((order.acc as number) / sellTotalAmount),
+          decimal
+        ),
       }));
 
     return { buyOrder, sellOrder };
@@ -350,6 +350,10 @@ class TradeHistory {
     }, [myConclusion, myNewOrder]);
 
     return {
+      loading: !Boolean(positionDetailOutput),
+      noData:
+        Boolean(positionDetailOutput) &&
+        Number(positionDetailOutput.Output1?.szCnt ?? 0) === 0,
       positionDetail: parseData(positionDetailOutput),
       getPositionDetail,
     };
@@ -410,7 +414,14 @@ class TradeHistory {
       getOpenOrders({ ...input });
     }, [myNewOrder, myConclusion]);
 
-    return { openOrders: parseData(openOrdersOutput), getOpenOrders };
+    return {
+      loading: !Boolean(openOrdersOutput),
+      noData:
+        Boolean(openOrdersOutput) &&
+        Number(openOrdersOutput.Output1?.szCnt ?? 0) === 0,
+      openOrders: parseData(openOrdersOutput),
+      getOpenOrders,
+    };
   }
 
   getMyTradeHistory() {
@@ -466,12 +477,19 @@ class TradeHistory {
       });
     };
 
-    return { myTradeHistory: parseData(tradeHistoryOutput), getMyTradeHistory };
+    return {
+      loading: !Boolean(tradeHistoryOutput),
+      noData:
+        Boolean(tradeHistoryOutput) &&
+        Number(tradeHistoryOutput.Output1?.szCnt ?? 0) === 0,
+      myTradeHistory: parseData(tradeHistoryOutput),
+      getMyTradeHistory,
+    };
   }
 
   getOpenPosition() {
     const { szAccNo, szPasswd: szAccNoPW } = useUserData();
-    const openOrdersOutput = useTypedSelector(
+    const openPositionOutput = useTypedSelector(
       (state) => state.asyncData[`t3602`]
     );
     const myConclusion = useTypedSelector(
@@ -533,7 +551,14 @@ class TradeHistory {
       getOpenPosition({ ...input });
     }, [myStopLimitOrder, myConclusion]);
 
-    return { openPosition: parseData(openOrdersOutput), getOpenPosition };
+    return {
+      loading: !Boolean(openPositionOutput),
+      noData:
+        Boolean(openPositionOutput) &&
+        Number(openPositionOutput.Output1?.szCnt ?? 0) === 0,
+      openPosition: parseData(openPositionOutput),
+      getOpenPosition,
+    };
   }
 }
 

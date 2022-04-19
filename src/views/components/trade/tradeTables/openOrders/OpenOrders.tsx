@@ -5,6 +5,7 @@ import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import useService from '@/hooks/useService';
 import OpenOrderList from './OpenOrderList';
 import TableBd from '../TableBd';
+import NoData from '../NoData';
 
 interface PropsType {}
 
@@ -24,7 +25,8 @@ const tableHdLabel = [
 
 const OpenOrders = () => {
   const services = useService();
-  const {openOrders, getOpenOrders} = services.trade.getOpenOrders();
+  const { loading, noData, openOrders, getOpenOrders } =
+    services.trade.getOpenOrders();
 
   services.realTime.getMyConclusion();
   services.realTime.getMyNewOrder();
@@ -32,17 +34,26 @@ const OpenOrders = () => {
   useEffect(() => {
     getOpenOrders();
   }, []);
-  
+
   return (
     <OpenOrdersStyle>
-      <div>
-        <TableHd list={tableHdLabel} />
-        <TableBd>
-          {openOrders.map((row, index) => (
-            <OpenOrderList key={`row-${row.symbol}${index}`} info={row} tableHdInfo={tableHdLabel} />
-          ))}
-        </TableBd>
-      </div>
+      {!loading &&
+        (noData ? (
+          <NoData msg="No data was retrieved" />
+        ) : (
+          <div>
+            <TableHd list={tableHdLabel} />
+            <TableBd>
+              {openOrders.map((row, index) => (
+                <OpenOrderList
+                  key={`row-${row.symbol}${index}`}
+                  info={row}
+                  tableHdInfo={tableHdLabel}
+                />
+              ))}
+            </TableBd>
+          </div>
+        ))}
     </OpenOrdersStyle>
   );
 };

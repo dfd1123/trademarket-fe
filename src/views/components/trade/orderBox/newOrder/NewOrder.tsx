@@ -39,17 +39,17 @@ const NewOrder = ({ mobile }: PropsType) => {
   const { marginType, leverage, order } = context;
   const { marginData } = services.user.getUserMarginData();
 
-  const { buyNewOrder, sellNewOrder } = services.trade.reqNewOrder(
-    selectedSymbol as string
-  );
-
-  const [inputs, setInputs] = useState(initialValue);
-
   const { PIP_LOWEST } = useTypedSelector(
     (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
   );
 
   const { close } = useCurrentSymbol(selectedSymbol as string);
+
+  const { buyNewOrder, sellNewOrder } = services.trade.reqNewOrder(
+    selectedSymbol as string
+  );
+
+  const [inputs, setInputs] = useState(initialValue);
 
   const convertUsdt = useMemo(() => {
     if (!inputs.price || !inputs.amount) return formatNumber(0, PIP_LOWEST);

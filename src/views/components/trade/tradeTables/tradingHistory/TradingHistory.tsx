@@ -7,6 +7,7 @@ import TableBd from '../TableBd';
 import TradeHistoryList from './TradeHistoryList';
 import { useTypedSelector } from '@/store';
 import { getDiffDate } from '@/utils/dateUtils';
+import NoData from '../NoData';
 
 interface PropsType {}
 
@@ -27,7 +28,7 @@ const tableHdLabel = [
 
 const TradingHistory = () => {
   const services = useService();
-  const { myTradeHistory, getMyTradeHistory } =
+  const { loading, noData, myTradeHistory, getMyTradeHistory } =
     services.trade.getMyTradeHistory();
 
   const myConclusion = useTypedSelector(
@@ -45,18 +46,23 @@ const TradingHistory = () => {
 
   return (
     <TradingHistoryStyle>
-      <div>
-        <TableHd list={tableHdLabel} />
-        <TableBd>
-          {myTradeHistory.map((row, index) => (
-            <TradeHistoryList
-              key={`row-${row.symbol}${index}`}
-              info={row}
-              tableHdInfo={tableHdLabel}
-            />
-          ))}
-        </TableBd>
-      </div>
+      {!loading &&
+        (noData ? (
+          <NoData msg="No data was retrieved" />
+        ) : (
+          <div>
+            <TableHd list={tableHdLabel} />
+            <TableBd>
+              {myTradeHistory.map((row, index) => (
+                <TradeHistoryList
+                  key={`row-${row.symbol}${index}`}
+                  info={row}
+                  tableHdInfo={tableHdLabel}
+                />
+              ))}
+            </TableBd>
+          </div>
+        ))}
     </TradingHistoryStyle>
   );
 };

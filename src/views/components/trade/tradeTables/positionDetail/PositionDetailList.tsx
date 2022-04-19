@@ -28,7 +28,7 @@ const PositionDetailList = React.memo(
     );
 
     const [tableHd, setTableHd] = useState(tableHdInfo);
-    const [upDown, setUpDown] = useState<'up' | 'down'>('up');
+    const [upDown, setUpDown] = useState<'' | 'up' | 'down'>('');
 
     const row = useMemo(() => {
       const newInfo = { ...info };

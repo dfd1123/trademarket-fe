@@ -5,6 +5,7 @@ import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import useService from '@/hooks/useService';
 import TableBd from '../TableBd';
 import PositionDetailList from './PositionDetailList';
+import NoData from '../NoData';
 
 interface PropsType {}
 
@@ -24,7 +25,8 @@ const tableHdLabel = [
 
 const PositionDetail = () => {
   const services = useService();
-  const {positionDetail, getPositionDetail} = services.trade.getPositionDetail();
+  const { loading, noData, positionDetail, getPositionDetail } =
+    services.trade.getPositionDetail();
 
   services.realTime.getMyConclusion();
   services.realTime.getMyNewOrder();
@@ -33,17 +35,26 @@ const PositionDetail = () => {
     getPositionDetail();
   }, []);
 
-
   return (
     <PositionDetailStyle>
-      <div>
-        <TableHd list={tableHdLabel} />
-        <TableBd>
-          {positionDetail.map((row, index) => (
-            <PositionDetailList key={`row-${row.symbol}${index}`} info={row} tableHdInfo={tableHdLabel} />
-          ))}
-        </TableBd>
-      </div>
+      {!loading && (
+        noData ? (
+          <NoData msg="No data was retrieved" />
+        ) : (
+          <div>
+            <TableHd list={tableHdLabel} />
+            <TableBd>
+              {positionDetail.map((row, index) => (
+                <PositionDetailList
+                  key={`row-${row.symbol}${index}`}
+                  info={row}
+                  tableHdInfo={tableHdLabel}
+                />
+              ))}
+            </TableBd>
+          </div>
+        )
+      )}
     </PositionDetailStyle>
   );
 };

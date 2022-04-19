@@ -5,6 +5,7 @@ import useService from '@/hooks/useService';
 import OpenPositionList from './OpenPositionList';
 import TableHd from '../TableHd';
 import TableBd from '../TableBd';
+import NoData from '../NoData';
 
 interface PropsType {}
 
@@ -31,22 +32,32 @@ const tableHdLabel = [
 
 const OpenPositions = () => {
   const services = useService();
-  const {openPosition, getOpenPosition} = services.trade.getOpenPosition();
+  const { loading, noData, openPosition, getOpenPosition } =
+    services.trade.getOpenPosition();
 
   useEffect(() => {
     getOpenPosition();
   }, []);
-  
+
   return (
     <OpenPositionsStyle>
-      <div>
-        <TableHd list={tableHdLabel} />
-        <TableBd>
-          {openPosition.map((row, index) => (
-            <OpenPositionList key={`row-${row.symbol}${index}`} info={row} tableHdInfo={tableHdLabel} />
-          ))}
-        </TableBd>
-      </div>
+      {!loading &&
+        (noData ? (
+          <NoData msg="No data was retrieved" />
+        ) : (
+          <div>
+            <TableHd list={tableHdLabel} />
+            <TableBd>
+              {openPosition.map((row, index) => (
+                <OpenPositionList
+                  key={`row-${row.symbol}${index}`}
+                  info={row}
+                  tableHdInfo={tableHdLabel}
+                />
+              ))}
+            </TableBd>
+          </div>
+        ))}
     </OpenPositionsStyle>
   );
 };
