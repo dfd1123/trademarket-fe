@@ -32,11 +32,16 @@ let gnbList : GnbMenuType[] = [
     ],
   },
   {
-    id: "support",
-    name: "Support",
+    id: "helpCenter",
+    name: "Help Center",
     path: "",
     on: false,
-    children: [{ id: "guide", name: "Guide", path: "/" }],
+    children: [
+      { id: 'deposit', name: 'Deposit', path:'/deposit' },
+      { id: 'widthraw', name: 'Widthraw', path:'/withdraw' },
+      { id: 'submitRequest', name: 'Submit Request', path:'/submit-request' },
+      { id: "userGuide", name: "User Guide", path: "/user-guide" },
+    ],
   },
 ];
 
