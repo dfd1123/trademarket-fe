@@ -551,11 +551,13 @@ class TradeHistory {
       getOpenPosition({ ...input });
     }, [myStopLimitOrder, myConclusion]);
 
+    console.log(openPositionOutput && Number(openPositionOutput.Output1?.szCnt.trim() ?? 0));
+
     return {
       loading: !Boolean(openPositionOutput),
       noData:
         Boolean(openPositionOutput) &&
-        Number(openPositionOutput.Output1?.szCnt ?? 0) === 0,
+        !Boolean(openPositionOutput.Output2),
       openPosition: parseData(openPositionOutput),
       getOpenPosition,
     };
