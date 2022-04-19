@@ -72,8 +72,8 @@ export interface OpenPositionRowData {
   price: number | string;
   lot: number;
   currentPrice: number | string;
-  stop: number;
-  limit: number;
+  stop: number | string;
+  limit: number | string;
   priceDiffrence: number | string;
   grossPnl: number | string;
   leverage: number;

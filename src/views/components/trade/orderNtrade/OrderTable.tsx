@@ -15,8 +15,6 @@ const OrderTable = ({className} : PropsType) => {
   const services = useService();
   const { symbol: selectedSymbol } = useParams();
 
-  services.realTime.orderData(selectedSymbol as string);
-
   const { PIP_LOWEST } = useTypedSelector(
     (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
   );

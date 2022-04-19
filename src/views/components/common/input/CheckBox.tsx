@@ -90,7 +90,7 @@ const CheckBox = React.memo(
         }
       }
 
-      if (onChange) onChange(changeValue);
+      if (onChange) onChange(changeValue, name);
       // handleCheck(changeValue);
     };
 

@@ -3,7 +3,12 @@ import styled from 'styled-components';
 import { OpenPositionRowData } from '@/services/types/Trade';
 import useCurrentSymbol from '@/hooks/useCurrentSymbol';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
-import { DOWN_COLOR, LIMIT_COLOR, STOP_COLOR, UP_COLOR } from '@/data/colorData';
+import {
+  DOWN_COLOR,
+  LIMIT_COLOR,
+  STOP_COLOR,
+  UP_COLOR,
+} from '@/data/colorData';
 import useService from '@/hooks/useService';
 
 interface PropsType {
@@ -17,14 +22,11 @@ interface PropsType {
 
 const OpenPositionList = React.memo(
   ({ className, tableHdInfo, info }: PropsType) => {
-    const lastTdData = tableHdInfo[tableHdInfo.length - 1];
-
     const services = useService();
     const { close, pipLowest } = useCurrentSymbol(info.symbol);
 
-    const { sellNewOrder, buyNewOrder } = services.trade.reqNewOrder(
-      info.symbol
-    );
+    services.realTime.getMyConclusion();
+    services.realTime.getMyStopLimitOrder();
 
     const [tableHd, setTableHd] = useState(tableHdInfo);
     const [upDown, setUpDown] = useState<'up' | 'down'>('up');
@@ -47,6 +49,8 @@ const OpenPositionList = React.memo(
         newInfo.grossPnl = newInfo.priceDiffrence * newInfo.lot;
 
         newInfo.price = formatNumber(info.price, pointPosition);
+        newInfo.stop = formatNumber(info.stop, pointPosition);
+        newInfo.limit = formatNumber(info.limit, pointPosition);
         newInfo.currentPrice = formatNumber(currentPrice, pointPosition);
         newInfo.priceDiffrence = formatNumber(
           newInfo.priceDiffrence,
@@ -102,20 +106,25 @@ const OpenPositionListStyle = styled.div`
     }
   } */
 
-  span{
-      padding: 15px 0 !important;
+  span {
+    padding: 15px 0 !important;
   }
 
-  .stop{
+  .stop,
+  .market {
     color: ${STOP_COLOR} !important;
   }
 
-  .limit, .market{
+  .limit {
     color: ${LIMIT_COLOR} !important;
   }
 
-  .currentprice, .lot, .stop, .limit, .market{
-      cursor: pointer;
+  .currentprice,
+  .lot,
+  .stop,
+  .limit,
+  .market {
+    cursor: pointer;
   }
 `;
 

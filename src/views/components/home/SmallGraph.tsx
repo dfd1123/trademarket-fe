@@ -36,8 +36,7 @@ interface PropsType {
 
 const SmallGraph = ({ coinInfo }: PropsType) => {
   const services = useService();
-  const { tradeHistoryArr }: { tradeHistoryArr: TradeHistoryData[] } =
-    services.trade.getTradeHistory(coinInfo.CUR_NO, 1, 3, 300);
+  const { tradeHistoryArr, tradeHistoryFetchData } = services.trade.getTradeHistory(coinInfo.CUR_NO, 1, 3, 300);
   const [changePerc, setChangePerc] = useState('0.00');
   const [price, setPrice] = useState('0');
   const realTimeCoinInfo = useTypedSelector(
@@ -59,6 +58,10 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
       setPrice(formatNumber(szClose, coinInfo.PIP_LOWEST));
     }
   }, [realTimeCoinInfo]);
+
+  useEffect(() => {
+    if(tradeHistoryArr.length < 100) tradeHistoryFetchData(1, 3, 300);
+  }, [tradeHistoryArr])
 
   const data = {
     labels: tradeHistoryArr.map((trade) => trade.close),

@@ -162,6 +162,20 @@ export interface MyNewOrderData {
   szStatus: string;
 }
 
+export interface MyStopLimitOrder {
+  cStatus: string;
+  szAccNo: string;
+  szCustItem1: string;
+  szCustItem2: string;
+  szCustItem3: string;
+  szLimitPrc: string;
+  szOorgCustItem3: string;
+  szOrgCustItem1: string;
+  szOrgCustItem2: string;
+  szStopPrc: string;
+  szkey: string;
+}
+
 export interface RealTimePriceData {
   [key: string]: CoinOutput | null;
 }
@@ -176,6 +190,7 @@ export interface RealTimeDataState {
   order: RealTimeOrderData;
   myConclusion: MyConclusionData | null;
   myNewOrder: MyNewOrderData | null;
+  myStopLimitOrder: MyStopLimitOrder | null
 }
 
 export type CoinOutputKey = keyof CoinOutput;

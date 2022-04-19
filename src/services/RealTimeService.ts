@@ -39,7 +39,7 @@ class RealTimeService {
     this.connectNdisconnect({ input, disConnectInput }, [symbols]);
   }
 
-  orderData(symbol: string) {
+  orderData() {
     const { symbols } = useCoinList();
 
     const input: TransactionInputType = {
@@ -106,6 +106,27 @@ class RealTimeService {
     this.connectNdisconnect({ input, disConnectInput });
   }
 
+  getMyStopLimitOrder(){
+    const { szAccNo } = useUserData();
+    const input: TransactionInputType = {
+      Header: {
+        function: 'A',
+        termtype: 'HTS',
+        trcode: '98',
+      },
+      Input1: {
+        Key1: szAccNo,
+      },
+    };
+
+    const disConnectInput: TransactionInputType = {
+      ...input,
+      Header: { ...input.Header, function: 'U' },
+    };
+
+    this.connectNdisconnect({ input, disConnectInput });
+  }
+
   connectNdisconnect(
     {
       input,
@@ -114,21 +135,12 @@ class RealTimeService {
     dependency: any[] = []
   ) {
     useEffect(() => {
-      this.#ws.sendInput(disConnectInput);
-      setTimeout(() => {
-        this.#ws.sendInput(input);
-      }, 5);
+      this.#ws.sendInput(input);
 
       return () => {
         this.#ws.sendInput(disConnectInput);
       };
     }, [...dependency]);
-
-    useEffect(() => {
-      return () => {
-        this.#ws.sendInput(disConnectInput);
-      };
-    }, []);
   }
 }
 

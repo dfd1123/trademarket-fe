@@ -26,6 +26,9 @@ const OpenOrders = () => {
   const services = useService();
   const {openOrders, getOpenOrders} = services.trade.getOpenOrders();
 
+  services.realTime.getMyConclusion();
+  services.realTime.getMyNewOrder();
+
   useEffect(() => {
     getOpenOrders();
   }, []);

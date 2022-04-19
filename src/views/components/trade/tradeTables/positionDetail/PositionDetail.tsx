@@ -26,6 +26,9 @@ const PositionDetail = () => {
   const services = useService();
   const {positionDetail, getPositionDetail} = services.trade.getPositionDetail();
 
+  services.realTime.getMyConclusion();
+  services.realTime.getMyNewOrder();
+
   useEffect(() => {
     getPositionDetail();
   }, []);

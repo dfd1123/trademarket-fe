@@ -16,6 +16,7 @@ import useToast from '@/hooks/useToast';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import DarkSelectBox from '@/views/components/common/input/SelectBox';
 import OrderTable from '@/views/components/trade/orderNtrade/OrderTable';
+import useCurrentSymbol from '@/hooks/useCurrentSymbol';
 
 interface PropsType {
   mobile?: boolean;
@@ -33,11 +34,9 @@ const NewOrder = ({ mobile }: PropsType) => {
   const services = useService();
   const { toast } = useToast();
   const { symbol: selectedSymbol } = useParams();
-  const { PIP_LOWEST } = useTypedSelector(
-    (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
-  );
+
   const context = useContext(TradeInfoContext);
-  const { marginType, leverage } = context;
+  const { marginType, leverage, order } = context;
   const { marginData } = services.user.getUserMarginData();
 
   const { buyNewOrder, sellNewOrder } = services.trade.reqNewOrder(
@@ -45,7 +44,12 @@ const NewOrder = ({ mobile }: PropsType) => {
   );
 
   const [inputs, setInputs] = useState(initialValue);
-  const [percent, setPercent] = useState(0);
+
+  const { PIP_LOWEST } = useTypedSelector(
+    (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
+  );
+
+  const { close } = useCurrentSymbol(selectedSymbol as string);
 
   const convertUsdt = useMemo(() => {
     if (!inputs.price || !inputs.amount) return formatNumber(0, PIP_LOWEST);
@@ -67,8 +71,15 @@ const NewOrder = ({ mobile }: PropsType) => {
     );
   }, [orderValue, marginData]);
 
+  const percent = useMemo(() => {
+    const calcPercent = (((inputs.price / leverage) * inputs.amount) / unformatNumber(marginData.availableMargin)) * 100;
+    return Math.round(isNaN(calcPercent) ? 0 : calcPercent);
+  }, [inputs.price, inputs.amount]);
+
   const handleChange = (value: any, name?: string) => {
-    if (name) setInputs({ ...inputs, [name]: value });
+    if (name) {
+      setInputs({ ...inputs, [name]: value });
+    }
   };
 
   const handleAvailableMarginPercent = (value: number) => {
@@ -81,7 +92,6 @@ const NewOrder = ({ mobile }: PropsType) => {
       : 0;
 
     handleChange(amount > 200 ? 200 : amount, 'amount');
-    setPercent(value);
   };
 
   const buyOrder = () => {
@@ -96,11 +106,51 @@ const NewOrder = ({ mobile }: PropsType) => {
     sellNewOrder({ ...inputs, leverage, marginType });
   };
 
+  useEffect(() => {
+    if (order) {
+      const { orderType, price, amount } = order;
+      setInputs({
+        ...inputs,
+        orderType,
+        price: unformatNumber(price.toString()),
+        amount: unformatNumber(amount.toString()),
+      });
+    }
+  }, [order]);
+
+  useEffect(() => {
+    if (inputs.orderType === 'UOM') {
+      const currentPrice = unformatNumber(String(close || 0));
+      if (currentPrice !== inputs.price) {
+        setInputs({
+          ...inputs,
+          price: currentPrice,
+        });
+      }
+    }
+  }, [close, inputs]);
+
+  useEffect(() => {
+    const available = unformatNumber(marginData.availableMargin);
+    const margin = percent
+      ? Number((available * (percent / 100)).toFixed(PIP_LOWEST))
+      : 0;
+    const amount = margin
+      ? Number(((margin / inputs.price) * leverage).toFixed(PIP_LOWEST))
+      : 0;
+
+      setInputs({
+        ...inputs,
+        amount: amount > 200 ? 200 : amount
+      });
+  }, [percent]);
+
+
   return (
     <NewOrderStyle>
       <div className="order-cont">
         <div className="info">
-          <b className="symbol">BTCUSDT</b>
+          <b className="symbol">{selectedSymbol}</b>
           <span className="leverage">
             leverage <em>x {leverage}</em>
           </span>
@@ -347,7 +397,7 @@ const NewOrderStyle = styled.div`
     height: 15px;
   }
 
-  >.btn-cont {
+  > .btn-cont {
     display: flex;
     justify-content: space-between;
     .btn {
@@ -404,7 +454,7 @@ const NewOrderStyle = styled.div`
       display: none;
     }
 
-    >.btn-cont {
+    > .btn-cont {
       width: 100%;
       padding: 0 14px 15px;
       .btn {

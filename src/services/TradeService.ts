@@ -65,7 +65,9 @@ class TradeHistory {
     cTermDiv: string | number,
     nReqCnt: string | number = 500
   ) {
-    const tradeHistory = useTypedSelector((state) => state.asyncData[`t9731_${symbol}`]);
+    const tradeHistory = useTypedSelector(
+      (state) => state.asyncData[`t9731_${symbol}`]
+    );
     nReqCnt = nReqCnt.toString();
     nMinTerm = nMinTerm.toString();
     cTermDiv = cTermDiv.toString();
@@ -109,8 +111,10 @@ class TradeHistory {
       }
 
       return () => {
-        this.#dispatch(resetSpecificState({ trcode: `t9731_${symbol}` }));
-      }
+        if (tradeHistory) {
+          this.#dispatch(resetSpecificState({ trcode: `t9731_${symbol}` }));
+        }
+      };
     }, [symbol, nMinTerm, cTermDiv, nReqCnt]);
 
     // if (!tradeHistory) {
@@ -272,16 +276,16 @@ class TradeHistory {
       .map((order) => ({
         ...order,
         price: formatNumber(order.price, decimal),
-        amountPerc: Number(order.rem / buyTotalAmount).toFixed(2),
-        totalPerc: Number((order.acc as number) / buyTotalAmount).toFixed(2),
+        amountPerc: formatNumber(Number(order.rem / buyTotalAmount), decimal),
+        totalPerc: formatNumber(Number((order.acc as number) / buyTotalAmount), decimal),
       }));
     sellOrder = sellOrder
       .filter((order) => order.price !== 0)
       .map((order) => ({
         ...order,
         price: formatNumber(order.price, decimal),
-        amountPerc: Number(order.rem / sellTotalAmount).toFixed(2),
-        totalPerc: Number((order.acc as number) / sellTotalAmount).toFixed(2),
+        amountPerc: formatNumber(Number(order.rem / sellTotalAmount), decimal),
+        totalPerc: formatNumber(Number((order.acc as number) / sellTotalAmount), decimal),
       }));
 
     return { buyOrder, sellOrder };
@@ -411,7 +415,9 @@ class TradeHistory {
 
   getMyTradeHistory() {
     const { szAccNo, email } = useUserData();
-    const tradeHistoryOutput = useTypedSelector((state) => state.asyncData[`t3612`]);
+    const tradeHistoryOutput = useTypedSelector(
+      (state) => state.asyncData[`t3612`]
+    );
 
     const input: TransactionInputType = {
       Header: {
@@ -433,14 +439,16 @@ class TradeHistory {
       input.Input1.nFromDate = dateFormat(startDate, 'YMMdd');
       input.Input1.nToDate = dateFormat(endDate, 'YMMdd');
 
-      fetchData({...input});
-    }
+      fetchData({ ...input });
+    };
 
-    const parseData = (output) : MyTradeHistoryRowData[] =>  {
+    const parseData = (output): MyTradeHistoryRowData[] => {
       const outputData = output?.Output2 || [];
-      return outputData.map(row => {
-        const newD = [...row].map(data => typeof data === 'string' ? data.toString().trim() : data);
-        const result : MyTradeHistoryRowData = {
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
+        const result: MyTradeHistoryRowData = {
           orderNo: newD[0].slice(15, 21),
           excuteNo: newD[1].slice(10, 16),
           symbol: newD[2],
@@ -448,20 +456,20 @@ class TradeHistory {
           excuteLot: newD[4],
           orderKinds: translateSzPoCode(newD[5], false),
           orderPrice: newD[6],
-          excutePrice:newD[7],
+          excutePrice: newD[7],
           orderType: translateOrderType(newD[8], false),
           orderTime: newD[9],
           excuteTime: newD[10],
           pointPosition: newD[11],
-        }
+        };
         return result;
-      })
-    }
-    
-    return {myTradeHistory: parseData(tradeHistoryOutput), getMyTradeHistory};
+      });
+    };
+
+    return { myTradeHistory: parseData(tradeHistoryOutput), getMyTradeHistory };
   }
 
-  getOpenPosition(){
+  getOpenPosition() {
     const { szAccNo, szPasswd: szAccNoPW } = useUserData();
     const openOrdersOutput = useTypedSelector(
       (state) => state.asyncData[`t3602`]
@@ -469,8 +477,8 @@ class TradeHistory {
     const myConclusion = useTypedSelector(
       (state) => state.realTimeData.myConclusion
     );
-    const myNewOrder = useTypedSelector(
-      (state) => state.realTimeData.myNewOrder
+    const myStopLimitOrder = useTypedSelector(
+      (state) => state.realTimeData.myStopLimitOrder
     );
 
     const input: TransactionInputType = {
@@ -523,7 +531,7 @@ class TradeHistory {
 
     useEffect(() => {
       getOpenPosition({ ...input });
-    }, [myNewOrder, myConclusion]);
+    }, [myStopLimitOrder, myConclusion]);
 
     return { openPosition: parseData(openOrdersOutput), getOpenPosition };
   }

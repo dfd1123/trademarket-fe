@@ -34,6 +34,8 @@ const TradingHistory = () => {
     (state) => state.realTimeData.myConclusion
   );
 
+  services.realTime.getMyConclusion();
+
   useEffect(() => {
     const endDate = new Date();
     const startDate = getDiffDate(endDate, 1);

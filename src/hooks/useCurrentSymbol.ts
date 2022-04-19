@@ -1,11 +1,11 @@
 import { useTypedSelector } from '@/store';
 import { formatNumber } from '@/utils/numberUtils';
 
-const useCurrentSymbol = (symbol: string) => {
+const useCurrentSymbol = (symbol: string, equalityFunc?: (a, b) => boolean) => {
   const { PIP_LOWEST, MAX_ORDCNT } = useTypedSelector(
     (state) => state.coinInfoSlice.symbols[symbol] || {}
   );
-  const coin = useTypedSelector((state) => state.realTimeData.price[symbol]);
+  const coin = useTypedSelector((state) => state.realTimeData.price[symbol], equalityFunc);
 
   if (!coin) return {};
 

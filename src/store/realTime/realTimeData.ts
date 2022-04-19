@@ -12,6 +12,7 @@ import {
   OrderOutput,
   MyConclusionData,
   MyNewOrderData,
+  MyStopLimitOrder,
 } from './types/realTimeData';
 
 const initialState: RealTimeDataState = {
@@ -35,6 +36,7 @@ const initialState: RealTimeDataState = {
   },
   myConclusion: null,
   myNewOrder: null,
+  myStopLimitOrder: null,
 };
 
 const realTimeData = createSlice({
@@ -112,10 +114,26 @@ const realTimeData = createSlice({
         return { payload: Output1 };
       },
     },
+    updateMyStopLimitOrder: {
+      reducer(state, action: PayloadAction<MyStopLimitOrder>) {
+        state.myStopLimitOrder = action.payload;
+      },
+      prepare({ Output1 }: { Output1: MyStopLimitOrder }) {
+        Output1 = Object.keys(Output1).reduce((acc, key) => {
+          const value =
+            typeof Output1[key as keyof MyStopLimitOrder] === 'string'
+              ? Output1[key as keyof MyStopLimitOrder].toString().trim()
+              : Output1[key as keyof MyStopLimitOrder];
+          return { ...acc, [key]: value };
+        }, {} as MyStopLimitOrder);
+
+        return { payload: Output1 };
+      },
+    }
   },
 });
 
-export const { updatePriceData, updateOrderData, updateMyConclusion, updateMyNewOrder } =
+export const { updatePriceData, updateOrderData, updateMyConclusion, updateMyNewOrder, updateMyStopLimitOrder } =
   realTimeData.actions;
 
 export const getRealTimePrice = (symbol: string): Selector<string> =>
