@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { batch, useDispatch } from 'react-redux';
 import {
   updateMyConclusion,
   updateMyNewOrder,
+  updateMyStopLimitOrder,
   updateOrderData,
   updatePriceData,
 } from '@/store/realTime/realTimeData';
@@ -14,6 +15,7 @@ export interface TrdWebSocket extends WebSocket {
   waitSendList: TransactionInputType[];
   connect: boolean;
   closed: boolean;
+  subscribe: TransactionInputType[];
   sendInput: (input: TransactionInputType) => undefined | void;
 }
 
@@ -35,11 +37,14 @@ export default function WebSocketProvider({
   children: React.ReactNode;
 }) {
   const webSocketUrl = process.env.WS_HOST;
+  const webSocket = useRef<TrdWebSocket | null>(null);
   const dispatch = useDispatch();
 
   if (!window.ws) {
     window.ws = new WebSocket(webSocketUrl) as TrdWebSocket;
     let ws = window.ws;
+    webSocket.current = ws;
+    ws.subscribe = [];
     ws.connect = false;
     ws.closed = false;
     ws.waitSendList = [];
@@ -67,7 +72,7 @@ export default function WebSocketProvider({
 
     ws.onmessage = ({ data }: { data: MessageEvent['data'] }): undefined => {
       data = JSON.parse(data);
-      const trcode = data.Header.trcode;
+      const { trcode } = data.Header;
 
       if (trcode === '00000') return;
 
@@ -81,6 +86,8 @@ export default function WebSocketProvider({
             return dispatch(updateMyConclusion(data));
           case '96':
             return dispatch(updateMyNewOrder(data));
+          case '98':
+            return dispatch(updateMyStopLimitOrder(data));
           case 't5511':
             return dispatch(updateCoinInfo(data));
           default:
@@ -91,8 +98,30 @@ export default function WebSocketProvider({
 
     ws.sendInput = (input: TransactionInputType) => {
       if (!ws) return;
-      else if (!ws.connect) ws.waitSendList.push(input);
-      else ws.send(JSON.stringify(input));
+
+      if (!ws.connect) ws.waitSendList.push(input);
+      else {
+        const { trcode, function: func } = input.Header;
+        const input1 = input.Input1;
+
+        const findIndex = ws.subscribe.findIndex(
+          (req) =>
+            req.Header.trcode === trcode &&
+            JSON.stringify(req.Input1) === JSON.stringify(input1)
+        );
+
+        if (func === 'A' || func === 'U') {
+          if (func === 'A' && findIndex === -1) {
+            ws.subscribe.push(input);
+            ws.send(JSON.stringify(input));
+          } else if (func === 'U' && findIndex !== -1) {
+            ws.subscribe.splice(findIndex, 1);
+            ws.send(JSON.stringify(input));
+          }
+        } else {
+          ws.send(JSON.stringify(input));
+        }
+      }
     };
 
     ws.onerror = (error) => {
