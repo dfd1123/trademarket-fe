@@ -22,6 +22,8 @@ const OrderTable = ({className} : PropsType) => {
     (state) => state.realTimeData.order[selectedSymbol as string]
   );
 
+  services.realTime.orderData();
+
   const { buyOrder, sellOrder } = services.trade.orderBookDataSetting(
     liveData,
     PIP_LOWEST,

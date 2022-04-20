@@ -11,35 +11,38 @@ interface PropsType {
   value?: number | string;
   step?: number;
   dec?: number;
+  max?:number;
   placeholder?: string;
   onChange?: (value: any, name?: string) => void;
 }
 
-const IntegerInputComp = ({ className, label, name, value, step = 1, dec = 2, placeholder, onChange }: PropsType) => {
+const IntegerInputComp = ({ className, label, name, value, max, step = 1, dec = 2, placeholder, onChange }: PropsType) => {
     const [number, setNumber] = useState(String(value ?? '0'));
 
     const increase = () => {
-        setNumber(String(unformatNumber(number) + step));
+      const result = formatNumber(unformatNumber(number) + step, dec);
+        setNumber(result);
+        handleChange(result, name);
     }
 
     const decrease = () => {
-        const result = unformatNumber(number) - step < 0 ? 0 : unformatNumber(number) - step; 
-        setNumber(String(result));
+        const result = formatNumber(unformatNumber(number) - step < 0 ? 0 : unformatNumber(number) - step, dec); 
+        setNumber(result);
+        handleChange(result, name);
     }
 
     const handleChange = (value: string, name?: string) => {
         setNumber(String(value ?? '0'));
-        onChange && onChange(value, name);
+        onChange && onChange(String(value), name);
     }
 
     useEffect(() => {
-        console.log(value);
-        setNumber(String(number));
+        setNumber(String(value));
     },[value])
 
   return (
     <div className={className}>
-      <TextInput name={name} label={label} value={value} placeholder={placeholder} number onChange={handleChange} />
+      <TextInput name={name} label={label} value={value} max={max} placeholder={placeholder} number onChange={handleChange} />
       <div className="btn-holder">
         <BasicButton onClick={decrease}>-</BasicButton>
         <BasicButton onClick={increase}>+</BasicButton>

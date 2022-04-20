@@ -1,10 +1,13 @@
 import React, { createContext, useState } from 'react';
 
+export type OrderType = '' | 'UOM' | 'UOE' | 'UCEL' | 'UCES' | 'UCM' | 'URE';
+
+export type DealType = '079' | '080' | '081' | '082';
 export interface ContextOrderType {
   type: 'newOrder' | 'stopLimit' | 'modifyCancel';
-  orderType: 'UOM' | 'UOE' | 'UCEL' | 'UCES' | 'UCM' | 'URE';
+  orderType: OrderType;
   symbol: string;
-  dealType: '079' | '080' | '081' | '082';
+  dealType: DealType | string;
   price: number | string;
   amount: string;
   limitPrice?: number;
@@ -31,7 +34,7 @@ interface ReturnType {
   leverage: number;
   setLeverage: (value: number) => void;
   order: ContextOrderType | null;
-  setOrder: (object: ContextOrderType) => void,
+  setOrder: (object: ContextOrderType | null) => void,
 }
 
 const defaultValue : ReturnType = {
@@ -40,7 +43,7 @@ const defaultValue : ReturnType = {
   leverage: 10,
   setLeverage: (value: number): void => {},
   order: null,
-  setOrder: (object: ContextOrderType): void => {},
+  setOrder: (object: ContextOrderType | null): void => {},
 };
 
 export const TradeInfoContext = createContext(defaultValue);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import TableHd from '../TableHd';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
@@ -25,8 +25,8 @@ const tableHdLabel = [
 
 const OpenOrders = () => {
   const services = useService();
-  const { loading, noData, openOrders, getOpenOrders } =
-    services.trade.getOpenOrders();
+  
+  const { loading, noData, openOrders, getOpenOrders } = services.trade.getOpenOrders();
 
   services.realTime.getMyConclusion();
   services.realTime.getMyNewOrder();

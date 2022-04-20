@@ -20,3 +20,14 @@ export interface RegisterInput {
   szTelNo2: string;
   szUserName: string;
 }
+
+export interface UserMarginData {
+  balance: string;
+  openPositionMargin: string;
+  grossPnL: string;
+  possibleWithdraw: string;
+  maintenMargin: string;
+  marginForUse: string;
+  availableMargin: string;
+  marginCallRate: string;
+}

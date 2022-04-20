@@ -67,15 +67,15 @@ const TextInput = ({
     let {value, name} : {value: string | number, name: string} = e.target;
     if(number) {
       value = value.replace(/[^-\.0-9]/g, "");
-      console.log(value)
+      if(value[0] === '0' && Number(value) >= 1) value = value.slice(1);
       if(value === '.') value = '0.';
-      if(min && value < min) value = min;
-      if(max && value > max) value = max;
+      if(min && Number(value) < Number(min)) value = min;
+      if(max && Number(value) > Number(max)) value = max;
       value = String(value).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     }
     setText(value);
-    if (onChange) onChange(number ?  Number(value.replace(/,/g, '')) : value, name);
-    if (onInput) onInput(number ?  Number(value.replace(/,/g, '')) : value, name);
+    if (onChange) onChange(value, name);
+    if (onInput) onInput(value, name);
   };
 
   const handleReset = () => {
@@ -88,7 +88,6 @@ const TextInput = ({
   };
 
   useEffect(() => {
-    console.log(value);
     setText(value);
   }, [value]);
 

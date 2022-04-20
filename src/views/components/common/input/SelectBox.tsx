@@ -28,7 +28,7 @@ const SelectBox = ({ className, name, list, value, onChange }: PropsType) => {
     >
       {list &&
         list.map((info) => (
-          <option key={info.value} value={info.value}>
+          <option key={name + info.value} value={info.value}>
             {info.name}
           </option>
         ))}

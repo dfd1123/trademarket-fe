@@ -23,8 +23,8 @@ interface PropsType {
 }
 
 const initialValue = {
-  price: 0,
-  amount: 0,
+  price: '',
+  amount: '',
   orderType: 'UOE',
 };
 
@@ -52,8 +52,10 @@ const NewOrder = ({ mobile }: PropsType) => {
   const [inputs, setInputs] = useState(initialValue);
 
   const convertUsdt = useMemo(() => {
+    const amount = unformatNumber(inputs.amount);
+    const price = unformatNumber(inputs.price);
     if (!inputs.price || !inputs.amount) return formatNumber(0, PIP_LOWEST);
-    return formatNumber(inputs.amount * inputs.price, PIP_LOWEST);
+    return formatNumber(amount * price, PIP_LOWEST);
   }, [inputs.price, inputs.amount]);
 
   const orderValue = useMemo(() => {
@@ -72,9 +74,18 @@ const NewOrder = ({ mobile }: PropsType) => {
   }, [orderValue, marginData]);
 
   const percent = useMemo(() => {
-    const calcPercent = (((inputs.price / leverage) * inputs.amount) / unformatNumber(marginData.availableMargin)) * 100;
-    return Math.round(isNaN(calcPercent) ? 0 : calcPercent);
-  }, [inputs.price, inputs.amount]);
+    const price = unformatNumber(inputs.price);
+    const amount = unformatNumber(inputs.amount);
+    const margin = unformatNumber(marginData.availableMargin);
+    const calcPercent = (((price / leverage) * amount) /margin) * 100;
+
+    return Math.round(isNaN(calcPercent) || margin === 0 ? 0 : calcPercent);
+  }, [inputs.price, inputs.amount, marginData]);
+
+  const maxAmount = useMemo(() => {
+    const price = unformatNumber(inputs.price);
+    return formatNumber(unformatNumber(marginData.availableMargin as string) / (price / leverage), PIP_LOWEST)
+  }, [inputs.price]);
 
   const handleChange = (value: any, name?: string) => {
     if (name) {
@@ -83,15 +94,19 @@ const NewOrder = ({ mobile }: PropsType) => {
   };
 
   const handleAvailableMarginPercent = (value: number) => {
+    const price = unformatNumber(inputs.price);
     const available = unformatNumber(marginData.availableMargin);
     const margin = value
       ? Number((available * (value / 100)).toFixed(PIP_LOWEST))
       : 0;
     const amount = margin
-      ? Number(((margin / inputs.price) * leverage).toFixed(PIP_LOWEST))
+      ? formatNumber((margin / price) * leverage, PIP_LOWEST)
       : 0;
 
-    handleChange(amount > 200 ? 200 : amount, 'amount');
+    setInputs({
+      ...inputs,
+      amount: amount > 200 ? '200' : formatNumber(amount, PIP_LOWEST),
+    });
   };
 
   const buyOrder = () => {
@@ -107,44 +122,32 @@ const NewOrder = ({ mobile }: PropsType) => {
   };
 
   useEffect(() => {
-    if (order) {
-      const { orderType, price, amount } = order;
-      setInputs({
-        ...inputs,
-        orderType,
-        price: unformatNumber(price.toString()),
-        amount: unformatNumber(amount.toString()),
-      });
-    }
-  }, [order]);
-
-  useEffect(() => {
     if (inputs.orderType === 'UOM') {
       const currentPrice = unformatNumber(String(close || 0));
-      if (currentPrice !== inputs.price) {
+      const price = unformatNumber(inputs.price);
+      if (currentPrice !== price) {
         setInputs({
           ...inputs,
-          price: currentPrice,
+          price: formatNumber(currentPrice, PIP_LOWEST),
         });
       }
     }
   }, [close, inputs]);
 
   useEffect(() => {
-    const available = unformatNumber(marginData.availableMargin);
-    const margin = percent
-      ? Number((available * (percent / 100)).toFixed(PIP_LOWEST))
-      : 0;
-    const amount = margin
-      ? Number(((margin / inputs.price) * leverage).toFixed(PIP_LOWEST))
-      : 0;
+    if (order) {
+      const { orderType, price, amount } = order;
+
+      console.log(formatNumber(price, PIP_LOWEST));
 
       setInputs({
         ...inputs,
-        amount: amount > 200 ? 200 : amount
+        orderType,
+        price: formatNumber(price, PIP_LOWEST),
+        amount: formatNumber(amount, PIP_LOWEST),
       });
-  }, [percent]);
-
+    }
+  }, [order]);
 
   return (
     <NewOrderStyle>
@@ -194,13 +197,14 @@ const NewOrder = ({ mobile }: PropsType) => {
                 decimalCnt={PIP_LOWEST}
                 onChange={handleChange}
               />
-              <span className="convert-usdt">{convertUsdt} USDT</span>
+              <span className="convert-usdt">{inputs.price}{convertUsdt} USDT</span>
             </div>
             <div className="qault">
               <OrderInput
                 name="amount"
                 label="Amount"
                 value={inputs.amount}
+                max={Number(maxAmount)}
                 decimalCnt={PIP_LOWEST}
                 onChange={handleChange}
               />

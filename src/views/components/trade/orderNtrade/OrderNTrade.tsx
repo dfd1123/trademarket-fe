@@ -7,11 +7,7 @@ import OrderTable from './OrderTable';
 import SimpleTradeHistory from './SimpleTradeHistory';
 
 const OrderBooks = () => {
-  const services = useService();
-  const { symbol: selectedSymbol } = useParams();
   const [tabIndex, setTabIndex] = useState(0);
-
-  services.realTime.orderData();
 
   return (
     <OrderBookStyle>

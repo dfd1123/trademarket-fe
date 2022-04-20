@@ -25,7 +25,7 @@ const ChangeMarginType = () => {
         type="radio"
         name="margin-type"
         label="CROSS"
-        value="cross"
+        value="0"
         data={marginType}
         onChange={setMarginType}
       />
@@ -33,7 +33,7 @@ const ChangeMarginType = () => {
         type="radio"
         name="margin-type"
         label="ISO"
-        value="iso"
+        value="1"
         data={marginType}
         onChange={setMarginType}
       />

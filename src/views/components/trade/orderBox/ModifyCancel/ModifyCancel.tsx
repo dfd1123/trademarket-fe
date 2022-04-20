@@ -8,63 +8,128 @@ import {
   YellowBorderButton,
 } from '@/views/components/common/Button';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useService from '@/hooks/useService';
+import { OrderType, TradeInfoContext } from '@/provider/TradeInfoProvider';
+import { formatNumber, unformatNumber } from '@/utils/numberUtils';
+import useCurrentSymbol from '@/hooks/useCurrentSymbol';
 
-const initialValue = {
-  price: 0,
-  amount: 0,
-  orderType: 'UOE',
+const initialValue: { price: string; amount: string; orderType: OrderType } = {
+  price: '',
+  amount: '',
+  orderType: '',
 };
 
 const ModifyCancel = () => {
+  const services = useService();
+  const context = useContext(TradeInfoContext);
+  const { order, setOrder } = context;
+
+  const { sendModifyOrder } = services.trade.reqModifyOrder();
+
   const [inputs, setInputs] = useState(initialValue);
+  const [symbol, setSymbol] = useState('');
   const [decimal, setDecimal] = useState(2);
+
+  const { close } = useCurrentSymbol(symbol || 'BTCUSDT');
+
+  const convertUsdt = useMemo(() => {
+    const amount = unformatNumber(inputs.amount);
+    const price = unformatNumber(inputs.price);
+    if (!inputs.price || !inputs.amount) return formatNumber(0, decimal);
+    return formatNumber(amount * price, decimal);
+  }, [inputs.price, inputs.amount]);
+
+  const orderValue = useMemo(() => {
+    return formatNumber(unformatNumber(convertUsdt), decimal);
+  }, [convertUsdt]);
+
+  const availableMargin = useMemo(() => {
+    const amount = unformatNumber(inputs.amount);
+    const price = unformatNumber(inputs.price);
+
+    return formatNumber(
+      symbol && (amount * price) ? (unformatNumber(close || '0') - unformatNumber(orderValue)) : 0,
+      decimal
+    );
+  }, [orderValue, close]);
 
   const handleChange = (value: any, name?: string) => {
     if (name) setInputs({ ...inputs, [name]: value });
   };
 
+  const modifyOrder = () => {
+    if (order && inputs.orderType) {
+      sendModifyOrder({
+        ...inputs,
+        price: unformatNumber(inputs.price),
+        amount: unformatNumber(inputs.amount),
+        symbol: order.symbol,
+        deal: order.dealType,
+        orderId: order.orderNo as string,
+      });
+      setOrder(null);
+    }
+  };
+
+  useEffect(() => {
+    if (order) {
+      const dec = (order.price.toString().split('.')[1] ?? '').length;
+      setDecimal(dec);
+      setSymbol(order.symbol);
+      setInputs({
+        ...inputs,
+        price: formatNumber(order.price, dec),
+        amount: formatNumber(order.amount, dec),
+        orderType: order.orderType,
+      });
+    }
+  }, [order]);
+
   return (
     <ModifyCancelStyle>
       <div className="order-cont">
         <div className="info">
-          <b className="symbol">No selected</b>
+          <b className="symbol">{symbol || 'No selected'}</b>
         </div>
         <div className="inp-holder">
           <div className="tab-cont">
             <CheckBox
               type="radio"
               name="orderType"
-              label="Stop"
-              value="UOM"
+              label="Limit Order"
+              value="URE"
               data={inputs.orderType}
               onChange={handleChange}
               ripple={null}
+              disabled
+            />
+            <CheckBox
+              type="radio"
+              name="orderType"
+              label="Stop"
+              value="UCES"
+              data={inputs.orderType}
+              onChange={handleChange}
+              ripple={null}
+              disabled
             />
             <CheckBox
               type="radio"
               name="orderType"
               label="Limit"
-              value="UOE"
+              value="UCEL"
               data={inputs.orderType}
               onChange={handleChange}
               ripple={null}
-            />
-            <CheckBox
-              type="radio"
-              name="orderType"
-              label="MARKET"
-              value="UOE"
-              data={inputs.orderType}
-              onChange={handleChange}
-              ripple={null}
+              disabled
             />
             <DarkSelectBox
               name="orderType"
               value={inputs.orderType}
               list={[
-                { name: 'Stop', value: 'UOM' },
-                { name: 'Limit', value: 'UOE' },
-                { name: 'Market', value: 'UOE' },
+                { name: 'Limit Order', value: 'URE' },
+                { name: 'Stop', value: 'UCES' },
+                { name: 'Limit', value: 'UCEL' },
               ]}
               onChange={handleChange}
             />
@@ -97,19 +162,19 @@ const ModifyCancel = () => {
           <div className="pannel">
             <span className="label">Order Value</span>
             <span className="value">
-              <b>0</b>USDT
+              <b>{orderValue}</b>USDT
             </span>
           </div>
           <div className="pannel">
             <span className="label">Available Margin</span>
             <span className="value">
-              <b>0</b>USDT
+              <b>{availableMargin}</b>USDT
             </span>
           </div>
         </div>
       </div>
       <div className="btn-cont">
-        <YellowButton>M-ORDER MODIFY</YellowButton>
+        <YellowButton onClick={modifyOrder}>M-ORDER MODIFY</YellowButton>
         <YellowBorderButton>M-ORDER CANCEL</YellowBorderButton>
       </div>
     </ModifyCancelStyle>

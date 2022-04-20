@@ -10,6 +10,7 @@ interface PropsType {
   label: string;
   name: string;
   value?: string | number;
+  max?: number;
   decimalCnt?: number;
   onChange?: (value: any, name?: string) => void;
 }
@@ -19,6 +20,7 @@ const OrderInputComp = ({
   name,
   label,
   value,
+  max,
   decimalCnt = 2,
   onChange,
 }: PropsType) => {
@@ -40,6 +42,7 @@ const OrderInputComp = ({
           value={value}
           step={step}
           dec={decimalCnt}
+          max={max}
           placeholder="0"
           onChange={onChange}
         />

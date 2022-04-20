@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useTypedSelector } from '@/store';
 import useAsyncData from '@/hooks/useAsyncData';
-import { LoginInput, RegisterInput } from './types/User';
+import { LoginInput, RegisterInput, UserMarginData } from './types/User';
 import { ConstructorParamsType } from './types/Service';
 import { setAuth, resetAuth } from '@/store/auth/auth';
 import { TransactionInputType } from '@/types/TransactionType';
@@ -133,7 +133,7 @@ class UserService {
     return { registerRes, registerFetchData };
   }
 
-  getUserMarginData() {
+  getUserMarginData() : {marginData: UserMarginData, getMarginData: () => void} {
     const { szAccNo, email } = useUserData();
     const data = useTypedSelector((state) => state.asyncData[`t3608`]);
 

@@ -8,6 +8,7 @@ interface PropsType {
   ripple?: boolean;
   className?: string;
   onChange?: (value: number, name?: string) => void;
+  onClick?: () => void;
 }
 
 const Tab = ({
@@ -16,6 +17,7 @@ const Tab = ({
   ripple = true,
   className,
   onChange,
+  onClick,
 }: PropsType) => {
   const [state, setState] = useState(0);
 
@@ -23,6 +25,11 @@ const Tab = ({
     setState(idx);
     onChange && onChange(idx);
   };
+
+  const clickChangeIndex = (idx: number) => {
+    changeIndex(idx);
+    onClick && onClick();
+  }
 
   useEffect(() => {
     if (selected !== undefined) changeIndex(selected);
@@ -35,7 +42,7 @@ const Tab = ({
           key={index}
           ripple={ripple}
           className={`${state === index ? 'active' : ''}`}
-          onClick={() => changeIndex(index)}
+          onClick={() => clickChangeIndex(index)}
         >
           {item}
         </NoBorderButton>

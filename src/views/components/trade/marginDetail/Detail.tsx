@@ -10,8 +10,6 @@ const Detail = () => {
     (state) => state.coinInfoSlice.symbols[symbol as string]
   );
 
-  const [tabIndex, setTabIndex] = useState(0);
-
   return (
     <DetailStyle>
       <div className="pannel">

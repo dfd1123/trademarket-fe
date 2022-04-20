@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useTypedSelector } from '@/store';
+import useService from '@/hooks/useService';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import { YellowTabStyle } from '@/views/components/common/tab/Tab';
 import Margin from './Magin';
@@ -10,11 +12,24 @@ interface PropsType {
 }
 
 const MarginDetail = ({mobile} : PropsType) => {
+  const services = useService();
   const [tabIndex, setTabIndex] = useState(0);
+  const myConclusion = useTypedSelector(
+    (state) => state.realTimeData.myConclusion
+  );
+  const myNewOrder = useTypedSelector(
+    (state) => state.realTimeData.myNewOrder
+  );
+
+  const { marginData, getMarginData } = services.user.getUserMarginData();
 
   useEffect(() => {
     if(mobile) setTabIndex(0);
   }, [mobile]);
+
+  useEffect(() => {
+    getMarginData();
+  }, [myConclusion, myNewOrder]);
 
   return (
     <MarginDetailStyle>
@@ -22,7 +37,7 @@ const MarginDetail = ({mobile} : PropsType) => {
         <YellowTabStyle list={['Margin', 'Detail']} onChange={setTabIndex} />
       </div>
       <div className="pannel-cont">
-        {tabIndex === 0 && <Margin />}
+        {tabIndex === 0 && <Margin info={marginData} />}
         {tabIndex === 1 && <Detail />}
       </div>
     </MarginDetailStyle>

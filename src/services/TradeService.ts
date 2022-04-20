@@ -5,7 +5,7 @@ import useAsyncData from '@/hooks/useAsyncData';
 import { useTypedSelector } from '@/store';
 import tridList from '@/data/tridList';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
-import { formatNumber } from '@/utils/numberUtils';
+import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import {
   MyTradeHistoryRowData,
   OpenOrderRowData,
@@ -18,6 +18,7 @@ import useUserData from '@/hooks/useUserData';
 import { translateOrderType, translateSzPoCode } from '@/utils/translateUtils';
 import { resetSpecificState } from '@/store/asyncData/asyncData';
 import { dateFormat } from '@/utils/dateUtils';
+import { DealType } from '@/provider/TradeInfoProvider';
 
 class TradeHistory {
   #ws;
@@ -135,17 +136,6 @@ class TradeHistory {
     const { email, szAccNo, szPasswd } = useUserData();
     const newOrderData = useTypedSelector((state) => state.asyncData[`t3216`]);
 
-    useEffect(() => {
-      if (newOrderData && newOrderData.Message) {
-        if (newOrderData.Message.flag === '0') {
-          if (newOrderData.Message.data)
-            this.#toast(newOrderData.Message.data, { type: 'success' });
-        } else {
-          if (newOrderData.Message.data) this.#toast(newOrderData.Message.data);
-        }
-      }
-    }, [newOrderData]);
-
     const input: TransactionInputType = {
       Header: {
         function: 'D',
@@ -189,8 +179,10 @@ class TradeHistory {
       input.Input1.szOrdType = orderType.toString();
       input.Input1.szDealDiv = deal;
 
-      if (!price || price < 0) return this.#toast('Please Check Price!');
-      else if (!amount || amount < 0)
+      console.log(price, amount);
+
+      if (!price || price <= 0) return this.#toast('Please Check Price!');
+      else if (!amount || amount <= 0)
         return this.#toast('Please Check Amount!');
 
       if (input.Header.userid) fetchData({ ...input });
@@ -198,8 +190,8 @@ class TradeHistory {
 
     const sellNewOrder = ({ price, amount, leverage, marginType, orderType }) =>
       sendOrder({
-        price,
-        amount,
+        price: unformatNumber(price),
+        amount: unformatNumber(amount),
         leverage,
         marginType,
         orderType,
@@ -208,15 +200,105 @@ class TradeHistory {
 
     const buyNewOrder = ({ price, amount, leverage, marginType, orderType }) =>
       sendOrder({
-        price,
-        amount,
+        price: unformatNumber(price),
+        amount: unformatNumber(amount),
         leverage,
         marginType,
         orderType,
         deal: '079',
       });
 
+    useEffect(() => {
+      if (newOrderData && newOrderData.Message) {
+        if (newOrderData.Message.flag === '0') {
+          if (newOrderData.Message.data)
+            this.#toast(newOrderData.Message.data, { type: 'success' });
+        } else {
+          if (newOrderData.Message.data) this.#toast(newOrderData.Message.data);
+        }
+      }
+    }, [newOrderData]);
+
     return { newOrderData, sellNewOrder, buyNewOrder };
+  }
+
+  reqModifyOrder() {
+    const { email, szAccNo, szPasswd } = useUserData();
+    const modifyOrderData = useTypedSelector(
+      (state) => state.asyncData[`t3216`]
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        token: '',
+        trcode: 't3216',
+        userid: email,
+      },
+      Input1: {
+        cIsStaff: '0',
+        cModType: '7',
+        fNxOpenRate: '',
+        fOrderPrice: '',
+        fOrderSu: '',
+        szAccNo,
+        szCurNo: '',
+        szDealDiv: '', // Buy, Sell
+        szOrdType: '',
+        szPasswd: szPasswd,
+        szSLCustItem: '',
+        szStaffID: '',
+        szStaffPW: '',
+      },
+    };
+
+    const { fetchData } = useAsyncData(input);
+
+    const sendModifyOrder = ({
+      symbol,
+      price,
+      amount,
+      orderId,
+      orderType,
+      deal,
+    }: {
+      symbol: string;
+      price: number;
+      amount: number;
+      orderId: string;
+      orderType: string;
+      deal: DealType | string;
+    }) => {
+      input.Input1.szCurNo = symbol;
+      input.Input1.fOrderPrice = unformatNumber(price.toString());
+      input.Input1.fOrderSu = unformatNumber(amount.toString());
+      input.Input1.szOrdType = orderType.toString();
+      input.Input1.szSLCustItem = orderId;
+      input.Input1.szDealDiv = translateSzPoCode(deal, false);
+
+      console.log(input);
+
+      if (!price || price <= 0) return this.#toast('Please Check Price!');
+      else if (!amount || amount <= 0)
+        return this.#toast('Please Check Amount!');
+
+      if (input.Header.userid) fetchData({ ...input });
+    };
+
+    useEffect(() => {
+      if (modifyOrderData && modifyOrderData.Message) {
+        if (modifyOrderData.Message.flag === '0') {
+          if (modifyOrderData.Message.data)
+            this.#toast(modifyOrderData.Message.data, { type: 'success' });
+        } else {
+          if (modifyOrderData.Message.data)
+            this.#toast(modifyOrderData.Message.data);
+        }
+      }
+    }, [modifyOrderData]);
+
+    return { modifyOrderData, sendModifyOrder };
   }
 
   orderBookDataSetting(
@@ -393,7 +475,7 @@ class TradeHistory {
         );
 
         const result: OpenOrderRowData = {
-          orderNo: newD[0].slice(15, 21),
+          orderNo: newD[0],
           symbol: newD[1],
           side: translateSzPoCode(newD[2], false),
           price: newD[3],
@@ -551,13 +633,15 @@ class TradeHistory {
       getOpenPosition({ ...input });
     }, [myStopLimitOrder, myConclusion]);
 
-    console.log(openPositionOutput && Number(openPositionOutput.Output1?.szCnt.trim() ?? 0));
+    console.log(
+      openPositionOutput &&
+        Number(openPositionOutput.Output1?.szCnt.trim() ?? 0)
+    );
 
     return {
       loading: !Boolean(openPositionOutput),
       noData:
-        Boolean(openPositionOutput) &&
-        !Boolean(openPositionOutput.Output2),
+        Boolean(openPositionOutput) && !Boolean(openPositionOutput.Output2),
       openPosition: parseData(openPositionOutput),
       getOpenPosition,
     };
