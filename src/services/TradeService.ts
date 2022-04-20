@@ -107,16 +107,12 @@ class TradeHistory {
     };
 
     useEffect(() => {
-      if (!tradeHistory) {
-        fetchData({ ...input });
-      }
+      // fetchData({ ...input });
 
       return () => {
-        if (tradeHistory) {
-          this.#dispatch(resetSpecificState({ trcode: `t9731_${symbol}` }));
-        }
+        this.#dispatch(resetSpecificState({ trcode: `t9731_${symbol}` }));
       };
-    }, [symbol, nMinTerm, cTermDiv, nReqCnt]);
+    }, []);
 
     const tradeHistoryArr: TradeHistoryData[] = (
       tradeHistory?.Output1 || []

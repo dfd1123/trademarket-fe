@@ -30,9 +30,9 @@ const Chart = ({
     services.trade.getTradeHistory(selectedSymbol as string, 1, 2, 500);
   const [chartInterval, setChartInterval] = useState('1');
 
-  useLayoutEffect(() => {
-    tradeHistoryFetchData(1, 2);
-  }, []);
+  useEffect(() => {
+    tradeHistoryFetchData(1, 2, 500);
+  }, [selectedSymbol]);
 
   useEffect(() => {
     let datafeed = makeDataFeed(tradeHistoryArr, currentCoin);

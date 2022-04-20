@@ -60,8 +60,8 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
   }, [realTimeCoinInfo]);
 
   useEffect(() => {
-    if(tradeHistoryArr.length < 100) tradeHistoryFetchData(1, 3, 300);
-  }, [tradeHistoryArr])
+    tradeHistoryFetchData(1, 3, 300);
+  }, []);
 
   const data = {
     labels: tradeHistoryArr.map((trade) => trade.close),
