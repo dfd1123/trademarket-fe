@@ -1,19 +1,58 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { YellowTabStyle } from '@/views/components/common/tab/Tab';
 import Chart from '@/views/components/trade/chart/Chart';
 import NewOrder from '@/views/components/trade/orderBox/newOrder/NewOrder';
 import ModifyCancel from '@/views/components/trade/orderBox/ModifyCancel/ModifyCancel';
 import StopLimit from '@/views/components/trade/orderBox/StopLimit/StopLimit';
+import { TradeInfoContext } from '@/provider/TradeInfoProvider';
 
 const MobileChartLine = () => {
+  const context = useContext(TradeInfoContext);
+  const { order, setOrder } = context;
   const [tabIndex, setTabIndex] = useState(0);
+
+  const changeTabIndex = (index: number) => {
+    setTabIndex(index);
+  };
+
+  const clickTab = () => {
+    setOrder(null);
+  };
+
+  useEffect(() => {
+    if (order) {
+      const { type } = order;
+
+      switch (type) {
+        case 'newOrder':
+          setTabIndex(1);
+          break;
+
+        case 'stopLimit':
+          setTabIndex(2);
+          break;
+
+        case 'modifyCancel':
+          setTabIndex(3);
+          break;
+
+        default:
+          setTabIndex(1);
+          break;
+      }
+    }else{
+      setTabIndex(1);
+    }
+  }, [order]);
 
   return (
     <MobileChartLineStyle>
       <YellowTabStyle
         list={['Chart', 'Order', 'Stop/Limit', 'Modify/Cancel']}
-        onChange={setTabIndex}
+        selected={tabIndex}
+        onClick={clickTab}
+        onChange={changeTabIndex}
       />
       <div>
         {Boolean(tabIndex === 0) && <Chart />}

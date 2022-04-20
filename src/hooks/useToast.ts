@@ -1,3 +1,4 @@
+import _debounce from 'lodash/debounce';
 import useModal from '@/hooks/useModal';
 import { useDispatch } from 'react-redux';
 import { ToastType } from '@/store/modal/types/toast';
@@ -16,11 +17,11 @@ export interface ToastFunctionType {
 const useToast = () => {
   const dispatch = useDispatch();
 
-  const toast = (
+  const toast = _debounce((
     msg: string,
     options: ToastOption | undefined = {
       type: 'warning',
-      duration: 1000,
+      duration: 2000,
     }
   ) => {
     let { type, duration } = options;
@@ -29,11 +30,11 @@ const useToast = () => {
       id: -1,
       msg,
       type: type ?? 'warning',
-      duration: duration ?? 1000,
+      duration: duration ?? 2000,
     };
 
     dispatch(addToast({ toast }));
-  };
+  }, 1);
 
   const closeToast = (id: number): void => {
     dispatch(removeToast({ id }));

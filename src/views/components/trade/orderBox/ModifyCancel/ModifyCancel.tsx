@@ -1,5 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import useCurrentSymbol from '@/hooks/useCurrentSymbol';
+import useService from '@/hooks/useService';
 import OrderInput from '../OrderInput';
 import CheckBox from '@/views/components/common/input/CheckBox';
 import DarkSelectBox from '@/views/components/common/input/SelectBox';
@@ -8,10 +11,9 @@ import {
   YellowBorderButton,
 } from '@/views/components/common/Button';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
-import useService from '@/hooks/useService';
 import { OrderType, TradeInfoContext } from '@/provider/TradeInfoProvider';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
-import useCurrentSymbol from '@/hooks/useCurrentSymbol';
+import { resetSpecificState } from '@/store/asyncData/asyncData';
 
 const initialValue: { price: string; amount: string; orderType: OrderType } = {
   price: '',
@@ -20,17 +22,19 @@ const initialValue: { price: string; amount: string; orderType: OrderType } = {
 };
 
 const ModifyCancel = () => {
+  const dispatch = useDispatch();
   const services = useService();
   const context = useContext(TradeInfoContext);
   const { order, setOrder } = context;
-
-  const { sendModifyOrder } = services.trade.reqModifyOrder();
 
   const [inputs, setInputs] = useState(initialValue);
   const [symbol, setSymbol] = useState('');
   const [decimal, setDecimal] = useState(2);
 
   const { close } = useCurrentSymbol(symbol || 'BTCUSDT');
+
+  const { modifyOrderData, sendModifyOrder } = services.trade.reqModifyOrder();
+  const { cancelOrderData, sendCancelOrder } = services.trade.reqCancelOrder();
 
   const convertUsdt = useMemo(() => {
     const amount = unformatNumber(inputs.amount);
@@ -48,7 +52,9 @@ const ModifyCancel = () => {
     const price = unformatNumber(inputs.price);
 
     return formatNumber(
-      symbol && (amount * price) ? (unformatNumber(close || '0') - unformatNumber(orderValue)) : 0,
+      symbol && amount * price
+        ? unformatNumber(close || '0') - unformatNumber(orderValue)
+        : 0,
       decimal
     );
   }, [orderValue, close]);
@@ -67,7 +73,20 @@ const ModifyCancel = () => {
         deal: order.dealType,
         orderId: order.orderNo as string,
       });
-      setOrder(null);
+    }
+  };
+
+  const cancelOrder = () => {
+    if (order && inputs.orderType) {
+      sendCancelOrder({
+        ...inputs,
+        orderType: 'UODE',
+        price: unformatNumber(inputs.price),
+        amount: unformatNumber(inputs.amount),
+        symbol: order.symbol,
+        deal: order.dealType,
+        orderId: order.orderNo as string,
+      });
     }
   };
 
@@ -84,6 +103,18 @@ const ModifyCancel = () => {
       });
     }
   }, [order]);
+
+  useEffect(() => {
+    if (cancelOrderData && cancelOrderData.Message) {
+      dispatch(resetSpecificState({ trcode: 't3215' }));
+      setOrder(null);
+    }
+
+    if (modifyOrderData && modifyOrderData.Message) {
+      dispatch(resetSpecificState({ trcode: 't3216' }));
+      setOrder(null);
+    }
+  }, [cancelOrderData, modifyOrderData]);
 
   return (
     <ModifyCancelStyle>
@@ -175,7 +206,9 @@ const ModifyCancel = () => {
       </div>
       <div className="btn-cont">
         <YellowButton onClick={modifyOrder}>M-ORDER MODIFY</YellowButton>
-        <YellowBorderButton>M-ORDER CANCEL</YellowBorderButton>
+        <YellowBorderButton onClick={cancelOrder}>
+          M-ORDER CANCEL
+        </YellowBorderButton>
       </div>
     </ModifyCancelStyle>
   );
@@ -258,7 +291,7 @@ const ModifyCancelStyle = styled.div`
   > .btn-cont {
     display: flex;
     justify-content: space-between;
-    margin-top: 80px;
+    margin-top: 62px;
     .btn {
       display: inline-block !important;
       width: calc(50% - 10px);

@@ -8,24 +8,36 @@ import { liveDataDateFormat } from '@/utils/dateUtils';
 import { formatNumber } from '@/utils/numberUtils';
 
 interface PropsType {
-    className?: string;
-  }
+  className?: string;
+}
 
-const SimpleTradeHistory = ({className} : PropsType) => {
+const SimpleTradeHistory = ({ className }: PropsType) => {
   const { symbol: selectedSymbol } = useParams();
-  const realTimeData = useTypedSelector(state => state.realTimeData.price[selectedSymbol as string]);
+  const realTimeData = useTypedSelector(
+    (state) => state.realTimeData.price[selectedSymbol as string]
+  );
   const { PIP_LOWEST } = useTypedSelector(
     (state) => state.coinInfoSlice.symbols[selectedSymbol as string] || {}
   );
 
   const [history, setHistory] = useState<SimpleTradeHistoryData[]>([]);
 
-
   useEffect(() => {
-      if(realTimeData){
-        const arr : SimpleTradeHistoryData[] = [...history, {datetime: liveDataDateFormat(realTimeData.szDate, realTimeData.szTime), close: formatNumber(realTimeData.szClose, PIP_LOWEST), amount: Number(realTimeData.szVolume), type: realTimeData.szBuyOrSell}];
-        setHistory(arr.length >= 20 ? arr.slice(-20) : arr);
-      }
+    if (realTimeData) {
+      const arr: SimpleTradeHistoryData[] = [
+        {
+          datetime: liveDataDateFormat(
+            realTimeData.szDate,
+            realTimeData.szTime
+          ),
+          close: formatNumber(realTimeData.szClose, PIP_LOWEST),
+          amount: Number(realTimeData.szVolume),
+          type: realTimeData.szBuyOrSell,
+        },
+        ...history,
+      ];
+      setHistory(arr.length >= 20 ? arr.slice(-20) : arr);
+    }
   }, [realTimeData]);
 
   return (
@@ -36,7 +48,9 @@ const SimpleTradeHistory = ({className} : PropsType) => {
         <div className="td total">Amount</div>
       </div>
       <div className="tb-bd">
-          {history.map((trade, index) => (<SimpleTradeList key={`trade-${index}`} {...trade} />))}
+        {history.map((trade, index) => (
+          <SimpleTradeList key={`trade-${index}`} {...trade} />
+        ))}
       </div>
     </SimpleTradeHistoryStyle>
   );

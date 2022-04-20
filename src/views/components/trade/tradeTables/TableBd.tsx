@@ -12,7 +12,10 @@ const TableBdComp = ({ className, children }: PropsType) => {
 
 const TableBd = styled(TableBdComp)`
   > div {
+    display: flex;
+    align-items: center;
     width: 100%;
+    min-height: 40px;
     border: 1px solid transparent;
     border-bottom: 1px solid #33353b;
     span {

@@ -136,6 +136,8 @@ class TradeHistory {
     const { email, szAccNo, szPasswd } = useUserData();
     const newOrderData = useTypedSelector((state) => state.asyncData[`t3216`]);
 
+    const [msgFlag, setMsgFlag] = useState(false);
+
     const input: TransactionInputType = {
       Header: {
         function: 'D',
@@ -209,14 +211,20 @@ class TradeHistory {
       });
 
     useEffect(() => {
-      if (newOrderData && newOrderData.Message) {
+      if (!msgFlag && newOrderData && newOrderData.Message) {
+        console.log('GGlqkv', msgFlag);
+        setMsgFlag(true);
         if (newOrderData.Message.flag === '0') {
           if (newOrderData.Message.data)
             this.#toast(newOrderData.Message.data, { type: 'success' });
+            this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         } else {
           if (newOrderData.Message.data) this.#toast(newOrderData.Message.data);
+          this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         }
       }
+
+      setMsgFlag(false);
     }, [newOrderData]);
 
     return { newOrderData, sellNewOrder, buyNewOrder };
@@ -291,14 +299,96 @@ class TradeHistory {
         if (modifyOrderData.Message.flag === '0') {
           if (modifyOrderData.Message.data)
             this.#toast(modifyOrderData.Message.data, { type: 'success' });
+            this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         } else {
           if (modifyOrderData.Message.data)
             this.#toast(modifyOrderData.Message.data);
+            this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         }
       }
     }, [modifyOrderData]);
 
     return { modifyOrderData, sendModifyOrder };
+  }
+
+  reqCancelOrder() {
+    const { email, szAccNo, szPasswd } = useUserData();
+    const cancelOrderData = useTypedSelector(
+      (state) => state.asyncData[`t3215`]
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        token: '',
+        trcode: 't3215',
+        userid: email,
+      },
+      Input1: {
+        cIsStaff: '0',
+        cModType: '8',
+        fNxOpenRate: '',
+        fOrderPrice: '',
+        fOrderSu: '',
+        szAccNo,
+        szCurNo: '',
+        szDealDiv: '', // Buy, Sell
+        szOrdType: '',
+        szPasswd: szPasswd,
+        szSLCustItem: '',
+        szStaffID: '',
+        szStaffPW: '',
+      },
+    };
+
+    const { fetchData } = useAsyncData(input);
+
+    const sendCancelOrder = ({
+      symbol,
+      price,
+      amount,
+      orderId,
+      orderType,
+      deal,
+    }: {
+      symbol: string;
+      price: number;
+      amount: number;
+      orderId: string;
+      orderType: string;
+      deal: DealType | string;
+    }) => {
+      input.Input1.szCurNo = symbol;
+      input.Input1.fOrderPrice = unformatNumber(price.toString());
+      input.Input1.fOrderSu = unformatNumber(amount.toString());
+      input.Input1.szOrdType = orderType.toString();
+      input.Input1.szSLCustItem = orderId;
+      input.Input1.szDealDiv = translateSzPoCode(deal, false);
+
+      if (!price || price <= 0) return this.#toast('Please Check Price!');
+      else if (!amount || amount <= 0)
+        return this.#toast('Please Check Amount!');
+
+      if (input.Header.userid) fetchData({ ...input });
+    };
+
+    useEffect(() => {
+      console.log(cancelOrderData && cancelOrderData.Message)
+      if (cancelOrderData && cancelOrderData.Message) {
+        if (cancelOrderData.Message.flag === '0') {
+          if (cancelOrderData.Message.data)
+            this.#toast(cancelOrderData.Message.data, { type: 'success' });
+            this.#dispatch(resetSpecificState({ trcode: 't3215' }));
+        } else {
+          if (cancelOrderData.Message.data)
+            this.#toast(cancelOrderData.Message.data);
+            this.#dispatch(resetSpecificState({ trcode: 't3215' }));
+        }
+      }
+    }, [cancelOrderData]);
+
+    return { cancelOrderData, sendCancelOrder };
   }
 
   orderBookDataSetting(

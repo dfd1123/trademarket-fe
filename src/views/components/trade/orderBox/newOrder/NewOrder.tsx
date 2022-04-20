@@ -197,7 +197,7 @@ const NewOrder = ({ mobile }: PropsType) => {
                 decimalCnt={PIP_LOWEST}
                 onChange={handleChange}
               />
-              <span className="convert-usdt">{inputs.price}{convertUsdt} USDT</span>
+              <span className="convert-usdt">{convertUsdt} USDT</span>
             </div>
             <div className="qault">
               <OrderInput
