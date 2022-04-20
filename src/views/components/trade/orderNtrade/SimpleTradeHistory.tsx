@@ -36,7 +36,7 @@ const SimpleTradeHistory = ({ className }: PropsType) => {
         },
         ...history,
       ];
-      setHistory(arr.length >= 20 ? arr.slice(-20) : arr);
+      setHistory(arr.length >= 20 ? arr.slice(0, 19) : arr);
     }
   }, [realTimeData]);
 
