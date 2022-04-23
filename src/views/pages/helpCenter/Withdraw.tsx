@@ -1,10 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 
 const Withdraw = () => {
   return (
-    <h1>Withdraw</h1>
-  )
-}
+    <HelpCenterLayout title="Withdraw">
+      <>
+        <div>table</div>
+      </>
+    </HelpCenterLayout>
+  );
+};
 
 export default Withdraw;
