@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { OpenPositionRowData } from '@/services/types/Trade';
 import useCurrentSymbol from '@/hooks/useCurrentSymbol';
@@ -10,6 +10,8 @@ import {
   UP_COLOR,
 } from '@/data/colorData';
 import useService from '@/hooks/useService';
+import { TradeInfoContext } from '@/provider/TradeInfoProvider';
+import { translateSzPoCode } from '@/utils/translateUtils';
 
 interface PropsType {
   className?: string;
@@ -23,6 +25,8 @@ interface PropsType {
 const OpenPositionList = React.memo(
   ({ className, tableHdInfo, info }: PropsType) => {
     const services = useService();
+    const context = useContext(TradeInfoContext);
+    const { setOrder } = context;
     const { close, pipLowest } = useCurrentSymbol(info.symbol);
 
     services.realTime.getMyConclusion();
@@ -46,6 +50,8 @@ const OpenPositionList = React.memo(
         if (newInfo.priceDiffrence > 0) setUpDown('up');
         else setUpDown('down');
 
+        newInfo.orderNo = info.orderNo.slice(15, 21);
+        newInfo.side = translateSzPoCode(info.side, false)
         newInfo.grossPnl = newInfo.priceDiffrence * newInfo.lot;
 
         newInfo.price = formatNumber(info.price, pointPosition);
@@ -61,6 +67,62 @@ const OpenPositionList = React.memo(
 
       return newInfo;
     }, [info, close]);
+
+    const rowClickHandler = (label: string) => {
+      label = label.trim();
+
+      if(label === 'currentprice'){
+        setOrder({
+          type: 'modifyCancel',
+          price: info.price,
+          amount: info.lot,
+          limitPrice: Number(info.limit ?? 0),
+          orderType: 'UCEL',
+          symbol: info.symbol,
+          dealType: info.side,
+          modType: '0',
+          limitNo: info.limitNo,
+          orderNo: info.orderNo,
+        });
+      } else if(label === 'stop'){
+        setOrder({
+          type: info.stop ? 'modifyCancel' : 'stopLimit',
+          price: info.price,
+          amount: info.lot,
+          stopPrice: Number(info.stop || info.price),
+          orderType: 'UCES',
+          symbol: info.symbol,
+          dealType: info.side,
+          modType: info.stop ? '0' : '4',
+          stopNo: info.stopNo,
+          orderNo: info.orderNo,
+        });
+      } else if(label === 'limit'){
+        setOrder({
+          type: info.limit ? 'modifyCancel' : 'stopLimit',
+          price: info.price,
+          amount: info.lot,
+          limitPrice: Number(info.limit || info.price),
+          orderType: 'UCEL',
+          symbol: info.symbol,
+          dealType: info.side,
+          modType: info.limit ? '0' : '4',
+          limitNo: info.limitNo,
+          orderNo: info.orderNo,
+        });
+      }else {
+        setOrder({
+          type: 'stopLimit',
+          price: info.price,
+          amount: info.lot,
+          orderType: 'UCM',
+          symbol: info.symbol,
+          dealType: info.side,
+          modType: '4',
+          orderNo: info.orderNo,
+        });
+      }
+    }
 
     useEffect(() => {
       const tempInfo = tableHdInfo.map((info) => ({
@@ -80,6 +142,7 @@ const OpenPositionList = React.memo(
             key={`${row.symbol}${index}`}
             className={`${tableHd[index].label}`}
             style={{ width: `${tableHd[index].ratio * 100}%` }}
+            onClick={() => rowClickHandler(tableHd[index].label)}
           >
             {data}
           </span>

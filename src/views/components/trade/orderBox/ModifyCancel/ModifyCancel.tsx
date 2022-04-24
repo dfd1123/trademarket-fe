@@ -15,10 +15,18 @@ import { OrderType, TradeInfoContext } from '@/provider/TradeInfoProvider';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import { resetSpecificState } from '@/store/asyncData/asyncData';
 
-const initialValue: { price: string; amount: string; orderType: OrderType } = {
+const initialValue: {
+  price: string;
+  limitPrice: string;
+  stopPrice: string;
+  amount: string;
+  orderType: OrderType;
+} = {
   price: '',
+  limitPrice: '',
+  stopPrice: '',
   amount: '',
-  orderType: '',
+  orderType: 'URE',
 };
 
 const ModifyCancel = () => {
@@ -31,17 +39,24 @@ const ModifyCancel = () => {
   const [symbol, setSymbol] = useState('');
   const [decimal, setDecimal] = useState(2);
 
-  const { close } = useCurrentSymbol(symbol || 'BTCUSDT');
+  const { close, pipLowest } = useCurrentSymbol(symbol || 'BTCUSDT');
 
+  const { setStopLimitData, sendSetLimit, sendSetStop } =
+    services.trade.reqSetLimitStop();
   const { modifyOrderData, sendModifyOrder } = services.trade.reqModifyOrder();
   const { cancelOrderData, sendCancelOrder } = services.trade.reqCancelOrder();
 
   const convertUsdt = useMemo(() => {
     const amount = unformatNumber(inputs.amount);
-    const price = unformatNumber(inputs.price);
+    const price =
+      inputs.orderType === 'URE'
+        ? unformatNumber(inputs.price)
+        : inputs.orderType === 'UCEL'
+        ? unformatNumber(inputs.limitPrice)
+        : unformatNumber(inputs.stopPrice);
     if (!inputs.price || !inputs.amount) return formatNumber(0, decimal);
     return formatNumber(amount * price, decimal);
-  }, [inputs.price, inputs.amount]);
+  }, [inputs.price, inputs.limitPrice, inputs.stopPrice, inputs.amount]);
 
   const orderValue = useMemo(() => {
     return formatNumber(unformatNumber(convertUsdt), decimal);
@@ -49,14 +64,25 @@ const ModifyCancel = () => {
 
   const availableMargin = useMemo(() => {
     const amount = unformatNumber(inputs.amount);
-    const price = unformatNumber(inputs.price);
+    let price = 0;
 
-    return formatNumber(
-      symbol && amount * price
-        ? unformatNumber(close || '0') - unformatNumber(orderValue)
-        : 0,
-      decimal
-    );
+    if (inputs.orderType === 'URE') {
+      price = unformatNumber(inputs.price);
+      return formatNumber(
+        symbol && amount * price
+          ? unformatNumber(close || '0') - unformatNumber(orderValue)
+          : 0,
+        decimal
+      );
+    } else {
+      price = inputs.orderType === 'UCEL' ? unformatNumber(inputs.limitPrice) : unformatNumber(inputs.stopPrice);
+      return formatNumber(
+        symbol && amount * price
+          ? unformatNumber(orderValue) / 10
+          : 0,
+        decimal
+      );
+    }
   }, [orderValue, close]);
 
   const handleChange = (value: any, name?: string) => {
@@ -65,14 +91,40 @@ const ModifyCancel = () => {
 
   const modifyOrder = () => {
     if (order && inputs.orderType) {
-      sendModifyOrder({
-        ...inputs,
-        price: unformatNumber(inputs.price),
-        amount: unformatNumber(inputs.amount),
-        symbol: order.symbol,
-        deal: order.dealType,
-        orderId: order.orderNo as string,
-      });
+      if (inputs.orderType === 'URE') {
+        sendModifyOrder({
+          ...inputs,
+          price: unformatNumber(inputs.price),
+          amount: unformatNumber(inputs.amount),
+          symbol: order.symbol,
+          deal: order.dealType,
+          orderId: order.orderNo as string,
+        });
+      } else if (inputs.orderType === 'UCEL') {
+        sendSetLimit({
+          ...inputs,
+          price: unformatNumber(inputs.price),
+          limitPrice: unformatNumber(inputs.limitPrice),
+          amount: unformatNumber(inputs.amount),
+          symbol: order.symbol,
+          deal: order.dealType,
+          modType: order.modType,
+          limitNo: order.limitNo,
+          orderId: order.orderNo as string,
+        });
+      } else if (inputs.orderType === 'UCES') {
+        sendSetStop({
+          ...inputs,
+          price: unformatNumber(inputs.price),
+          stopPrice: unformatNumber(inputs.stopPrice),
+          amount: unformatNumber(inputs.amount),
+          symbol: order.symbol,
+          deal: order.dealType,
+          modType: order.modType,
+          stopNo: order.stopNo,
+          orderId: order.orderNo as string,
+        });
+      }
     }
   };
 
@@ -91,30 +143,41 @@ const ModifyCancel = () => {
   };
 
   useEffect(() => {
+    if(decimal !== pipLowest){
+      setDecimal(pipLowest ?? 2);
+    }
+  }, [pipLowest]);
+
+  useEffect(() => {
     if (order) {
-      const dec = (order.price.toString().split('.')[1] ?? '').length;
-      setDecimal(dec);
       setSymbol(order.symbol);
       setInputs({
         ...inputs,
-        price: formatNumber(order.price, dec),
-        amount: formatNumber(order.amount, dec),
+        price: formatNumber(order.price, decimal),
+        limitPrice: formatNumber(order.limitPrice, decimal),
+        stopPrice: formatNumber(order.stopPrice, decimal),
+        amount: formatNumber(order.amount, decimal),
         orderType: order.orderType,
       });
     }
-  }, [order]);
+  }, [order, decimal]);
 
   useEffect(() => {
     if (cancelOrderData && cancelOrderData.Message) {
       dispatch(resetSpecificState({ trcode: 't3215' }));
-      setOrder(null);
+      if(cancelOrderData.Message.flag !== 'E') setOrder(null);
+    }
+
+    if (setStopLimitData && setStopLimitData.Message) {
+      dispatch(resetSpecificState({ trcode: 't3215' }));
+      if(setStopLimitData.Message.flag !== 'E') setOrder(null);
     }
 
     if (modifyOrderData && modifyOrderData.Message) {
       dispatch(resetSpecificState({ trcode: 't3216' }));
-      setOrder(null);
+      if(modifyOrderData.Message.flag !== 'E') setOrder(null);
     }
-  }, [cancelOrderData, modifyOrderData]);
+  }, [cancelOrderData, modifyOrderData, setStopLimitData]);
 
   return (
     <ModifyCancelStyle>
@@ -162,18 +225,39 @@ const ModifyCancel = () => {
                 { name: 'Stop', value: 'UCES' },
                 { name: 'Limit', value: 'UCEL' },
               ]}
+              disabled
               onChange={handleChange}
             />
           </div>
           <div className="inp-cont">
             <div className="qault">
-              <OrderInput
-                name="price"
-                label="Price(USDT)"
-                value={inputs.price}
-                decimalCnt={decimal}
-                onChange={handleChange}
-              />
+              {inputs.orderType === 'URE' && (
+                <OrderInput
+                  name="price"
+                  label="Price(USDT)"
+                  value={inputs.price}
+                  decimalCnt={decimal}
+                  onChange={handleChange}
+                />
+              )}
+              {inputs.orderType === 'UCES' && (
+                <OrderInput
+                  name="stopPrice"
+                  label="S-Price(USDT)"
+                  value={inputs.stopPrice}
+                  decimalCnt={decimal}
+                  onChange={handleChange}
+                />
+              )}
+              {inputs.orderType === 'UCEL' && (
+                <OrderInput
+                  name="limitPrice"
+                  label="L-Price(USDT)"
+                  value={inputs.limitPrice}
+                  decimalCnt={decimal}
+                  onChange={handleChange}
+                />
+              )}
             </div>
             <div className="qault">
               <OrderInput

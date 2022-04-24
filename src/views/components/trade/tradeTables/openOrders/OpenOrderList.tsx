@@ -20,7 +20,7 @@ const OpenOrderList = React.memo(
   ({ className, tableHdInfo, info }: PropsType) => {
     const services = useService();
     const context = useContext(TradeInfoContext);
-  const { setOrder } = context;
+    const { setOrder } = context;
 
     const { close } = useCurrentSymbol(info.symbol);
     const { PIP_LOWEST } = useTypedSelector(

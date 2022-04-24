@@ -9,7 +9,7 @@ export interface ContextOrderType {
   symbol: string;
   dealType: DealType | string;
   price: number | string;
-  amount: string;
+  amount: number | string;
   limitPrice?: number;
   stopPrice?: number;
   orderNo?: string;

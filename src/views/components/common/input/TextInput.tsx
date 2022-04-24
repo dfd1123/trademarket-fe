@@ -1,27 +1,27 @@
-import React, { useState, useRef, useEffect } from "react";
-import styled from "styled-components";
-import basicResetClose from "@/assets/img/icon/ico-circle-close.svg";
-import searchIcon from "@/assets/img/icon/ico-search.svg";
+import React, { useState, useRef, useEffect } from 'react';
+import styled from 'styled-components';
+import basicResetClose from '@/assets/img/icon/ico-circle-close.svg';
+import searchIcon from '@/assets/img/icon/ico-search.svg';
 
 interface PropsType extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   type?: string;
   className?: string;
   reset?: boolean;
-  number?:boolean;
-  autocomplete?:'on'|'off';
-  onEnter?: (value?: any , name?: any) => void;
-  onInput?: (value : any , name?: any) => void;
-  onChange?: (value : any , name?: any) => void;
+  number?: boolean;
+  autocomplete?: 'on' | 'off';
+  onEnter?: (value?: any, name?: any) => void;
+  onInput?: (value: any, name?: any) => void;
+  onChange?: (value: any, name?: any) => void;
 }
 
 const TextInput = ({
   label,
   className,
-  type = "text",
+  type = 'text',
   name,
   value = '',
-  placeholder = "",
+  placeholder = '',
   readOnly = false,
   disabled = false,
   tabIndex = 0,
@@ -33,9 +33,9 @@ const TextInput = ({
   onEnter,
   onChange,
   onInput,
-  onClick
+  onClick,
 }: PropsType) => {
-  const isSearch = type === "search";
+  const isSearch = type === 'search';
   const input = useRef<HTMLInputElement>(null);
   const [text, setText] = useState(value || '');
   const [focus, setFocus] = useState(false);
@@ -44,7 +44,7 @@ const TextInput = ({
     if (!onEnter) return;
 
     if (input.current) {
-      const {value, name} = input.current;
+      const { value, name } = input.current;
       if (onEnter) {
         onEnter(value, name);
         return;
@@ -58,20 +58,22 @@ const TextInput = ({
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleEnter();
     }
   };
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let {value, name} : {value: string | number, name: string} = e.target;
-    if(number) {
-      value = value.replace(/[^-\.0-9]/g, "");
-      if(value[0] === '0' && Number(value) >= 1) value = value.slice(1);
-      if(value === '.') value = '0.';
-      if(min && Number(value) < Number(min)) value = min;
-      if(max && Number(value) > Number(max)) value = max;
-      value = String(value).replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+    let { value, name }: { value: string | number; name: string } = e.target;
+    if (number) {
+      value = value.replace(/[^-\.0-9]/g, '');
+      if (value[0] === '0' && Number(value) >= 1) value = value.slice(1);
+      if (value === '.') value = '0.';
+      if (min && Number(value) < Number(min)) value = min;
+      if (max && Number(value) > Number(max)) value = max;
+      const parts = value.toString().split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      value = parts.join('.');
     }
     setText(value);
     if (onChange) onChange(value, name);
@@ -80,10 +82,10 @@ const TextInput = ({
 
   const handleReset = () => {
     if (input.current) {
-      input.current.value = "";
-      const {value, name} = input.current;
+      input.current.value = '';
+      const { value, name } = input.current;
       setText('');
-      if (onChange) onChange("", name);
+      if (onChange) onChange('', name);
     }
   };
 
@@ -92,7 +94,15 @@ const TextInput = ({
   }, [value]);
 
   return (
-    <div className={`${className} ${isSearch ? "search" : ""} ${focus ? "focus" : ""} ${focus || String(text || '') || (input.current && input.current.value) ? "focus-value" : ""} ${reset ? "reset" : ""}`}>
+    <div
+      className={`${className} ${isSearch ? 'search' : ''} ${
+        focus ? 'focus' : ''
+      } ${
+        focus || String(text || '') || (input.current && input.current.value)
+          ? 'focus-value'
+          : ''
+      } ${reset ? 'reset' : ''}`}
+    >
       <div className="inp-cont">
         <input
           ref={input}
@@ -115,12 +125,12 @@ const TextInput = ({
           {text && reset ? (
             <button className="reset" onMouseDown={handleReset} />
           ) : (
-            ""
+            ''
           )}
-          {isSearch ? <button className="search" onClick={handleEnter} /> : ""}
+          {isSearch ? <button className="search" onClick={handleEnter} /> : ''}
         </div>
       </div>
-      {label ? <label htmlFor={name}>{label}</label> : ""}
+      {label ? <label htmlFor={name}>{label}</label> : ''}
     </div>
   );
 };
@@ -132,29 +142,29 @@ export const BasicInput = styled(TextInput)`
 
   .inp-cont {
     position: relative;
-    width:inherit;
-    height:inherit;
+    width: inherit;
+    height: inherit;
   }
 
   label {
     display: block;
     margin-bottom: 8px;
-    padding-left:3px;
-    font-size:14px;
+    padding-left: 3px;
+    font-size: 14px;
     line-height: 20px;
-    color:#828282;
+    color: #828282;
   }
   input {
-    width:inherit;
-    height:inherit;
+    width: inherit;
+    height: inherit;
     padding: 10px;
-    border: 1px solid #F4F4F4;
+    border: 1px solid #f4f4f4;
     border-radius: 5px;
-    background-color: #F4F4F4;
+    background-color: #f4f4f4;
     outline: transparent;
 
-    &::placeholder{
-      color:#BFBFBF;
+    &::placeholder {
+      color: #bfbfbf;
     }
   }
 
@@ -172,7 +182,7 @@ export const BasicInput = styled(TextInput)`
         margin-right: 7px;
       }
       &::after {
-        content: "";
+        content: '';
         display: block;
         width: 15px;
         height: 15px;
@@ -244,15 +254,15 @@ export const MerterialInput = styled(BasicInput)`
     pointer-events: none;
     transition: font-size 0.2s, top 0.2s;
     font-size: 1em;
-    color: #000;;
+    color: #000;
     transform: translate(0px, 0px);
   }
 
   input {
     border: 1px solid #000000;
-    background-color:#fff;
+    background-color: #fff;
     outline: #000 !important;
-    
+
     &::-webkit-input-placeholder,
     &:-moz-placeholder,
     &::-moz-placeholder,
@@ -272,8 +282,8 @@ export const MerterialInput = styled(BasicInput)`
       display: none;
     }
 
-    &:focus{
-      border:2px solid #000;
+    &:focus {
+      border: 2px solid #000;
     }
   }
 

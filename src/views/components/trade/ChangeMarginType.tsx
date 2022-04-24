@@ -63,7 +63,7 @@ const ChangeMarginTypeStyle = styled.div`
       padding: 0;
       font-size: 13px;
       font-weight: 700;
-      color: #fff;
+      color: #fff !important;
       line-height: 30px;
       background-color: #33353b;
       border-radius: 3px;
@@ -72,6 +72,7 @@ const ChangeMarginTypeStyle = styled.div`
     input {
       &:checked {
         ~ label {
+          color:#fff;
           background-color: #ffab2e;
         }
       }

@@ -10,10 +10,11 @@ interface PropsType {
     value: any;
   }[];
   value?: any;
+  disabled?: boolean;
   onChange?: (value: any, name?: string) => void;
 }
 
-const SelectBox = ({ className, name, list, value, onChange }: PropsType) => {
+const SelectBox = ({ className, name, list, value, disabled = false, onChange }: PropsType) => {
   const handleChange = (e) => {
     const { value } = e.target;
 
@@ -24,6 +25,7 @@ const SelectBox = ({ className, name, list, value, onChange }: PropsType) => {
       name={name}
       className={className}
       value={value}
+      disabled={disabled}
       onChange={handleChange}
     >
       {list &&

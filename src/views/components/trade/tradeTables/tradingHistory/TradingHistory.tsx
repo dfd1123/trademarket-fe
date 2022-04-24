@@ -35,14 +35,25 @@ const TradingHistory = () => {
     (state) => state.realTimeData.myConclusion
   );
 
+  const [endDate, setEndDate] = useState(new Date());
+
   services.realTime.getMyConclusion();
 
-  useEffect(() => {
-    const endDate = new Date();
+  const getHistory = async () => {
     const startDate = getDiffDate(endDate, 1);
 
-    getMyTradeHistory(startDate, endDate);
-  }, [myConclusion]);
+    await getMyTradeHistory(startDate, endDate);
+
+    setEndDate(startDate);
+  }
+
+  useEffect(() => {
+    if(noData){
+      getHistory();
+    }else{
+      getHistory();
+    }
+  }, [myConclusion, noData]);
 
   return (
     <TradingHistoryStyle>

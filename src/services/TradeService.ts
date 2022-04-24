@@ -213,7 +213,7 @@ class TradeHistory {
         if (newOrderData.Message.flag === '0') {
           if (newOrderData.Message.data)
             this.#toast(newOrderData.Message.data, { type: 'success' });
-            this.#dispatch(resetSpecificState({ trcode: 't3216' }));
+          this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         } else {
           if (newOrderData.Message.data) this.#toast(newOrderData.Message.data);
           this.#dispatch(resetSpecificState({ trcode: 't3216' }));
@@ -277,11 +277,10 @@ class TradeHistory {
       input.Input1.szCurNo = symbol;
       input.Input1.fOrderPrice = unformatNumber(price.toString());
       input.Input1.fOrderSu = unformatNumber(amount.toString());
+      input.Input1.fOrderL;
       input.Input1.szOrdType = orderType.toString();
       input.Input1.szSLCustItem = orderId;
       input.Input1.szDealDiv = translateSzPoCode(deal, false);
-
-      console.log(input);
 
       if (!price || price <= 0) return this.#toast('Please Check Price!');
       else if (!amount || amount <= 0)
@@ -295,11 +294,11 @@ class TradeHistory {
         if (modifyOrderData.Message.flag === '0') {
           if (modifyOrderData.Message.data)
             this.#toast(modifyOrderData.Message.data, { type: 'success' });
-            this.#dispatch(resetSpecificState({ trcode: 't3216' }));
+          this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         } else {
           if (modifyOrderData.Message.data)
             this.#toast(modifyOrderData.Message.data);
-            this.#dispatch(resetSpecificState({ trcode: 't3216' }));
+          this.#dispatch(resetSpecificState({ trcode: 't3216' }));
         }
       }
     }, [modifyOrderData]);
@@ -370,21 +369,203 @@ class TradeHistory {
     };
 
     useEffect(() => {
-      console.log(cancelOrderData && cancelOrderData.Message)
       if (cancelOrderData && cancelOrderData.Message) {
         if (cancelOrderData.Message.flag === '0') {
           if (cancelOrderData.Message.data)
             this.#toast(cancelOrderData.Message.data, { type: 'success' });
-            this.#dispatch(resetSpecificState({ trcode: 't3215' }));
+          this.#dispatch(resetSpecificState({ trcode: 't3215' }));
         } else {
           if (cancelOrderData.Message.data)
             this.#toast(cancelOrderData.Message.data);
-            this.#dispatch(resetSpecificState({ trcode: 't3215' }));
+          this.#dispatch(resetSpecificState({ trcode: 't3215' }));
         }
       }
     }, [cancelOrderData]);
 
     return { cancelOrderData, sendCancelOrder };
+  }
+
+  reqSetLimitStop() {
+    const { email, szAccNo, szPasswd } = useUserData();
+    const setStopLimitData = useTypedSelector(
+      (state) => state.asyncData[`t3215`]
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        token: '',
+        trcode: 't3215',
+        userid: email,
+      },
+      Input1: {
+        cIsStaff: '0',
+        cModType: '4',
+        fNxOpenRate: '',
+        fOrderPrice: '',
+        fOrderSu: '',
+        szAccNo,
+        szCurNo: '',
+        szDealDiv: '',
+        szOrdType: '',
+        szPasswd: szPasswd,
+        szSLCustItem: '',
+        szStaffID: '',
+        szStaffPW: '',
+      },
+    };
+
+    const { fetchData } = useAsyncData(input);
+
+    const sendSetStopLimit = ({
+      symbol,
+      price,
+      amount,
+      orderId,
+      orderType,
+      modType = '4',
+      stopNo,
+      limitNo,
+      deal,
+    }: {
+      symbol: string;
+      price: number;
+      amount: number;
+      orderId: string;
+      orderType: string;
+      modType?: string;
+      stopNo?: string;
+      limitNo?: string;
+      deal: DealType | string;
+    }) => {
+      input.Input1.szCurNo = symbol;
+      input.Input1.fOrderPrice = unformatNumber(price.toString());
+      input.Input1.fOrderSu = unformatNumber(amount.toString());
+      input.Input1.szOrdType = orderType.toString();
+      input.Input1.cModType = modType;
+      input.Input1.szOrgCustItem = orderId;
+      input.Input1.szDealDiv = deal === '079' ? '082' : deal === '081' ? '080' : null;
+
+      if(modType === '0'){
+        if(stopNo) input.Input1.szSLCustItem = stopNo;
+        else if(limitNo) input.Input1.szSLCustItem = limitNo;
+      }
+
+      const stopPrice = unformatNumber((input.Input1.fStopPrice ?? '0').toString());
+      const limitPrice = unformatNumber((input.Input1.fLimitPrice ?? '0').toString());
+
+      if(input.Input1.szDealDiv === '079'){
+        if(orderType === 'UCES' && stopPrice >= price){
+          return this.#toast('Please Check STOP Price!');
+        }
+
+        if(orderType === 'UCEL' && limitPrice <= price){
+          return this.#toast('Please Check LIMIT Price!');
+        }
+      }
+
+      if(input.Input1.szDealDiv === '081'){
+        if(orderType === 'UCES' && stopPrice <= price){
+          return this.#toast('Please Check STOP Price!');
+        }
+
+        if(orderType === 'UCEL' && limitPrice >= price){
+          return this.#toast('Please Check LIMIT Price!');
+        }
+      }
+
+      if (!price || price <= 0) return this.#toast('Please Check Price!');
+      else if (!amount || amount <= 0)
+        return this.#toast('Please Check Amount!');
+
+      if (input.Header.userid) fetchData({ ...input });
+    };
+
+    const sendSetStop = ({
+      symbol,
+      price,
+      stopPrice,
+      amount,
+      orderId,
+      orderType,
+      modType = '4',
+      stopNo,
+      deal,
+    }: {
+      symbol: string;
+      price: number;
+      stopPrice: number;
+      amount: number;
+      orderId: string;
+      orderType: string;
+      modType?: string;
+      stopNo?: string;
+      deal: DealType | string;
+    }) => {
+      input.Input1.fStopPrice = unformatNumber(stopPrice.toString());
+      sendSetStopLimit({ symbol, price, amount, orderId, orderType, modType, stopNo, deal });
+    };
+
+    const sendSetLimit = ({
+      symbol,
+      price,
+      limitPrice,
+      amount,
+      orderId,
+      orderType,
+      modType = '4',
+      limitNo,
+      deal,
+    }: {
+      symbol: string;
+      price: number;
+      limitPrice: number;
+      amount: number;
+      orderId: string;
+      orderType: string;
+      modType?:string;
+      limitNo?: string;
+      deal: DealType | string;
+    }) => {
+      input.Input1.fLimitPrice = unformatNumber(limitPrice.toString());
+      sendSetStopLimit({ symbol, price, amount, orderId, orderType, modType, limitNo, deal });
+    };
+
+    const sendSetMarket = ({
+      symbol,
+      price,
+      amount,
+      orderId,
+      orderType,
+      modType = '4',
+      deal,
+    }: {
+      symbol: string;
+      price: number;
+      amount: number;
+      orderId: string;
+      orderType: string;
+      modType?: string;
+      deal: DealType | string;
+    }) => {
+      sendSetStopLimit({ symbol, price, amount, orderId, orderType, modType, deal });
+    };
+
+    useEffect(() => {
+      if (setStopLimitData && setStopLimitData.Message) {
+        if (setStopLimitData.Message.flag === '0') {
+          if (setStopLimitData.Message.data)
+            this.#toast(setStopLimitData.Message.data, { type: 'success' });
+          this.#dispatch(resetSpecificState({ trcode: 't3215' }));
+        } else {
+          if (setStopLimitData.Message.data) this.#toast(setStopLimitData.Message.data);
+          this.#dispatch(resetSpecificState({ trcode: 't3215' }));
+        }
+      }
+    }, [setStopLimitData]);
+
+    return { setStopLimitData, sendSetStop, sendSetLimit, sendSetMarket };
   }
 
   orderBookDataSetting(
@@ -693,7 +874,7 @@ class TradeHistory {
         const result: OpenPositionRowData = {
           ticketNo: newD[0].slice(10),
           symbol: newD[1],
-          side: translateSzPoCode(newD[2], false),
+          side: newD[2],
           price: newD[3],
           lot: newD[4],
           currentPrice: newD[5],
@@ -705,7 +886,7 @@ class TradeHistory {
           crossIso: newD[11],
           market: 'Market',
           orderTime: newD[12],
-          orderNo: newD[13].slice(15, 21),
+          orderNo: newD[13],
           stopNo: newD[14],
           limitNo: newD[15],
           businessDate: newD[16],

@@ -56,7 +56,7 @@ const OrderInputComp = ({
             <path d="M7 10l5 5 5-5z"></path>
           </svg>
           <ul className="drop-box">
-            {name === 'price'
+            {name !== 'amount'
               ? priceSteps.map((price) => (
                   <li
                     key={price}

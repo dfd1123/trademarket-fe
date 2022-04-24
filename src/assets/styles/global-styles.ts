@@ -73,6 +73,23 @@ const GlobalStyle = createGlobalStyle`
       margin: 0;
   }
 
+  *{
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 4px;
+      background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb{
+      background-color: rgb(51, 53, 59);
+      border-radius: 20px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
+
   #root{
     height:100%;
   }

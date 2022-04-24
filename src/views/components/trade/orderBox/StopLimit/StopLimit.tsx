@@ -5,26 +5,110 @@ import CheckBox from '@/views/components/common/input/CheckBox';
 import DarkSelectBox from '@/views/components/common/input/SelectBox';
 import { YellowButton } from '@/views/components/common/Button';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import { OrderType, TradeInfoContext } from '@/provider/TradeInfoProvider';
+import useCoinList from '@/hooks/useCoinList';
+import { formatNumber, unformatNumber } from '@/utils/numberUtils';
+import useService from '@/hooks/useService';
+import { useDispatch } from 'react-redux';
+import { resetSpecificState } from '@/store/asyncData/asyncData';
 
-const initialValue = {
-  price: 0,
-  amount: 0,
-  orderType: 'UOE',
+const initialValue: {
+  price: string;
+  limitPrice: string;
+  stopPrice: string;
+  amount: string;
+  orderType: OrderType;
+} = {
+  price: '',
+  limitPrice: '',
+  stopPrice: '',
+  amount: '',
+  orderType: 'UCES',
 };
 
 const StopLimit = () => {
+  const dispatch = useDispatch();
+  const services = useService();
+  const context = useContext(TradeInfoContext);
+  const { order, setOrder } = context;
+
+  const {coinList} = useCoinList();
+
   const [inputs, setInputs] = useState(initialValue);
+  const [symbol, setSymbol] = useState('');
   const [decimal, setDecimal] = useState(2);
+
+  const {setStopLimitData, sendSetStop, sendSetLimit, sendSetMarket} = services.trade.reqSetLimitStop();
 
   const handleChange = (value: any, name?: string) => {
     if (name) setInputs({ ...inputs, [name]: value });
   };
 
+  const setStopLimit = () => {
+    if (order && inputs.orderType) {
+      if (inputs.orderType === 'UCM') {
+        sendSetMarket({
+          ...inputs,
+          price: unformatNumber(inputs.price),
+          amount: unformatNumber(inputs.amount),
+          symbol: order.symbol,
+          deal: order.dealType,
+          orderId: order.orderNo as string,
+        });
+      } else if (inputs.orderType === 'UCEL') {
+        sendSetLimit({
+          ...inputs,
+          price: unformatNumber(inputs.price),
+          limitPrice: unformatNumber(inputs.limitPrice),
+          amount: unformatNumber(inputs.amount),
+          symbol: order.symbol,
+          deal: order.dealType,
+          limitNo: order.limitNo,
+          orderId: order.orderNo as string,
+        });
+      } else if (inputs.orderType === 'UCES') {
+        sendSetStop({
+          ...inputs,
+          price: unformatNumber(inputs.price),
+          stopPrice: unformatNumber(inputs.stopPrice),
+          amount: unformatNumber(inputs.amount),
+          symbol: order.symbol,
+          deal: order.dealType,
+          stopNo: order.stopNo,
+          orderId: order.orderNo as string,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (order) {
+      const targetCoin = coinList.find(coin => coin.CUR_NO === order.symbol);
+      setSymbol(order.symbol);
+      setDecimal(targetCoin?.PIP_LOWEST ?? 2);
+      setInputs({
+        ...inputs,
+        price: formatNumber(order.price, decimal),
+        limitPrice: formatNumber(order.limitPrice, decimal),
+        stopPrice: formatNumber(order.stopPrice, decimal),
+        amount: formatNumber(order.amount, decimal),
+        orderType: order.orderType,
+      });
+    }
+  }, [order, decimal]);
+
+  useEffect(() => {
+    if (setStopLimitData && setStopLimitData.Message) {
+      dispatch(resetSpecificState({ trcode: 't3215' }));
+      if(setStopLimitData.Message.flag !== 'E') setOrder(null);
+    }
+  }, [setStopLimitData]);
+
   return (
     <StopLimitStyle>
       <div className="order-cont">
         <div className="info">
-          <b className="symbol">No selected</b>
+          <b className="symbol">{symbol || 'No selected'}</b>
         </div>
         <div className="inp-holder">
           <div className="tab-cont">
@@ -32,49 +116,73 @@ const StopLimit = () => {
               type="radio"
               name="orderType"
               label="Stop"
-              value="UOM"
+              value="UCES"
               data={inputs.orderType}
               onChange={handleChange}
               ripple={null}
+              disabled
             />
             <CheckBox
               type="radio"
               name="orderType"
               label="Limit"
-              value="UOE"
+              value="UCEL"
               data={inputs.orderType}
               onChange={handleChange}
               ripple={null}
+              disabled
             />
             <CheckBox
               type="radio"
               name="orderType"
               label="MARKET"
-              value="UOE"
+              value="UCM"
               data={inputs.orderType}
               onChange={handleChange}
               ripple={null}
+              disabled
             />
             <DarkSelectBox
               name="orderType"
               value={inputs.orderType}
               list={[
-                { name: 'Stop', value: 'UOM' },
-                { name: 'Limit', value: 'UOE' },
-                { name: 'Market', value: 'UOE' },
+                { name: 'Stop', value: 'UCES' },
+                { name: 'Limit', value: 'UCEL' },
+                { name: 'Market', value: 'UCM' },
               ]}
+              disabled
               onChange={handleChange}
             />
           </div>
           <div className="inp-cont">
             <div className="qault">
-              <OrderInput
-                name="price"
-                label="Price(USDT)"
-                value={inputs.price}
-                decimalCnt={decimal}
-                onChange={handleChange}
-              />
+            {inputs.orderType === 'UCM' && (
+                <OrderInput
+                  name="price"
+                  label="Price(USDT)"
+                  value={inputs.price}
+                  decimalCnt={decimal}
+                  onChange={handleChange}
+                />
+              )}
+              {inputs.orderType === 'UCES' && (
+                <OrderInput
+                  name="stopPrice"
+                  label="S-Price(USDT)"
+                  value={inputs.stopPrice}
+                  decimalCnt={decimal}
+                  onChange={handleChange}
+                />
+              )}
+              {inputs.orderType === 'UCEL' && (
+                <OrderInput
+                  name="limitPrice"
+                  label="L-Price(USDT)"
+                  value={inputs.limitPrice}
+                  decimalCnt={decimal}
+                  onChange={handleChange}
+                />
+              )}
             </div>
             <div className="qault">
               <OrderInput
@@ -92,7 +200,7 @@ const StopLimit = () => {
         </div>
       </div>
       <div className="btn-cont">
-        <YellowButton>MARKET</YellowButton>
+        <YellowButton onClick={setStopLimit}>MARKET</YellowButton>
       </div>
     </StopLimitStyle>
   );

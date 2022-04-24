@@ -10,6 +10,7 @@ import { TradeInfoContext } from '@/provider/TradeInfoProvider';
 const MobileChartLine = () => {
   const context = useContext(TradeInfoContext);
   const { order, setOrder } = context;
+  const [clickAction, setClickAction] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
   const changeTabIndex = (index: number) => {
@@ -17,7 +18,11 @@ const MobileChartLine = () => {
   };
 
   const clickTab = () => {
+    setClickAction(true);
     setOrder(null);
+    setTimeout(() => {
+      setClickAction(false);
+    }, 10);
   };
 
   useEffect(() => {
@@ -42,7 +47,7 @@ const MobileChartLine = () => {
           break;
       }
     }else{
-      setTabIndex(1);
+      if(!clickAction) setTabIndex(1);
     }
   }, [order]);
 
