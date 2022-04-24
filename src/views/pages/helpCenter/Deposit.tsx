@@ -1,10 +1,16 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import Sidebar from "@/views/components/common/Sidebar";
+import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 
 const Deposit = () => {
   return (
-    <h1>Deposit</h1>
-  )
-}
+    <HelpCenterLayout title="Deposit">
+      <>
+        <div>table</div>
+      </>
+    </HelpCenterLayout>
+  );
+};
 
 export default Deposit;
