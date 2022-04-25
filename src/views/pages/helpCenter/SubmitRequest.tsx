@@ -1,10 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
+import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 
 const SubmitRequest = () => {
   return (
-    <h1>Submit Request</h1>
-  )
-}
+    <HelpCenterLayout title="Withdraw">
+      <>
+        <div>table</div>
+      </>
+    </HelpCenterLayout>
+  );
+};
 
 export default SubmitRequest;
