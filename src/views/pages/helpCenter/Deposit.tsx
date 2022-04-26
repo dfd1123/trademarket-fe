@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
-import HelpCenterTableList from "@/views/components/helpCenter/HelpCenterTableList";
-import TableBd from "@/views/components/trade/tradeTables/TableBd";
-import TableHd from "@/views/components/trade/tradeTables/TableHd";
+import HelpCenterTableList from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableList";
 import IntegerInput from "@/views/components/common/input/IntegerInput";
 import { BasicButton } from "@/views/components/common/Button";
 import { MOBILE_SIZE } from "@/assets/styles/responsiveBreakPoint";
+import HelpCenterTableHd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableHd";
+import HelpCenterTableBd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableBd";
 
 const date = new Date().toDateString();
 
@@ -89,8 +89,11 @@ const Deposit = () => {
         </div>
         <div className="deposit-table-container">
           <div className="deposit-table-wrapper">
-            <TableHd className="deposit-request-tableHd" list={tableHdLabel} />
-            <TableBd>
+            <HelpCenterTableHd
+              className="deposit-request-tableHd"
+              list={tableHdLabel}
+            />
+            <HelpCenterTableBd>
               {dummyData ? (
                 dummyData.map((item, index) => {
                   return (
@@ -105,7 +108,7 @@ const Deposit = () => {
               ) : (
                 <div>no data</div>
               )}
-            </TableBd>
+            </HelpCenterTableBd>
           </div>
         </div>
       </ContainerStyle>

@@ -3,11 +3,11 @@ import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 import IntegerInput from "@/views/components/common/input/IntegerInput";
 import { BasicInput } from "@/views/components/common/input/TextInput";
-import TableHd from "@/views/components/trade/tradeTables/TableHd";
-import TableBd from "@/views/components/trade/tradeTables/TableBd";
-import HelpCenterTableList from "@/views/components/helpCenter/HelpCenterTableList";
+import HelpCenterTableList from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableList";
 import { MOBILE_SIZE } from "@/assets/styles/responsiveBreakPoint";
 import BasicButton from "@/views/components/common/Button";
+import HelpCenterTableHd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableHd";
+import HelpCenterTableBd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableBd";
 
 const date = new Date().toDateString();
 
@@ -94,8 +94,11 @@ const Widthraw = () => {
         </div>
         <div className="withdraw-table-container">
           <div className="withdraw-table-wrapper">
-            <TableHd className="withdraw-request-tableHd" list={tableHdLabel} />
-            <TableBd>
+            <HelpCenterTableHd
+              className="withdraw-request-tableHd"
+              list={tableHdLabel}
+            />
+            <HelpCenterTableBd>
               {dummyData ? (
                 dummyData.map((item, index) => {
                   return (
@@ -110,7 +113,7 @@ const Widthraw = () => {
               ) : (
                 <div>no data</div>
               )}
-            </TableBd>
+            </HelpCenterTableBd>
           </div>
         </div>
       </ContainerStyle>

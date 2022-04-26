@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Sidebar from "@/views/components/common/Sidebar";
+import Sidebar from "@/views/components/helpCenter/Sidebar";
 import Accordion from "@/views/components/helpCenter/Accodian";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 
