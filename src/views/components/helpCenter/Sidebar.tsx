@@ -4,12 +4,6 @@ import { Link, useLocation, useParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   console.log(location.pathname);
-  //   // console.log(params);
-  // }, []);
 
   return (
     <SidebarStyle>

@@ -1,12 +1,12 @@
 export interface GnbMenuType {
-    id: string;
-    name: string;
-    path: string;
-    on?: boolean;
-    children?: GnbMenuType[];
+  id: string;
+  name: string;
+  path: string;
+  on?: boolean;
+  children?: GnbMenuType[];
 }
 
-let gnbList : GnbMenuType[] = [
+let gnbList: GnbMenuType[] = [
   { id: "trade", name: "Feature Trade", path: "/trade" },
   {
     id: "wallet",
@@ -26,9 +26,13 @@ let gnbList : GnbMenuType[] = [
     path: "",
     on: false,
     children: [
-      { id: "excutionList", name: "Excution List", path: "/" },
-      { id: "oeDetail", name: "Order/Execution Detail", path: "/" },
-      { id: "ceList", name: "Close Execution List", path: "/" },
+      { id: "executionList", name: "Execution List", path: "/execution-list" },
+      {
+        id: "oeDetail",
+        name: "Order/Execution Detail",
+        path: "/order-execution",
+      },
+      { id: "ceList", name: "Close Execution List", path: "/close-execution" },
     ],
   },
   {
@@ -37,9 +41,9 @@ let gnbList : GnbMenuType[] = [
     path: "",
     on: false,
     children: [
-      { id: 'deposit', name: 'Deposit', path:'/deposit' },
-      { id: 'widthraw', name: 'Widthraw', path:'/withdraw' },
-      { id: 'submitRequest', name: 'Submit Request', path:'/submit-request' },
+      { id: "deposit", name: "Deposit", path: "/deposit" },
+      { id: "withdraw", name: "Withdraw", path: "/withdraw" },
+      { id: "submitRequest", name: "Submit Request", path: "/submit-request" },
       { id: "userGuide", name: "User Guide", path: "/user-guide" },
     ],
   },
