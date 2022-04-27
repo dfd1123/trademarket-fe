@@ -3,7 +3,7 @@ import { ConstructorParamsType } from './types/Service';
 import { TransactionInputType } from '@/types/TransactionType';
 import useAsyncData from '@/hooks/useAsyncData';
 import { useTypedSelector } from '@/store';
-import tridList from '@/data/tridList';
+import tridList from '@/data/coinList';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CommonTransactionOutputType } from "@/types/TransactionType";
-import tridList from "@/data/tridList";
+import tridList from "@/data/coinList";
 
 const initialState : any = {};
 
