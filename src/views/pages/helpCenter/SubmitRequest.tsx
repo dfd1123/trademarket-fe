@@ -58,7 +58,6 @@ const SubmitRequest = () => {
             <TableBd>
               {dummyData ? (
                 dummyData.map((item, index) => {
-                  console.log(item);
                   return (
                     <HelpCenterTableList
                       key={index}
