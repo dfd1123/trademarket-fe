@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Sidebar from "@/views/components/common/Sidebar";
+import Sidebar from "@/views/components/helpCenter/Sidebar";
 
 interface PropsType {
   title: string;

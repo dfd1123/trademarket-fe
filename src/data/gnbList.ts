@@ -1,12 +1,12 @@
 export interface GnbMenuType {
-    id: string;
-    name: string;
-    path: string;
-    on?: boolean;
-    children?: GnbMenuType[];
+  id: string;
+  name: string;
+  path: string;
+  on?: boolean;
+  children?: GnbMenuType[];
 }
 
-let gnbList : GnbMenuType[] = [
+let gnbList: GnbMenuType[] = [
   { id: "trade", name: "Feature Trade", path: "/trade" },
   {
     id: "wallet",
@@ -37,9 +37,9 @@ let gnbList : GnbMenuType[] = [
     path: "",
     on: false,
     children: [
-      { id: 'deposit', name: 'Deposit', path:'/deposit' },
-      { id: 'widthraw', name: 'Widthraw', path:'/withdraw' },
-      { id: 'submitRequest', name: 'Submit Request', path:'/submit-request' },
+      { id: "deposit", name: "Deposit", path: "/deposit" },
+      { id: "withdraw", name: "Withdraw", path: "/withdraw" },
+      { id: "submitRequest", name: "Submit Request", path: "/submit-request" },
       { id: "userGuide", name: "User Guide", path: "/user-guide" },
     ],
   },
