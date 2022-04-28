@@ -32,3 +32,12 @@ export interface SubmitRequestContentData {
   answerSubject?: string;
   answerContent?: string;
 }
+
+export interface DepositRequestHistoryOutput {
+  no: string;
+  accountNo: string;
+  dateTime: string;
+  amount: string;
+  stat: string;
+  clientNo: string;
+}
