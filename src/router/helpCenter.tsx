@@ -10,26 +10,32 @@ const helpCenter: Route[] = [
   {
     path: "/user-guide",
     element: <UserGuide />,
+    meta:{theme: 'light'}
   },
   {
     path: "/deposit",
     element: <Deposit />,
+    meta:{theme: 'light'}
   },
   {
     path: "/withdraw",
     element: <Withdraw />,
+    meta:{theme: 'light'}
   },
   {
     path: "/submit-request",
     element: <SubmitRequest />,
+    meta:{theme: 'light'}
   },
   {
     path: "/submit-request/:id",
     element: <SubmitRequestDetail />,
+    meta:{theme: 'light'}
   },
   {
     path: "/submit-request/write",
     element: <SubmitRequestWrite />,
+    meta:{theme: 'light'}
   },
 ];
 

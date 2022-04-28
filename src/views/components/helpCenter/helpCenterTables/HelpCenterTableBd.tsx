@@ -28,10 +28,6 @@ const HelpCenterTableBd = styled(HelpCenterTableBdComp)`
       color: #fff;
       text-align: center;
     }
-
-    &:hover {
-      border: 1px solid rgb(141, 146, 221);
-    }
   }
 `;
 

@@ -5,7 +5,7 @@ import useAsyncData from "@/hooks/useAsyncData";
 import { useTypedSelector } from "@/store";
 import { DepositRequestHistoryOutput } from "@/services/types/HelpCenter";
 
-class HelpCenter {
+class HelpCenterService {
   #ws;
   #cookie;
   #dispatch;
@@ -50,7 +50,7 @@ class HelpCenter {
 
   // t2313: deposit list
   // t2413: withdraw list
-  getDepositOrWithdrawHistory({ trcode, inputData }) {
+  getDepositOrWithdrawHistory() {
     const depositRequestDate = useTypedSelector(
       (state) => state.asyncData["t2313"]
     );
@@ -59,19 +59,37 @@ class HelpCenter {
       Header: {
         function: "D",
         termtype: "HTS",
-        trcode: trcode,
+        trcode: "t2313",
       },
       Input1: {
-        ...inputData,
+        // ...inputData,
       },
     };
     const { fetchData } = useAsyncData(input);
-    fetchData();
-    const depositRequestObj: DepositRequestHistoryOutput[] =
-      depositRequestDate?.Output2 || {};
+    
+    const getDepositHistory = (newInput) => {
+      input.Input1 = newInput;
 
-    const depositRequestResultData = depositRequestDate.map(
-      (item, index) => {}
-    );
+      fetchData({...input});
+    }
+
+
+    // const depositRequestObj: DepositRequestHistoryOutput[] =
+    //   depositRequestDate?.Output2 || {};
+
+    // const depositRequestResultData = depositRequestDate.map(
+    //   (item, index) => {}
+    // );
+
+    const parseData = (data) => {
+      // parsing...after return
+    }
+
+    return {
+      deposit: parseData(depositRequestDate),
+      getDepositHistory
+    }
   }
 }
+
+export default HelpCenterService;

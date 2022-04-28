@@ -8,6 +8,7 @@ import RealTimeService from '@/services/RealTimeService';
 import CoinInfoService from '@/services/CoinInfoService';
 import TradeService from '@/services/TradeService';
 import WalletService from '@/services/WalletService';
+import HelpCenterService from '@/services/HelpCenterService';
 import { useContext } from 'react';
 import { WebSocketContext } from '@/provider/WebSocketProvider';
 
@@ -38,6 +39,7 @@ const useService = () => {
     coinInfo: new CoinInfoService(serviceParams),
     trade: new TradeService(serviceParams),
     wallet: new WalletService(serviceParams),
+    helpCenter: new HelpCenterService(serviceParams),
   };
 
   return { ...services };

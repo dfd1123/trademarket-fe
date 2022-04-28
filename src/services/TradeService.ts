@@ -991,7 +991,7 @@ class TradeService {
           orderPrice: newD[5],
           stopPrice: newD[6],
           limitPrice: newD[7],
-          orderKinds: translateSzPoCode(newD[8], false),
+          orderKinds: translateOrderType(newD[8], false),
           orderType: translateOrderType(newD[9], false),
           stat: newD[10],
           orderTime: newD[11],

@@ -40,10 +40,10 @@ const OrderDetailHistory = () => {
   //   (state) => state.realTimeData.myConclusion
   // );
 
-  const getDetailHistory = async () => {
+  const getDetailHistory = () => {
     const startDate =new Date(dateRange[0]);
     const endDate = new Date(dateRange[1]);
-    await getMyDetailTradeHistory(startDate, endDate);
+    getMyDetailTradeHistory(startDate, endDate);
   };
 
   useEffect(() => {
