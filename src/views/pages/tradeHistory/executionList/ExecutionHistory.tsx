@@ -39,7 +39,7 @@ const ExecutionHistory = () => {
   // );
 
   const getHistory = async () => {
-    const startDate =new Date(dateRange[0]);
+    const startDate = new Date(dateRange[0]);
     const endDate = new Date(dateRange[1]);
     await getMyTradeHistory(startDate, endDate);
   };
@@ -51,35 +51,34 @@ const ExecutionHistory = () => {
   return (
     <ExecutionHistoryStyle>
       <TradeTables>
-      {!loading &&
-        (noData ? (
-          <NoData msg="No data was retrieved" />
-        ) : (
-        <div>
-            <TableHd list={tableHdLabel} />
-            <TableBd>
-              {myTradeHistory.map((row, index) => (
-                <ExecutionList
-                  key={`row-${row.symbol}${index}`}
-                  info={row}
-                  tableHdInfo={tableHdLabel}
-                />
-              ))}
-            </TableBd>
-          </div>
-        ))}
+        {!loading &&
+          (noData ? (
+            <NoData msg="No data was retrieved" />
+          ) : (
+            <div>
+              <TableHd list={tableHdLabel} />
+              <TableBd>
+                {myTradeHistory.map((row, index) => (
+                  <ExecutionList
+                    key={`row-${row.symbol}${index}`}
+                    info={row}
+                    tableHdInfo={tableHdLabel}
+                  />
+                ))}
+              </TableBd>
+            </div>
+          ))}
       </TradeTables>
     </ExecutionHistoryStyle>
   );
 };
 
 const ExecutionHistoryStyle = styled.div`
-
-.tables-cont {
-  overflow: scroll;
-  > div{
-    min-width: 1280px;
-  }
+  .tables-cont {
+    overflow: scroll;
+    > div {
+      min-width: 1280px;
+    }
   }
   @media (max-width: ${TABLET_SIZE}) {
     width: 100%;

@@ -16,16 +16,19 @@ import useModal from '@/hooks/useModal';
 import ModalDatePicker from '../common/modal/ModalDatePicker';
 
 interface PropsType {
+  date: string;
   dateRange: string[];
-  onChangeDate: (dateRange: string[]) => void;
+  onChangeDate: (date: string) => void;
+  onChangeDateRange: (dateRange: string[]) => void;
 }
 
-const ControlPanel = ({dateRange, onChangeDate}: PropsType) => {
+const ControlPanel = ({date, dateRange, onChangeDate, onChangeDateRange}: PropsType) => {
   const services = useService();
   const { pathname } = useLocation();
   const {szAccNo} = useUserData();
 
   const [title, setTitle] = useState('');
+  const [tempDate, setTempDate] = useState(dateFormat(new Date()));
   const [tempDateRange, setTempDateRange] = useState<string[]>(dateRange);
 
   const {unrealProfitNLoss, getUnrealProfitNLoss} = services.wallet.getUnrealProfitNLoss();
@@ -33,20 +36,30 @@ const ControlPanel = ({dateRange, onChangeDate}: PropsType) => {
   const { openModal } = useModal();
 
   const openDatePickerModal = async () => {
-    const result = await openModal(ModalDatePicker, {
-      props: { initialDateRange: dateRange, range: true },
-    });
-
-    setTempDateRange(result);
+    if(title === 'Close Execution List'){
+      const result = await openModal(ModalDatePicker, {
+        props: { initialFocusedDate: date, range: false },
+      });
+  
+      setTempDate(result);
+    }else{
+      const result = await openModal(ModalDatePicker, {
+        props: { initialDateRange: dateRange, range: true },
+      });
+  
+      setTempDateRange(result);
+    }
+    
   };
 
   const inquiry = () => {
-    onChangeDate(tempDateRange);
+    onChangeDate(tempDate);
+    onChangeDateRange(tempDateRange);
   }
 
   useEffect(() => {
-    if(pathname.includes('execution-list')) setTitle('Execution List');
-    else if(pathname.includes('order-execution-list')) setTitle('Order/Execution Detail');
+    if(pathname.includes('/execution-list')) setTitle('Execution List');
+    else if(pathname.includes('/order-execution-list')) setTitle('Order/Execution Detail');
     else  setTitle('Close Execution List');
     getUnrealProfitNLoss();
   }, [pathname]);
@@ -76,7 +89,15 @@ const ControlPanel = ({dateRange, onChangeDate}: PropsType) => {
             <span className="label">DATE</span>
             <div className="value">
               <IconCalendar />
-              {tempDateRange[0]} <i>~</i> {tempDateRange[1]}
+              {title === 'Close Execution List' ? (
+                <>
+                  {tempDate}
+                </>
+              ) : (
+                <>
+                {tempDateRange[0]} <i>~</i> {tempDateRange[1]}
+                </>
+              ) }
             </div>
           </div>
           <BasicButton className="btn-inquiry" onClick={inquiry}>INQUIRY</BasicButton>

@@ -82,6 +82,24 @@ export interface MyDetailTradeHistoryRowData {
   ipAddress: string;
 }
 
+export interface MyCloseTradeHistoryRowData {
+  excuteNo: string;
+  accountNo: string;
+  symbol: string;
+  closeLot: number;
+  openTime: string;
+  closeTime: string;
+  openPrice: number | string;
+  closePrice: number | string;
+  pnlPrice: number;
+  pnl: number;
+  openCommision: number;
+  closeCommision: number;
+  orderType: string;
+  side: string;
+  pointPosition: number;
+}
+
 export interface OpenPositionRowData {
   ticketNo: string;
   symbol: string;

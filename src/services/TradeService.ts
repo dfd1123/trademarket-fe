@@ -7,6 +7,7 @@ import coinList from '@/data/coinList';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import {
+  MyCloseTradeHistoryRowData,
   MyDetailTradeHistoryRowData,
   MyTradeHistoryRowData,
   OpenOrderRowData,
@@ -1009,6 +1010,71 @@ class TradeService {
         Number(detailTradeHistoryOutput.Output1?.szCnt ?? 0) === 0,
       myDetailTradeHistory: parseData(detailTradeHistoryOutput),
       getMyDetailTradeHistory,
+    };
+  }
+
+  getCloseExcutionHistory() {
+    const { szAccNo, email } = useUserData();
+    const closeTradeHistoryOutput = useTypedSelector(
+      (state) => state.asyncData[`t3634`]
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3634',
+        userid: email,
+        token: '',
+      },
+      Input1: {
+        szAccNo: szAccNo,
+        con_key: '',
+        nDate: '',
+      },
+    };
+    const { fetchData } = useAsyncData(input);
+
+    const getMyCloseTradeHistory = (date: Date) => {
+      input.Input1.nDate = dateFormat(date, 'YMMdd');
+
+      fetchData({ ...input });
+    };
+
+    const parseData = (output): MyCloseTradeHistoryRowData[] => {
+      const outputData = output?.Output2 || [];
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
+        const result: MyCloseTradeHistoryRowData = {
+          excuteNo: newD[0].slice(10, 16),
+          accountNo: newD[1],
+          symbol: newD[2],
+          closeLot: newD[3],
+          openTime: newD[4],
+          closeTime: newD[5],
+          openPrice: newD[6],
+          closePrice: newD[7],
+          pnlPrice: newD[8],
+          pnl: newD[9],
+          openCommision: newD[10],
+          closeCommision: newD[11],
+          orderType: translateOrderType(newD[12], false),
+          side: newD[13],
+          pointPosition: newD[14],
+        };
+        return result;
+      });
+    };
+
+    return {
+      loading: !Boolean(closeTradeHistoryOutput),
+      noData:
+        Boolean(closeTradeHistoryOutput) &&
+        Number(closeTradeHistoryOutput.Output1?.szCnt ?? 0) === 0,
+      myCloseTradeHistory: parseData(closeTradeHistoryOutput),
+      getMyCloseTradeHistory,
     };
   }
 }
