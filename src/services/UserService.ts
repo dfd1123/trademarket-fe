@@ -49,23 +49,47 @@ class UserService {
       },
     };
 
+    const userDetailInfoInput: TransactionInputType = {
+      Header: { function: 'D', termtype: 'HTS', trcode: 't113C' },
+      Input1: {
+        szFlag: '0',
+        szMemberNo: '000',
+        szCustNo: userid,
+        szPasswd: passwd,
+        szUHIN_data: '',
+        szField_No: '',
+        szField_Data1: '',
+        szField_Data2: '',
+        szField_Data3: '',
+        szStaffID: '',
+        szStaffPasswd: '',
+      },
+    };
+
     const { resultKey: loginTrCode, fetchData: loginFetch } =
       useAsyncData(loginInput);
     const { resultKey: userInfoTrCode, fetchData: userInfoFetch } =
       useAsyncData(userInfoInput);
+    const { resultKey: userDetailInfoTrCode, fetchData: userDetailInfoFetch } =
+      useAsyncData(userDetailInfoInput);
+
     const loginRes = useTypedSelector((state) => state.asyncData[loginTrCode]);
     const userInfoRes = useTypedSelector(
       (state) => state.asyncData[userInfoTrCode]
     );
+    const userDetailInfoRes = useTypedSelector(
+      (state) => state.asyncData[userDetailInfoTrCode]
+    );
 
     const loginFetchData = (params: LoginInput | undefined = undefined) => {
-      if (params)
+      if (params) {
         loginInput.Input1 = {
           ...loginInput.Input1,
           userid: params.userid,
           passwd: params.passwd,
         };
-      loginFetch(loginInput);
+        loginFetch(loginInput);
+      }
     };
 
     const userInfoFetchData = (userid: string) => {
@@ -77,6 +101,16 @@ class UserService {
       userInfoFetch();
     };
 
+    const userDetailInfoFetchData = () => {
+      userDetailInfoInput.Input1 = {
+        ...userDetailInfoInput.Input1,
+        szCustNo: loginInput.Input1.userid,
+        szPasswd: loginInput.Input1.passwd,
+      };
+
+      userDetailInfoFetch(userDetailInfoInput);
+    }
+
     useEffect(() => {
       if (loginRes) {
         if (loginRes.Message.flag === 'E') {
@@ -84,22 +118,24 @@ class UserService {
         } else {
           const userid = loginRes.Output1.userid;
           userInfoFetchData(userid);
+          userDetailInfoFetchData();
         }
       }
     }, [loginRes]);
 
     useEffect(() => {
-      if (userInfoRes && userInfoRes.Output2) {
+      if (userInfoRes && userDetailInfoRes && userInfoRes.Output2 && userDetailInfoRes.Output1) {
         this.#dispatch(
           setAuth({
             email: userInfoRes.Output2[0][1],
             szAccNo: userInfoRes.Output2[0][2],
             szPasswd: userInfoRes.Output2[0][3],
+            szBankAccNo: userDetailInfoRes.Output1.szBank_AccNo
           })
         );
         navigate(-1);
       }
-    }, [userInfoRes]);
+    }, [userInfoRes, userDetailInfoRes]);
 
     return { loginRes, loginFetchData };
   }
@@ -133,7 +169,10 @@ class UserService {
     return { registerRes, registerFetchData };
   }
 
-  getUserMarginData() : {marginData: UserMarginData, getMarginData: () => void} {
+  getUserMarginData(): {
+    marginData: UserMarginData;
+    getMarginData: () => void;
+  } {
     const { szAccNo, email } = useUserData();
     const data = useTypedSelector((state) => state.asyncData[`t3608`]);
 
@@ -159,7 +198,10 @@ class UserService {
       getMarginData();
     }, [szAccNo]);
 
-    const parseData = data && data.Output2 ? data.Output2[0].map((d) => formatNumber(d, 2)) : []
+    const parseData =
+      data && data.Output2
+        ? data.Output2[0].map((d) => formatNumber(d, 2))
+        : [];
 
     return {
       marginData: {

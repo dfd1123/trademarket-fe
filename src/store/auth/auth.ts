@@ -32,9 +32,10 @@ const authSlice = createSlice({
         email: string;
         szAccNo: string;
         szPasswd: string;
+        szBankAccNo: string;
       }>
     ) {
-      const { email, szAccNo, szPasswd } = action.payload;
+      const { email, szAccNo, szPasswd, szBankAccNo } = action.payload;
 
       if (!email) return;
 
@@ -42,6 +43,7 @@ const authSlice = createSlice({
       state.data.email = email.trim();
       state.data.szAccNo = szAccNo.trim();
       state.data.szPasswd = szPasswd.trim();
+      state.data.szBankAccNo = szBankAccNo.trim();
     },
     resetAuth(state) {
       state.isLoggedIn = false;
