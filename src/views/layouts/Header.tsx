@@ -16,43 +16,56 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
   const logoImage = theme.name === 'dark' ? darkLogo : darkLogo; // TODO:: whiteLogo 만들기
   const headerHide = useRouteMeta('headerHide');
   const navigate = useNavigate();
-  const {openModal} = useModal();
+  const { openModal } = useModal();
   const userInfo = useTypedSelector((state) => state.authSlice);
 
   const mobileMenuOpen = () => {
     openModal(MobileGnb);
-  }
+  };
 
-  return headerHide ? (<></>) : (<StyleHeader theme={theme}>
-    <div className="logo">
-      <Link to="/">
-        {!logoText && logoImage ? (
-          <img src={logoImage} alt="logo" />
+  return headerHide ? (
+    <></>
+  ) : (
+    <StyleHeader theme={theme}>
+      <div className="logo">
+        <Link to="/">
+          {!logoText && logoImage ? (
+            <img src={logoImage} alt="logo" />
+          ) : (
+            <span>LOGO</span>
+          )}
+        </Link>
+      </div>
+      <PcGnb theme={theme} />
+      <div className="btn-cont">
+        {userInfo.isLoggedIn ? (
+          <UserInfo info={userInfo} />
         ) : (
-          <span>LOGO</span>
+          <YellowButton
+            className="btn-login"
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </YellowButton>
         )}
-      </Link>
-    </div>
-    <PcGnb theme={theme} />
-    <div className="btn-cont">
-      {userInfo.isLoggedIn ? (<UserInfo info={userInfo} />):(
-        <YellowButton className="btn-login" onClick={() => navigate('/login')}>Login</YellowButton>
-      )}
-      
-      <button className="btn-mobile-menu" onClick={mobileMenuOpen}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="5" width="18" height="2" fill="#FFFFFF"></rect>
-          <rect x="3" y="11" width="18" height="2" fill="#FFFFFF"></rect>
-          <rect x="3" y="17" width="12" height="2" fill="#FFFFFF"></rect>
-        </svg>
-      </button>
-    </div>
-  </StyleHeader>);
+
+        <button className="btn-mobile-menu" onClick={mobileMenuOpen}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="5" width="18" height="2" fill="#FFFFFF"></rect>
+            <rect x="3" y="11" width="18" height="2" fill="#FFFFFF"></rect>
+            <rect x="3" y="17" width="12" height="2" fill="#FFFFFF"></rect>
+          </svg>
+        </button>
+      </div>
+    </StyleHeader>
+  );
 });
 
 const StyleHeader = styled.header`
   position: relative;
-  margin: 0 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
   .logo {
     position: absolute;
     left: 0;
@@ -70,7 +83,7 @@ const StyleHeader = styled.header`
       font-weight: 600;
       color: ${(props) => props.theme.header.color};
       ${(props) =>
-        props.theme.name === 'dark'
+        props.theme.name !== 'light'
           ? 'text-shadow: 0 0 5px rgba(0, 0, 0, 0.7)'
           : ''};
     }
@@ -82,14 +95,14 @@ const StyleHeader = styled.header`
 
   .btn-cont {
     position: absolute;
-    right: 0;
+    right: 20px;
     top: 0;
     z-index: 1;
     display: flex;
     align-items: center;
     height: 100%;
     .btn-login {
-      >button{
+      > button {
         width: 120px;
         height: 32px;
         font-weight: 700;
@@ -101,9 +114,7 @@ const StyleHeader = styled.header`
         vertical-align: middle;
         rect {
           ${(props) =>
-            props.theme.name === 'dark'
-              ? 'fill: #f1f1f1;'
-              : 'fill: #000;'};
+            props.theme.name !== 'light' ? 'fill: #f1f1f1;' : 'fill: #000;'};
         }
       }
     }
@@ -111,6 +122,8 @@ const StyleHeader = styled.header`
 
   @media (max-width: ${TABLET_SIZE}) {
     height: 43px;
+    margin: 0 20px;
+    padding: 0;
 
     .logo {
       justify-content: left;
@@ -121,6 +134,7 @@ const StyleHeader = styled.header`
     }
 
     .btn-cont {
+      right:0;
       .btn-login {
         display: none !important;
       }

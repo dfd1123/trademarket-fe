@@ -18,7 +18,6 @@ interface PropsType {
 const TradeHistoryList = React.memo(
   ({ className, tableHdInfo, info }: PropsType) => {
     const services = useService();
-    const { close } = useCurrentSymbol(info.symbol);
     const { PIP_LOWEST } = useTypedSelector(
       (state) => state.coinInfoSlice.symbols[info.symbol]
     );
@@ -28,13 +27,13 @@ const TradeHistoryList = React.memo(
     const row = useMemo(() => {
       const newInfo = { ...info };
 
-      const pointPosition = newInfo.pointPosition;
+      const pointPosition = PIP_LOWEST;
 
       newInfo.orderPrice = formatNumber(info.orderPrice, pointPosition);
       newInfo.excutePrice = formatNumber(info.excutePrice, pointPosition);
 
       return newInfo;
-    }, [info, close]);
+    }, [info]);
 
     useEffect(() => {
       const tempInfo = tableHdInfo.map((info) => ({

@@ -32,6 +32,7 @@ const StyledPcGnb = styled.div`
         display:block !important;
         > a {
           display:block;
+          width:100%;
           padding: 10px 5px;
           color: inherit;
           ${(props) =>
@@ -96,6 +97,8 @@ const StyledPcGnb = styled.div`
           > li {
             padding: 6px 15px;
             > a {
+              display: block;
+              width:100%;
               font-size: 16px;
               color:#fff;
               line-height: 19px;

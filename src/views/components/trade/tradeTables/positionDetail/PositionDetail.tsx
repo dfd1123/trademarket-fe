@@ -5,7 +5,7 @@ import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import useService from '@/hooks/useService';
 import TableBd from '../TableBd';
 import PositionDetailList from './PositionDetailList';
-import NoData from '../NoData';
+import NoData from '../../../common/NoData';
 
 interface PropsType {}
 

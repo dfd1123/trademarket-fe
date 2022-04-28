@@ -1,4 +1,4 @@
-export default [
+const coinList = [
     0,
     'BTCUSDT',
     'ETHUSDT',
@@ -21,3 +21,5 @@ export default [
     'ADAUSDT',
     '1000SHIBUSDT'
 ]
+
+export default coinList;

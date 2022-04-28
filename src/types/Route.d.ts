@@ -1,7 +1,7 @@
 import { DefaultTheme } from "styled-components";
 
 export interface RouteMeta {
-  theme?: DefaultTheme | string;
+  theme?: string;
   headerHide?: boolean;
   footerHide?: boolean;
   isAuth?: boolean;
@@ -10,6 +10,7 @@ export interface Route {
   path: string;
   element: JSX.Element;
   meta?: RouteMeta;
+  children?: Route[];
 }
 
 export interface ReduceRoute extends Route {

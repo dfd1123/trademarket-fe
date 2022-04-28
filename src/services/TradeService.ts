@@ -3,10 +3,11 @@ import { ConstructorParamsType } from './types/Service';
 import { TransactionInputType } from '@/types/TransactionType';
 import useAsyncData from '@/hooks/useAsyncData';
 import { useTypedSelector } from '@/store';
-import tridList from '@/data/coinList';
+import coinList from '@/data/coinList';
 import { OrderOutput } from '@/store/realTime/types/realTimeData';
 import { formatNumber, unformatNumber } from '@/utils/numberUtils';
 import {
+  MyDetailTradeHistoryRowData,
   MyTradeHistoryRowData,
   OpenOrderRowData,
   OpenPositionRowData,
@@ -20,7 +21,7 @@ import { resetSpecificState } from '@/store/asyncData/asyncData';
 import { dateFormat } from '@/utils/dateUtils';
 import { DealType } from '@/provider/TradeInfoProvider';
 
-class TradeHistory {
+class TradeService {
   #ws;
   #cookie;
   #dispatch;
@@ -73,7 +74,7 @@ class TradeHistory {
     nMinTerm = nMinTerm.toString();
     cTermDiv = cTermDiv.toString();
 
-    const tridIndex = tridList.findIndex((preSymbol) => preSymbol === symbol);
+    const tridIndex = coinList.findIndex((preSymbol) => preSymbol === symbol);
 
     const input: TransactionInputType = {
       Header: {
@@ -445,32 +446,37 @@ class TradeHistory {
       input.Input1.szOrdType = orderType.toString();
       input.Input1.cModType = modType;
       input.Input1.szOrgCustItem = orderId;
-      input.Input1.szDealDiv = deal === '079' ? '082' : deal === '081' ? '080' : null;
+      input.Input1.szDealDiv =
+        deal === '079' ? '082' : deal === '081' ? '080' : null;
 
-      if(modType === '0'){
-        if(stopNo) input.Input1.szSLCustItem = stopNo;
-        else if(limitNo) input.Input1.szSLCustItem = limitNo;
+      if (modType === '0') {
+        if (stopNo) input.Input1.szSLCustItem = stopNo;
+        else if (limitNo) input.Input1.szSLCustItem = limitNo;
       }
 
-      const stopPrice = unformatNumber((input.Input1.fStopPrice ?? '0').toString());
-      const limitPrice = unformatNumber((input.Input1.fLimitPrice ?? '0').toString());
+      const stopPrice = unformatNumber(
+        (input.Input1.fStopPrice ?? '0').toString()
+      );
+      const limitPrice = unformatNumber(
+        (input.Input1.fLimitPrice ?? '0').toString()
+      );
 
-      if(input.Input1.szDealDiv === '079'){
-        if(orderType === 'UCES' && stopPrice >= price){
+      if (input.Input1.szDealDiv === '079') {
+        if (orderType === 'UCES' && stopPrice >= price) {
           return this.#toast('Please Check STOP Price!');
         }
 
-        if(orderType === 'UCEL' && limitPrice <= price){
+        if (orderType === 'UCEL' && limitPrice <= price) {
           return this.#toast('Please Check LIMIT Price!');
         }
       }
 
-      if(input.Input1.szDealDiv === '081'){
-        if(orderType === 'UCES' && stopPrice <= price){
+      if (input.Input1.szDealDiv === '081') {
+        if (orderType === 'UCES' && stopPrice <= price) {
           return this.#toast('Please Check STOP Price!');
         }
 
-        if(orderType === 'UCEL' && limitPrice >= price){
+        if (orderType === 'UCEL' && limitPrice >= price) {
           return this.#toast('Please Check LIMIT Price!');
         }
       }
@@ -504,7 +510,16 @@ class TradeHistory {
       deal: DealType | string;
     }) => {
       input.Input1.fStopPrice = unformatNumber(stopPrice.toString());
-      sendSetStopLimit({ symbol, price, amount, orderId, orderType, modType, stopNo, deal });
+      sendSetStopLimit({
+        symbol,
+        price,
+        amount,
+        orderId,
+        orderType,
+        modType,
+        stopNo,
+        deal,
+      });
     };
 
     const sendSetLimit = ({
@@ -524,12 +539,21 @@ class TradeHistory {
       amount: number;
       orderId: string;
       orderType: string;
-      modType?:string;
+      modType?: string;
       limitNo?: string;
       deal: DealType | string;
     }) => {
       input.Input1.fLimitPrice = unformatNumber(limitPrice.toString());
-      sendSetStopLimit({ symbol, price, amount, orderId, orderType, modType, limitNo, deal });
+      sendSetStopLimit({
+        symbol,
+        price,
+        amount,
+        orderId,
+        orderType,
+        modType,
+        limitNo,
+        deal,
+      });
     };
 
     const sendSetMarket = ({
@@ -549,7 +573,15 @@ class TradeHistory {
       modType?: string;
       deal: DealType | string;
     }) => {
-      sendSetStopLimit({ symbol, price, amount, orderId, orderType, modType, deal });
+      sendSetStopLimit({
+        symbol,
+        price,
+        amount,
+        orderId,
+        orderType,
+        modType,
+        deal,
+      });
     };
 
     useEffect(() => {
@@ -559,7 +591,8 @@ class TradeHistory {
             this.#toast(setStopLimitData.Message.data, { type: 'success' });
           this.#dispatch(resetSpecificState({ trcode: 't3215' }));
         } else {
-          if (setStopLimitData.Message.data) this.#toast(setStopLimitData.Message.data);
+          if (setStopLimitData.Message.data)
+            this.#toast(setStopLimitData.Message.data);
           this.#dispatch(resetSpecificState({ trcode: 't3215' }));
         }
       }
@@ -913,6 +946,71 @@ class TradeHistory {
       getOpenPosition,
     };
   }
+
+  getMyDetailTradeHistory() {
+    const { szAccNo, email } = useUserData();
+    const detailTradeHistoryOutput = useTypedSelector(
+      (state) => state.asyncData[`t3607`]
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3607',
+        userid: email,
+        token: '',
+      },
+      Input1: {
+        szAccNo: szAccNo,
+        nFromDate: '',
+        nToDate: '',
+      },
+    };
+    const { fetchData } = useAsyncData(input);
+
+    const getMyDetailTradeHistory = (startDate: Date, endDate: Date) => {
+      input.Input1.nFromDate = dateFormat(startDate, 'YMMdd');
+      input.Input1.nToDate = dateFormat(endDate, 'YMMdd');
+
+      fetchData({ ...input });
+    };
+
+    const parseData = (output): MyDetailTradeHistoryRowData[] => {
+      const outputData = output?.Output2 || [];
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
+        const result: MyDetailTradeHistoryRowData = {
+          orderNo: newD[0].slice(15, 21),
+          excuteNo: newD[1].slice(10, 16),
+          symbol: newD[2],
+          side: newD[3],
+          lot: newD[4],
+          orderPrice: newD[5],
+          stopPrice: newD[6],
+          limitPrice: newD[7],
+          orderKinds: translateSzPoCode(newD[8], false),
+          orderType: translateOrderType(newD[9], false),
+          stat: newD[10],
+          orderTime: newD[11],
+          managerId: newD[12],
+          ipAddress: newD[13],
+        };
+        return result;
+      });
+    };
+
+    return {
+      loading: !Boolean(detailTradeHistoryOutput),
+      noData:
+        Boolean(detailTradeHistoryOutput) &&
+        Number(detailTradeHistoryOutput.Output1?.szCnt ?? 0) === 0,
+      myDetailTradeHistory: parseData(detailTradeHistoryOutput),
+      getMyDetailTradeHistory,
+    };
+  }
 }
 
-export default TradeHistory;
+export default TradeService;

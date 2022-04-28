@@ -108,6 +108,8 @@ const GlobalStyle = createGlobalStyle`
 
     &.dark { background-color:#000; }
 
+    &.blue { background-color:#0c2945; }
+
     >div{
 
     }

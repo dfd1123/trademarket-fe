@@ -11,7 +11,7 @@ interface PropsType {
   onClick?: () => void;
 }
 
-const Tab = ({
+const TabComp = ({
   list,
   selected,
   ripple = true,
@@ -51,7 +51,7 @@ const Tab = ({
   );
 };
 
-const TabStyle = styled(Tab)`
+const Tab = styled(TabComp)`
   ${NoBorderButton} {
     &.active {
       background-color: #ddd;
@@ -59,7 +59,7 @@ const TabStyle = styled(Tab)`
   }
 `;
 
-export const YellowTabStyle = styled(TabStyle)`
+export const YellowTab = styled(Tab)`
   display: inline-flex;
   white-space: nowrap;
   font-weight: 700;
@@ -91,4 +91,4 @@ export const YellowTabStyle = styled(TabStyle)`
   }
 `;
 
-export default TabStyle;
+export default Tab;

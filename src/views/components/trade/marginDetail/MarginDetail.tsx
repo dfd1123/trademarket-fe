@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useTypedSelector } from '@/store';
 import useService from '@/hooks/useService';
 import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
-import { YellowTabStyle } from '@/views/components/common/tab/Tab';
+import { YellowTab } from '@/views/components/common/tab/Tab';
 import Margin from './Magin';
 import Detail from './Detail';
 
@@ -34,7 +34,7 @@ const MarginDetail = ({mobile} : PropsType) => {
   return (
     <MarginDetailStyle>
       <div className="tab-cont">
-        <YellowTabStyle list={['Margin', 'Detail']} onChange={setTabIndex} />
+        <YellowTab list={['Margin', 'Detail']} onChange={setTabIndex} />
       </div>
       <div className="pannel-cont">
         {tabIndex === 0 && <Margin info={marginData} />}
@@ -48,7 +48,7 @@ const MarginDetailStyle = styled.div`
   width: 420px;
   .tab-cont {
     background-color: #33353b;
-    ${YellowTabStyle} {
+    ${YellowTab} {
       height: 40px;
       .btn {
         width: 108px;

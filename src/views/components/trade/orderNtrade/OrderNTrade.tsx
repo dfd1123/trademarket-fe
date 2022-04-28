@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
 import useService from '@/hooks/useService';
-import { YellowTabStyle } from '@/views/components/common/tab/Tab';
+import { YellowTab } from '@/views/components/common/tab/Tab';
 import OrderTable from './OrderTable';
 import SimpleTradeHistory from './SimpleTradeHistory';
 
@@ -11,7 +11,7 @@ const OrderBooks = () => {
 
   return (
     <OrderBookStyle>
-      <YellowTabStyle list={['Order Book', 'Trades']} onChange={setTabIndex} />
+      <YellowTab list={['Order Book', 'Trades']} onChange={setTabIndex} />
       <div className="content-box">
         {tabIndex === 0 ? <OrderTable /> : <SimpleTradeHistory />}
       </div>
@@ -23,7 +23,7 @@ const OrderBookStyle = styled.div`
   width: 290px;
   margin: 0 5px;
 
-  ${YellowTabStyle} {
+  ${YellowTab} {
     width: 100%;
     height: 40px;
 

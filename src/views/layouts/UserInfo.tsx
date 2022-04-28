@@ -84,8 +84,8 @@ const UserInfoStyle = styled.div`
     margin-left: 10px;
     font-size: 17px;
     font-weight: 700;
-    color: ${(props) => props.theme.name === 'dark' ? 'rgba(255, 255, 255, 0.62)':'rgba(0, 0, 0, 0.87)'};
-    border:1px solid ${(props) => props.theme.name === 'dark' ? 'rgba(255, 255, 255, 0.62)':'rgba(0, 0, 0, 0.87)'};
+    color: ${(props) => props.theme.name !== 'light' ? 'rgba(255, 255, 255, 0.62)':'rgba(0, 0, 0, 0.87)'};
+    border:1px solid ${(props) => props.theme.name !== 'light' ? 'rgba(255, 255, 255, 0.62)':'rgba(0, 0, 0, 0.87)'};
   }
 
   @media (max-width: ${TABLET_SIZE}) {

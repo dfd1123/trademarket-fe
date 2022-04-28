@@ -41,6 +41,7 @@ const SelectBox = ({ className, name, list, value, disabled = false, onChange }:
 export const DarkSelectBox = styled(SelectBox)`
   position: relative;
   padding: 13px 10px;
+  padding-right: 30px;
   font-size: 14px;
   color: #fff;
   background-color: #1e1f23;
@@ -52,6 +53,7 @@ export const DarkSelectBox = styled(SelectBox)`
   background-repeat: no-repeat;
   background-size: 10px;
   background-position: calc(100% - 10px) center;
+  cursor: pointer;
 `;
 
 export default DarkSelectBox;

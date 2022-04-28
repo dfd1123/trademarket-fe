@@ -97,7 +97,7 @@ const OrderTableStyle = styled.div`
     .td {
       font-size: 12px;
       color: #fff;
-      line-height: 28px;
+      line-height: 24px;
       border-bottom: 1px solid #33353b;
     }
   }

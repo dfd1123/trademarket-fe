@@ -11,6 +11,7 @@
     "@material-table/core": "0.2.22",
     "@material-ui/core": "4.9.8",
     "@material-ui/pickers": "3.2.10",
+    "@mui/x-date-pickers": "^5.0.0-alpha.2",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/js-cookie": "^3.0.1",
     "@types/lodash": "4.14.178",
@@ -47,6 +48,7 @@
     "yarn": "^1.22.17"
   },
   "devDependencies": {
+    "@honkhonk/vite-plugin-svgr": "^1.1.0",
     "@originjs/vite-plugin-require-context": "^1.0.9",
     "@types/react": "^17.0.33",
     "@types/react-calendar": "^3.4.5",

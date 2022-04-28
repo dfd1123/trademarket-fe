@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { YellowTabStyle } from '@/views/components/common/tab/Tab';
+import { YellowTab } from '@/views/components/common/tab/Tab';
 import Chart from '@/views/components/trade/chart/Chart';
 import NewOrder from '@/views/components/trade/orderBox/newOrder/NewOrder';
 import ModifyCancel from '@/views/components/trade/orderBox/ModifyCancel/ModifyCancel';
@@ -53,7 +53,7 @@ const MobileChartLine = () => {
 
   return (
     <MobileChartLineStyle>
-      <YellowTabStyle
+      <YellowTab
         list={['Chart', 'Order', 'Stop/Limit', 'Modify/Cancel']}
         selected={tabIndex}
         onClick={clickTab}
@@ -71,7 +71,7 @@ const MobileChartLine = () => {
 
 const MobileChartLineStyle = styled.div`
   background-color: #1e1f23;
-  ${YellowTabStyle} {
+  ${YellowTab} {
     width: 100%;
     height: 40px;
 

@@ -65,6 +65,23 @@ export interface MyTradeHistoryRowData {
   pointPosition: number;
 }
 
+export interface MyDetailTradeHistoryRowData {
+  orderNo: string;
+  excuteNo: string;
+  symbol: string;
+  side: string;
+  lot: number;
+  orderPrice: string;
+  stopPrice: string;
+  limitPrice: string;
+  orderKinds: string;
+  orderType: string;
+  stat: string;
+  orderTime: string;
+  managerId: string;
+  ipAddress: string;
+}
+
 export interface OpenPositionRowData {
   ticketNo: string;
   symbol: string;

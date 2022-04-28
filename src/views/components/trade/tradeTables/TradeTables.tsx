@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { YellowTabStyle } from '@/views/components/common/tab/Tab';
+import { YellowTab } from '@/views/components/common/tab/Tab';
 import PositionDetail from './positionDetail/PositionDetail';
 import OpenOrders from './openOrders/OpenOrders';
 import TradingHistory from './tradingHistory/TradingHistory';
@@ -18,7 +18,7 @@ const TradeTables = () => {
   
   return (
     <TradeTablesStyle>
-      <YellowTabStyle
+      <YellowTab
         list={[
           'Position Detail',
           'Open Orders',
@@ -46,7 +46,7 @@ const TradeTables = () => {
 const TradeTablesStyle = styled.div`
   width: calc(100% - 425px);
   margin-right: 5px;
-  ${YellowTabStyle} {
+  ${YellowTab} {
     width: 100%;
     height: 40px;
 
@@ -91,7 +91,7 @@ const TradeTablesStyle = styled.div`
         height: 350px;
     }
 
-    ${YellowTabStyle} {
+    ${YellowTab} {
       white-space: break-spaces;
       .btn {
         padding: 0 10px;

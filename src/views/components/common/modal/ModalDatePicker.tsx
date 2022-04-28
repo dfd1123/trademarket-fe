@@ -3,51 +3,69 @@ import styled from 'styled-components';
 import { ModalStyle } from '@/views/components/common/modal/ModalTemplate';
 import { ModalComponentPropsType } from '@/store/modal/types/modal';
 import BasicButton from '@/views/components/common/Button';
-// import Calendar from '@/views/components/common/Calendar';
-import Calendar from 'react-calendar';
+import Calendar from '@/views/components/common/Calendar';
+// import Calendar from 'react-calendar';
 import { dateFormat } from '@/utils/dateUtils';
 import 'react-calendar/dist/Calendar.css';
+import RangeCalendar from '../RangeCalendar';
 
 interface PropsType extends ModalComponentPropsType {
   initialFocusedDate?: string;
+  initialDateRange?: string[];
+  range?: boolean;
 }
 
 const ModalDatePicker = ({
   initialFocusedDate,
+  initialDateRange,
+  range = false,
   className,
   nonModal,
   close,
   resolve,
 }: PropsType) => {
   const [date, setDate] = useState<string | null>(null);
+  const [dateRange, setDateRange] = useState<any[] | null>(null);
 
   const formatDate = (calendarLocale: string, date: Date) => {
     return dateFormat(date, 'd');
+  };
+
+  const submit = () => {
+    if (resolve) {
+      if (date) resolve(date);
+      else if (dateRange && dateRange.length === 2 && !dateRange.includes(null))
+        resolve(dateRange);
+    }
   };
 
   return (
     <ModalDatePickerStyle
       className={className}
       close={close}
-      nonModal={nonModal}>
+      nonModal={nonModal}
+    >
       <div className="calender-cont">
-        <Calendar
-          calendarType="US"
-          defaultView="month"
-          maxDetail="month"
-          view="month"
-          locale="ko-KR"
-          formatDay={formatDate}
-          value={initialFocusedDate ? new Date(initialFocusedDate) : new Date()}
-          onChange={(val: Date) => setDate(dateFormat(val, 'yyyy-MM-dd'))}
-          // orientation="portrait"
-          // initialFocusedDate={initialFocusedDate}
-          // onChange={setDate}
-        />
+        {range ? (
+          <RangeCalendar value={initialDateRange} onChange={setDateRange} />
+        ) : (
+          <Calendar
+            date={
+              initialFocusedDate
+                ? new Date(initialFocusedDate).getTime()
+                : new Date().getTime()
+            }
+            onChange={(val: Date) => setDate(dateFormat(val, 'yyyy-MM-dd'))}
+          />
+        )}
+
         <div className="btn-holder">
-          <BasicButton onClick={close}>취소</BasicButton>
-          <BasicButton onClick={() => resolve && resolve(date)}>
-            선택
+          <BasicButton onClick={close}>Cancel</BasicButton>
+          <BasicButton
+            onClick={submit}
+            disabled={range && (dateRange || []).length < 2}
+          >
+            Enter
           </BasicButton>
         </div>
       </div>
@@ -59,6 +77,27 @@ const ModalDatePickerStyle = styled(ModalStyle)`
   .calender-cont {
     border-radius: 5px;
     overflow: hidden;
+    .MuiPickerStaticWrapper-root {
+      > div {
+        flex-direction: column;
+        .PrivatePickersToolbar-root {
+          background-color: #1574bd;
+          color: #fff;
+          flex-direction: row;
+          max-width: 100%;
+          .MuiTypography-overline {
+            display: none;
+          }
+          .MuiTypography-h4 {
+            margin-left: 10px;
+            font-size: 28px;
+          }
+          .PrivateDatePickerToolbar-penIcon {
+            display: none;
+          }
+        }
+      }
+    }
   }
 
   .btn-holder {

@@ -14,8 +14,8 @@ let gnbList : GnbMenuType[] = [
     path: "",
     on: false,
     children: [
-      { id: "myAsset", name: "My Asset", path: "/" },
-      { id: "walletHistory", name: "History", path: "/" },
+      { id: "myAsset", name: "My Asset", path: "/wallet/asset" },
+      { id: "walletHistory", name: "History", path: "/wallet/history" },
       { id: "walletConvert", name: "Convert", path: "/" },
       { id: "depositWithdraw", name: "Deposit / Withdraw", path: "/" },
     ],
@@ -26,8 +26,8 @@ let gnbList : GnbMenuType[] = [
     path: "",
     on: false,
     children: [
-      { id: "excutionList", name: "Excution List", path: "/" },
-      { id: "oeDetail", name: "Order/Execution Detail", path: "/" },
+      { id: "excutionList", name: "Excution List", path: "/history/execution-list" },
+      { id: "oeDetail", name: "Order/Execution Detail", path: "/history/order-execution-list" },
       { id: "ceList", name: "Close Execution List", path: "/" },
     ],
   },

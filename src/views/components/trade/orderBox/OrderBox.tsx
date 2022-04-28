@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { YellowTabStyle } from '@/views/components/common/tab/Tab';
+import { YellowTab } from '@/views/components/common/tab/Tab';
 import NewOrder from './newOrder/NewOrder';
 import StopLimit from './StopLimit/StopLimit';
 import ModifyCancel from './ModifyCancel/ModifyCancel';
@@ -52,7 +52,7 @@ const OrderBox = ({ mobile }: PropsType) => {
 
   return (
     <OrderBoxStyle>
-      <YellowTabStyle
+      <YellowTab
         list={['New Order', 'Stop/Limit', 'Modify/Cancel']}
         selected={tabIndex}
         onClick={clickTab}
@@ -70,7 +70,7 @@ const OrderBox = ({ mobile }: PropsType) => {
 const OrderBoxStyle = styled.div`
   width: 420px;
 
-  ${YellowTabStyle} {
+  ${YellowTab} {
     width: 100%;
     height: 40px;
     .btn {

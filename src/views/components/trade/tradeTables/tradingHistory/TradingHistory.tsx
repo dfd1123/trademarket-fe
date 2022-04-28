@@ -7,7 +7,7 @@ import TableBd from '../TableBd';
 import TradeHistoryList from './TradeHistoryList';
 import { useTypedSelector } from '@/store';
 import { getDiffDate } from '@/utils/dateUtils';
-import NoData from '../NoData';
+import NoData from '../../../common/NoData';
 
 interface PropsType {}
 

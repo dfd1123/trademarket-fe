@@ -5,7 +5,7 @@ import useService from '@/hooks/useService';
 import OpenPositionList from './OpenPositionList';
 import TableHd from '../TableHd';
 import TableBd from '../TableBd';
-import NoData from '../NoData';
+import NoData from '../../../common/NoData';
 
 interface PropsType {}
 
