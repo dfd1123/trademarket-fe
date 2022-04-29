@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 import { useParams } from "react-router-dom";
+import useService from "@/hooks/useService";
+import { SubmitRequestDetailOutput } from "@/services/types/HelpCenter";
 
 const dummyData = [
   {
@@ -31,19 +33,29 @@ const dummyData = [
 
 const SubmitRequestDetail = () => {
   const { id } = useParams();
-  const { subject, content, answerContent, answerSubject } =
-    dummyData[(id ? Number(id) : 1) - 1];
+  const service = useService();
+  const { submitRequestDetail, getSubmitRequestDetail } =
+    service.helpCenter.getSubmitRequestData();
+
+  useEffect(() => {
+    // console.log(submitRequestDetail);
+    getSubmitRequestDetail(id ? id : "");
+  }, []);
 
   return (
     <HelpCenterLayout title="Submit Request">
       <ContainerStyle>
-        <div className="request-detail-subject detail-subject">{subject}</div>
-        <div className="request-detail-content detail-content">{content}</div>
+        <div className="request-detail-subject detail-subject">
+          {submitRequestDetail.title}
+        </div>
+        <div className="request-detail-content detail-content">
+          {submitRequestDetail.content}
+        </div>
         <div className="request-detail-answer-subject detail-subject">
-          {answerSubject}
+          {submitRequestDetail.answerTitle}
         </div>
         <div className="request-detail-answer-content detail-content">
-          {answerContent}
+          {submitRequestDetail.answerContent}
         </div>
       </ContainerStyle>
     </HelpCenterLayout>

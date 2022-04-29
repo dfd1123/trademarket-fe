@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, NavLink, useLocation, useParams } from "react-router-dom";
 
 const Sidebar = () => {
   const location = useLocation();
 
   // pathname에 의존성이 있어서 좋은 방법인지는 잘...
   useEffect(() => {
-    const query = `.hs-${location.pathname.replace("/", "")}`;
-    const menu = document.querySelector(query);
-    menu?.classList.add("menu-active");
-    console.log("render");
+    // const query = `.hs-${location.pathname.replace("/", "")}`;
+    // const menu = document.querySelector(query);
+    // menu?.classList.add("menu-active");
+    // console.log("render");
   }, []);
 
   return (
@@ -18,24 +18,24 @@ const Sidebar = () => {
       <h3 className="helpCenterNav-title">Help Center</h3>
       <ul className="helpCenterNav-listWrapper">
         <li className="help-center-menu hs-deposit">
-          <Link to="/deposit" className="deposit">
+          <NavLink to="/deposit" className="deposit">
             Deposit
-          </Link>
+          </NavLink>
         </li>
         <li className="help-center-menu hs-withdraw">
-          <Link to="/withdraw" className="withdraw">
+          <NavLink to="/withdraw" className="withdraw">
             Withdraw
-          </Link>
+          </NavLink>
         </li>
         <li className="help-center-menu hs-submit-request">
-          <Link to="/submit-request" className="submit-request">
+          <NavLink to="/submit-request" className="submit-request">
             Submit Request
-          </Link>
+          </NavLink>
         </li>
         <li className="help-center-menu hs-user-guide">
-          <Link to="/user-guide" className="user-guide">
+          <NavLink to="/user-guide" className="user-guide">
             User Guides
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </SidebarStyle>
@@ -69,7 +69,7 @@ const SidebarStyle = styled.aside`
       border-radius: 3px;
     }
 
-    .menu-active {
+    .active {
       color: #f39202 !important;
       background-color: #fdecd4;
     }

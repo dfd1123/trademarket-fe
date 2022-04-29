@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 import HelpCenterTableList from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableList";
@@ -7,6 +7,8 @@ import { BasicButton } from "@/views/components/common/Button";
 import { MOBILE_SIZE } from "@/assets/styles/responsiveBreakPoint";
 import HelpCenterTableHd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableHd";
 import HelpCenterTableBd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableBd";
+import useService from "@/hooks/useService";
+import useUserData from "@/hooks/useUserData";
 
 const date = new Date().toDateString();
 
@@ -79,6 +81,13 @@ const dummyData = [
 ];
 
 const Deposit = () => {
+  const service = useService();
+  const { deposit, getDepositHistory } = service.helpCenter.getDepositHistory();
+
+  useEffect(() => {
+    getDepositHistory();
+  }, []);
+
   return (
     <HelpCenterLayout title="Deposit">
       <ContainerStyle>
@@ -94,8 +103,8 @@ const Deposit = () => {
               list={tableHdLabel}
             />
             <HelpCenterTableBd>
-              {dummyData ? (
-                dummyData.map((item, index) => {
+              {deposit ? (
+                deposit.map((item, index) => {
                   return (
                     <HelpCenterTableList
                       key={index}

@@ -41,3 +41,27 @@ export interface DepositRequestHistoryOutput {
   stat: string;
   clientNo: string;
 }
+
+export interface WithdrawRequestHistoryOutput {
+  no: string;
+  accountNo: string;
+  dateTime: string;
+  amount: string;
+  stat: string;
+  etcInfo: string;
+}
+
+export interface SubmitRequestListDataOutput {
+  no: string;
+  requestSubject: string;
+  stat: string;
+  entryTime: string;
+  answerTime: string;
+}
+
+export interface SubmitRequestDetailOutput {
+  title: string;
+  content: string;
+  answerTitle: string;
+  answerContent: string;
+}

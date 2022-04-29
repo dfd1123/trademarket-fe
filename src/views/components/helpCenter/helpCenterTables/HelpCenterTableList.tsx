@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import {
   DepositRequestData,
+  DepositRequestHistoryOutput,
   SubmitRequestData,
+  SubmitRequestListDataOutput,
   WithdrawRequestData,
+  WithdrawRequestHistoryOutput,
 } from "@/services/types/HelpCenter";
 import { useNavigate } from "react-router-dom";
 
@@ -13,18 +16,19 @@ interface PropsType {
     label: string;
     ratio: number;
   }[];
-  info: DepositRequestData | WithdrawRequestData | SubmitRequestData;
-  linkTo?: string;
+  info:
+    | DepositRequestHistoryOutput
+    | WithdrawRequestHistoryOutput
+    | SubmitRequestListDataOutput;
+  onClick?: (id: string) => void;
 }
 
 const HelpCenterTableList = ({
   className,
   tableHdInfo,
   info,
-  linkTo,
+  onClick,
 }: PropsType) => {
-  const navigate = useNavigate();
-
   const row = Object.values(info).map((item, index) => {
     return (
       <span
@@ -33,7 +37,7 @@ const HelpCenterTableList = ({
         style={{
           width: `${tableHdInfo[index].ratio * 100}%`,
           color: "black",
-          textAlign: `${linkTo && index === 2 ? "start" : "center"}`,
+          textAlign: `${onClick && index === 2 ? "start" : "center"}`,
           overflow: "hidden",
           textOverflow: "ellipsis",
           whiteSpace: "nowrap",
@@ -46,8 +50,8 @@ const HelpCenterTableList = ({
 
   return (
     <HelpCenterTableListStyle>
-      {linkTo ? (
-        <div style={{ width: "100%" }} onClick={() => navigate(linkTo)}>
+      {onClick ? (
+        <div style={{ width: "100%" }} onClick={() => onClick(info.no)}>
           {row}
         </div>
       ) : (
