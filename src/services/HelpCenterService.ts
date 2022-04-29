@@ -169,7 +169,6 @@ class HelpCenterService {
         szReq_Seq_No: id,
         szPrc_Seq_No: "1",
       };
-      console.log(getSubmitRequestDetail);
 
       fetchData({ ...submitRequestDetailInput });
     };
@@ -189,7 +188,6 @@ class HelpCenterService {
     };
 
     const parseSubmitRequestDetailData = (data) => {
-      console.log(data);
       return {
         title: data.szQue_Title_Data,
         content: data.szQue_Memo,

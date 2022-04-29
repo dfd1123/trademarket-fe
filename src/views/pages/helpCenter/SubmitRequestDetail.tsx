@@ -5,32 +5,6 @@ import { useParams } from "react-router-dom";
 import useService from "@/hooks/useService";
 import { SubmitRequestDetailOutput } from "@/services/types/HelpCenter";
 
-const dummyData = [
-  {
-    no: 1,
-    stat: "333rasdf",
-    subject: "fsgasflgjsdlkgjalsdgjlaksgjlasgjljsgaj",
-    content:
-      "Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.",
-    entryTime: "2020-02-02",
-    answerTime: "2020-02-02",
-    answerSubject: "Velox gluten saepe resuscitabos bubo est.",
-    answerContent:
-      "Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.",
-  },
-  {
-    no: 2,
-    stat: "333rasdf",
-    subject:
-      "as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu",
-    content: "asdfasdf",
-    entryTime: "2020-02-02",
-    answerTime: "2020-02-02",
-    answerSubject: "",
-    answerContent: "",
-  },
-];
-
 const SubmitRequestDetail = () => {
   const { id } = useParams();
   const service = useService();
@@ -38,9 +12,21 @@ const SubmitRequestDetail = () => {
     service.helpCenter.getSubmitRequestData();
 
   useEffect(() => {
-    // console.log(submitRequestDetail);
     getSubmitRequestDetail(id ? id : "");
   }, []);
+
+  const breakLine = (line: string | undefined) =>
+    line
+      ? line
+          .trim()
+          .split("#")
+          .map((item) => (
+            <span>
+              {item}
+              <br />
+            </span>
+          ))
+      : null;
 
   return (
     <HelpCenterLayout title="Submit Request">
@@ -49,13 +35,13 @@ const SubmitRequestDetail = () => {
           {submitRequestDetail.title}
         </div>
         <div className="request-detail-content detail-content">
-          {submitRequestDetail.content}
+          {breakLine(submitRequestDetail.content)}
         </div>
         <div className="request-detail-answer-subject detail-subject">
           {submitRequestDetail.answerTitle}
         </div>
         <div className="request-detail-answer-content detail-content">
-          {submitRequestDetail.answerContent}
+          {breakLine(submitRequestDetail.answerContent)}
         </div>
       </ContainerStyle>
     </HelpCenterLayout>
