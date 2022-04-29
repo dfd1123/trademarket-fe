@@ -41,7 +41,7 @@ const HelpCenterStyle = styled.div`
   .content-section {
     width: 100%;
     height: 100%;
-    padding: 0 40px 0 180px;
+    padding: 0 40px 0 220px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

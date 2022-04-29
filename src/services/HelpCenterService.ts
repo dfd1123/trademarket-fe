@@ -133,6 +133,9 @@ class HelpCenterService {
     const submitRequestDetail = useTypedSelector(
       (state) => state.asyncData["t2713"]
     );
+    const submitRequestQuestion = useTypedSelector(
+      (state) => state.asyncData["t2510"]
+    );
 
     const { email, szAccNo } = useUserData();
     const submitRequestInput: TransactionInputType = {
@@ -148,6 +151,14 @@ class HelpCenterService {
         function: "D",
         termtype: "HTS",
         trcode: "t2713",
+      },
+      Input1: {},
+    };
+    const submitRequestQuestionInput: TransactionInputType = {
+      Header: {
+        function: "D",
+        termtype: "HTS",
+        trcode: "t2510",
       },
       Input1: {},
     };
@@ -171,6 +182,19 @@ class HelpCenterService {
       };
 
       fetchData({ ...submitRequestDetailInput });
+    };
+
+    const sendSubmitRequestQuestion = (title: string, content: string) => {
+      submitRequestQuestionInput.Input1 = {
+        szCust_No: email,
+        szReq_Seq_No: "0",
+        szQue_Title_Data: title,
+        szQue_Data1: "",
+        szQue_Data2: "",
+        szQue_Data3: "",
+        szQue_Memo: content,
+      };
+      fetchData({ ...submitRequestQuestionInput });
     };
 
     const parseSubmitRequestListData = (
@@ -203,6 +227,7 @@ class HelpCenterService {
       submitRequestDetail: parseSubmitRequestDetailData(
         submitRequestDetail?.Output1 ? submitRequestDetail.Output1 : {}
       ),
+      sendSubmitRequestQuestion,
       getSubmitRequestList,
       getSubmitRequestDetail,
     };

@@ -7,14 +7,25 @@ import TextInput, {
 } from "@/views/components/common/input/TextInput";
 import BasicButton from "@/views/components/common/Button";
 import TextArea from "@/views/components/common/input/TextArea";
+import useService from "@/hooks/useService";
+import { useNavigate } from "react-router-dom";
 
 const SubmitRequestWrite = () => {
+  const service = useService();
+  const navigate = useNavigate();
   const [titleText, setTitleText] = useState("");
   const [contentText, setContentText] = useState("");
+  const { sendSubmitRequestQuestion } =
+    service.helpCenter.getSubmitRequestData();
 
   const onSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
-    alert("submit");
+    if (titleText.trim() === "" || contentText.trim() === "") {
+      alert("Title or Content is empty.");
+      return;
+    }
+    sendSubmitRequestQuestion(titleText, contentText);
+    navigate("/submit-request");
   };
 
   const onChangeTitle = (e) => {
