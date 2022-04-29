@@ -87,8 +87,6 @@ class WalletService {
   getUnrealProfitNLoss(){
     const { szAccNo } = useUserData();
     const unrealProfitNLoss = useTypedSelector((state) => state.asyncData['t3608']?.Output2 || []);
-
-    console.log(unrealProfitNLoss);
     
     const input: TransactionInputType = {
       Header: {

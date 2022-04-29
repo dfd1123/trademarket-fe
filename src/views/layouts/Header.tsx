@@ -63,6 +63,7 @@ const Header = React.memo(function Header({ theme }: { theme: DefaultTheme }) {
 
 const StyleHeader = styled.header`
   position: relative;
+  z-index: 11;
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;

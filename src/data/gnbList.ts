@@ -28,7 +28,7 @@ let gnbList: GnbMenuType[] = [
     children: [
       { id: "excutionList", name: "Excution List", path: "/history/execution-list" },
       { id: "oeDetail", name: "Order/Execution Detail", path: "/history/order-execution-list" },
-      { id: "ceList", name: "Close Execution List", path: "/" },
+      { id: "ceList", name: "Close Execution List", path: "/history/close-execution-list" },
     ],
   },
   {

@@ -7,21 +7,23 @@ import { MOBILE_SIZE } from '@/assets/styles/responsiveBreakPoint';
 import { dateFormat } from '@/utils/dateUtils';
 
 export interface HistoryOutletContext {
+    date: string;
     dateRange: string[];
 }
 
 const History = () => {
   const today = new Date();
   const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+  const [date, setDate] = useState(dateFormat(today));
   const [dateRange, setDateRange] = useState<string[]>([
     dateFormat(yesterday),
     dateFormat(today),
   ]);
   return (
     <div>
-      <ControlPanel dateRange={dateRange} onChangeDate={setDateRange} />
+      <ControlPanel date={date} dateRange={dateRange} onChangeDate={setDate} onChangeDateRange={setDateRange} />
       <HistoryStyle>
-        <Outlet context={{dateRange}} />
+        <Outlet context={{date, dateRange}} />
       </HistoryStyle>
     </div>
   );
