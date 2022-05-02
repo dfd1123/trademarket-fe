@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 import IntegerInput from "@/views/components/common/input/IntegerInput";
@@ -8,6 +8,8 @@ import { MOBILE_SIZE } from "@/assets/styles/responsiveBreakPoint";
 import BasicButton from "@/views/components/common/Button";
 import HelpCenterTableHd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableHd";
 import HelpCenterTableBd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableBd";
+import useService from "@/hooks/useService";
+import useUserData from "@/hooks/useUserData";
 
 const date = new Date().toDateString();
 
@@ -20,66 +22,15 @@ const tableHdLabel = [
   { label: "Etc Information", ratio: 0.2 },
 ];
 
-const dummyData = [
-  {
-    no: 1,
-    accountNo: "333rasdf",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-  {
-    no: 2,
-    accountNo: "wqt",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-  {
-    no: 3,
-    accountNo: "dfggabv",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-  {
-    no: 4,
-    accountNo: "fgdfg",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-  {
-    no: 5,
-    accountNo: "xcbear",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-  {
-    no: 6,
-    accountNo: "adrfgarwg",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-  {
-    no: 7,
-    accountNo: "333rabxbxsdf",
-    dateTime: date,
-    amount: 45,
-    state: "cancel",
-    etcInfo: "dddd",
-  },
-];
-
 const Widthraw = () => {
+  const service = useService();
+  const { withdraw, getWithdrawHistory } =
+    service.helpCenter.getWithdrawHistory();
+
+  useEffect(() => {
+    getWithdrawHistory();
+  }, []);
+
   return (
     <HelpCenterLayout title="withdraw">
       <ContainerStyle>
@@ -99,8 +50,8 @@ const Widthraw = () => {
               list={tableHdLabel}
             />
             <HelpCenterTableBd>
-              {dummyData ? (
-                dummyData.map((item, index) => {
+              {withdraw ? (
+                withdraw.map((item, index) => {
                   return (
                     <HelpCenterTableList
                       key={index}

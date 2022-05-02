@@ -1,49 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 import { useParams } from "react-router-dom";
-
-const dummyData = [
-  {
-    no: 1,
-    stat: "333rasdf",
-    subject: "fsgasflgjsdlkgjalsdgjlaksgjlasgjljsgaj",
-    content:
-      "Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.",
-    entryTime: "2020-02-02",
-    answerTime: "2020-02-02",
-    answerSubject: "Velox gluten saepe resuscitabos bubo est.",
-    answerContent:
-      "Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est. Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.Velox gluten saepe resuscitabos bubo est.",
-  },
-  {
-    no: 2,
-    stat: "333rasdf",
-    subject:
-      "as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu",
-    content: "asdfasdf",
-    entryTime: "2020-02-02",
-    answerTime: "2020-02-02",
-    answerSubject: "",
-    answerContent: "",
-  },
-];
+import useService from "@/hooks/useService";
+import { SubmitRequestDetailOutput } from "@/services/types/HelpCenter";
 
 const SubmitRequestDetail = () => {
   const { id } = useParams();
-  const { subject, content, answerContent, answerSubject } =
-    dummyData[(id ? Number(id) : 1) - 1];
+  const service = useService();
+  const { submitRequestDetail, getSubmitRequestDetail } =
+    service.helpCenter.getSubmitRequestData();
+
+  useEffect(() => {
+    getSubmitRequestDetail(id ? id : "");
+  }, []);
+
+  const breakLine = (line: string | undefined) =>
+    line
+      ? line
+          .trim()
+          .split("#")
+          .map((item) => (
+            <span>
+              {item}
+              <br />
+            </span>
+          ))
+      : null;
 
   return (
     <HelpCenterLayout title="Submit Request">
       <ContainerStyle>
-        <div className="request-detail-subject detail-subject">{subject}</div>
-        <div className="request-detail-content detail-content">{content}</div>
+        <div className="request-detail-subject detail-subject">
+          {submitRequestDetail.title}
+        </div>
+        <div className="request-detail-content detail-content">
+          {breakLine(submitRequestDetail.content)}
+        </div>
         <div className="request-detail-answer-subject detail-subject">
-          {answerSubject}
+          {submitRequestDetail.answerTitle}
         </div>
         <div className="request-detail-answer-content detail-content">
-          {answerContent}
+          {breakLine(submitRequestDetail.answerContent)}
         </div>
       </ContainerStyle>
     </HelpCenterLayout>

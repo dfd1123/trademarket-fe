@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import HelpCenterLayout from "@/views/components/helpCenter/HelpCenterLayout";
 import HelpCenterTableList from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableList";
-import TableBd from "@/views/components/trade/tradeTables/TableBd";
-import TableHd from "@/views/components/trade/tradeTables/TableHd";
+import HelpCenterTableHd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableHd";
+import HelpCenterTableBd from "@/views/components/helpCenter/helpCenterTables/HelpCenterTableBd";
 import { BasicButton } from "@/views/components/common/Button";
 import { MOBILE_SIZE } from "@/assets/styles/responsiveBreakPoint";
 import IntegerInput from "@/views/components/common/input/IntegerInput";
 import { useNavigate, Link } from "react-router-dom";
+import useService from "@/hooks/useService";
+import useUserData from "@/hooks/useUserData";
 
 const tableHdLabel = [
   { label: "No", ratio: 0.1 },
@@ -17,26 +19,19 @@ const tableHdLabel = [
   { label: "Answer Time", ratio: 0.15 },
 ];
 
-const dummyData = [
-  {
-    no: 1,
-    stat: "333rasdf",
-    subject: "fsgasflgjsdlkgjalsdgjlaksgjlasgjljsgaj",
-    entryTime: "2020-02-02",
-    answerTime: "2020-02-02",
-  },
-  {
-    no: 2,
-    stat: "333rasdf",
-    subject:
-      "as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu as ldfjhaidslfj werijrsafg zxvnlkzxv ewtj opeoppopi pilmnnu",
-    entryTime: "2020-02-02",
-    answerTime: "2020-02-02",
-  },
-];
-
 const SubmitRequest = () => {
   const navigate = useNavigate();
+  const service = useService();
+  const { submitRequestList, getSubmitRequestList, getSubmitRequestDetail } =
+    service.helpCenter.getSubmitRequestData();
+
+  useEffect(() => {
+    getSubmitRequestList();
+  }, []);
+
+  const onClick = (id: string) => {
+    navigate(`/submit-request/${id}`);
+  };
 
   return (
     <HelpCenterLayout title="Withdraw">
@@ -51,27 +46,27 @@ const SubmitRequest = () => {
         </div>
         <div className="submit-request-table-container">
           <div className="submit-request-table-wrapper">
-            <TableHd
+            <HelpCenterTableHd
               className="submit-request-request-tableHd"
               list={tableHdLabel}
             />
-            <TableBd>
-              {dummyData ? (
-                dummyData.map((item, index) => {
+            <HelpCenterTableBd>
+              {submitRequestList ? (
+                submitRequestList.map((item, index) => {
                   return (
                     <HelpCenterTableList
                       key={index}
                       className="submit-request-table-subject"
                       tableHdInfo={tableHdLabel}
                       info={item}
-                      linkTo={`/submit-request/${String(item.no)}`}
+                      onClick={onClick}
                     />
                   );
                 })
               ) : (
                 <div>no data</div>
               )}
-            </TableBd>
+            </HelpCenterTableBd>
           </div>
         </div>
       </ContainerStyle>
