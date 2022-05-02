@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styled from 'styled-components';
 import BasicButton from '../common/Button';
 import SelectBox from '../common/input/SelectBox';
@@ -16,37 +16,53 @@ import { useLocation } from 'react-router';
 import coinList from '@/data/coinList';
 import { AssetData } from '@/services/types/Wallet';
 
-const ControlPanel = () => {
-  const today = new Date();
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
-  const list = [
-    { name: 'BTC', value: 'BTC' },
-    { name: 'ETH', value: 'ETH' },
-    { name: 'USDT', value: 'USDT' },
-    { name: 'XRP', value: 'XRP' },
-  ];
+interface PropsType {
+  coin: string;
+  date: string;
+  dateRange: string[];
+  onChangeDate: (date: string) => void;
+  onChangeDateRange: (dateRange: string[]) => void;
+  onChangeCoin: (symbol: string) => void;
+}
 
+const ControlPanel = ({
+  coin,
+  date,
+  dateRange,
+  onChangeCoin,
+  onChangeDate,
+  onChangeDateRange,
+}: PropsType) => {
   const services = useService();
   const { pathname } = useLocation();
-  const { getCoinCurrentInfo } = services.wallet.getCoinCurrentInfo();
-
-  const [coin, setCoin] = useState('BTC');
-  const [assetData, setAssetData] = useState<AssetData | null>(null);
-  const [dateRange, setDateRange] = useState<string[]>([
-    dateFormat(yesterday),
-    dateFormat(today),
-  ]);
-
-  const { myAssetData, getMyAsset } = services.wallet.getMyAsset(coin);
-  const {unrealProfitNLoss, getUnrealProfitNLoss} = services.wallet.getUnrealProfitNLoss();
-
   const { openModal } = useModal();
+
+  const [assetData, setAssetData] = useState<AssetData | null>(null);
+  const [tempDate, setTempDate] = useState(date);
+  const [tempDateRange, setTempDateRange] = useState<string[]>(dateRange);
+
+  const { myAssetData, getMyAsset } = services.wallet.getMyAsset();
+  const { unrealProfitNLoss, getUnrealProfitNLoss } =
+    services.wallet.getUnrealProfitNLoss();
+
+  const coinList = useMemo(() => {
+    if (myAssetData.length > 0) 
+      return myAssetData.map((data) => ({
+        name: data[1].trim(),
+        value: data[1].trim(),
+      }));
+  }, [myAssetData]);
 
   const openDatePickerModal = async () => {
     const result = await openModal(ModalDatePicker, {
       props: { initialDateRange: dateRange, range: true },
     });
-    setDateRange(result);
+    setTempDateRange(result);
+  };
+
+  const inquiry = () => {
+    onChangeDate(tempDate);
+    onChangeDateRange(tempDateRange);
   };
 
   useEffect(() => {
@@ -58,7 +74,7 @@ const ControlPanel = () => {
         assetValue: 0,
       });
     }
-  }, [myAssetData, coin]);
+  }, [myAssetData]);
 
   useEffect(() => {
     getMyAsset();
@@ -66,9 +82,6 @@ const ControlPanel = () => {
 
   useEffect(() => {
     getUnrealProfitNLoss();
-    coinList.forEach((coin) => {
-      if (coin) getCoinCurrentInfo(coin as string);
-    });
   }, [pathname]);
 
   return (
@@ -76,7 +89,12 @@ const ControlPanel = () => {
       <div className="tit">
         <div className="coin-select">
           <img src={`/img/coin/ico-${coin.toLowerCase()}.svg`} alt={coin} />
-          <SelectBox name="curNo" list={list} onChange={setCoin} />
+          <SelectBox
+            name="curNo"
+            list={coinList}
+            value={coin}
+            onChange={onChangeCoin}
+          />
         </div>
         <b> WALLET</b>
       </div>
@@ -92,7 +110,10 @@ const ControlPanel = () => {
           <div className="panel-box">
             <span className="label">Unrealized Profit / Loss</span>
             <div className="value">
-              {(unrealProfitNLoss[0] || []).length > 5 ? unrealProfitNLoss[0][6] : 0.00}<i>USDT</i>
+              {(unrealProfitNLoss[0] || []).length > 5
+                ? unrealProfitNLoss[0][6]
+                : 0.0}
+              <i>USDT</i>
             </div>
           </div>
         </div>
@@ -101,10 +122,12 @@ const ControlPanel = () => {
             <span className="label">DATE</span>
             <div className="value">
               <IconCalendar />
-              {dateRange[0]} <i>~</i> {dateRange[1]}
+              {tempDateRange[0]} <i>~</i> {tempDateRange[1]}
             </div>
           </div>
-          <BasicButton className="btn-inquiry">INQUIRY</BasicButton>
+          <BasicButton className="btn-inquiry" onClick={inquiry}>
+            INQUIRY
+          </BasicButton>
         </div>
       </div>
     </ControlPanelStyle>

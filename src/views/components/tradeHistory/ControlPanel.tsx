@@ -28,7 +28,7 @@ const ControlPanel = ({date, dateRange, onChangeDate, onChangeDateRange}: PropsT
   const {szAccNo} = useUserData();
 
   const [title, setTitle] = useState('');
-  const [tempDate, setTempDate] = useState(dateFormat(new Date()));
+  const [tempDate, setTempDate] = useState(date);
   const [tempDateRange, setTempDateRange] = useState<string[]>(dateRange);
 
   const {unrealProfitNLoss, getUnrealProfitNLoss} = services.wallet.getUnrealProfitNLoss();

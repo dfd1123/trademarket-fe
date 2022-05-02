@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import iconArrowWhite from '@/assets/img/icon/icon-arrow-d-white.svg';
+import iconArrowBlack from '@/assets/img/icon/icon-arrow-d-black.svg';
 
 interface PropsType {
   className?: string;
@@ -50,6 +51,24 @@ export const DarkSelectBox = styled(SelectBox)`
   outline: transparent;
   appearance: none;
   background-image: url(${iconArrowWhite});
+  background-repeat: no-repeat;
+  background-size: 10px;
+  background-position: calc(100% - 10px) center;
+  cursor: pointer;
+`;
+
+export const LightSelectBox = styled(SelectBox)`
+  position: relative;
+  padding: 13px 10px;
+  padding-right: 30px;
+  font-size: 14px;
+  color: #383838;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  outline: transparent;
+  appearance: none;
+  background-image: url(${iconArrowBlack});
   background-repeat: no-repeat;
   background-size: 10px;
   background-position: calc(100% - 10px) center;

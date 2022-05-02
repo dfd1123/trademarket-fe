@@ -15,6 +15,8 @@ const asyncData = createSlice({
                 if(coinSymbol === 0) coinSymbol = '';
                 else coinSymbol = `_${coinSymbol}`;
             } else if (action.payload.Header.trcode === 't9732'){
+                if(!action.payload.Output1) return;
+
                 coinSymbol = action.payload.Output1.szCurNo.trim();
                 if(coinSymbol === 0) coinSymbol = '';
                 else coinSymbol = `_${coinSymbol}`;

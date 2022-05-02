@@ -16,7 +16,7 @@ let gnbList: GnbMenuType[] = [
     children: [
       { id: "myAsset", name: "My Asset", path: "/wallet/asset" },
       { id: "walletHistory", name: "History", path: "/wallet/history" },
-      { id: "walletConvert", name: "Convert", path: "/" },
+      { id: "walletConvert", name: "Convert", path: "/wallet/convert" },
       { id: "depositWithdraw", name: "Deposit / Withdraw", path: "/" },
     ],
   },
