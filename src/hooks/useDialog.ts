@@ -5,6 +5,7 @@ import { DialogType } from '@/store/modal/types/dialog';
 
 interface DialogOption {
   title?: string;
+  promptType?: string;
   msg?: string;
   children?: FunctionComponent;
   value?: string | number;
@@ -27,7 +28,7 @@ const useDialog = (): DialogHookReturn => {
   const dispatch = useDispatch();
 
   const openDialog = (type: "alert" | "confirm" | "prompt", options: DialogOption) => {
-    let { title, msg, children, button, value } = options;
+    let { title, promptType, msg, children, button, value } = options;
     const basicButton : {yes:string, no?: string} = {yes: '확인', no: '취소'};
 
     switch(type){
@@ -48,6 +49,7 @@ const useDialog = (): DialogHookReturn => {
     return new Promise<any>((resolve, reject) => {
       const dialog: DialogType = {
         type: type,
+        promptType: promptType ?? 'text',
         title: title ?? '',
         msg: msg ?? '',
         children,
@@ -71,7 +73,7 @@ const useDialog = (): DialogHookReturn => {
     return openDialog('confirm', options);
   }
 
-  const prompt = (message = '', options: DialogOption = {title: '', msg: '', children: undefined, value: '', button: {yes: '확인', no: '취소'}}): Promise<unknown> => {
+  const prompt = (message = '', options: DialogOption = {title: '', promptType: 'text', msg: '', children: undefined, value: '', button: {yes: '확인', no: '취소'}}): Promise<unknown> => {
     options.msg = message;
     return openDialog('prompt', options);
   }

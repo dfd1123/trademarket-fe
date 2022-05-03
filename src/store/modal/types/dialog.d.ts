@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 
 export interface DialogType {
   type: "alert" | "confirm" | "prompt";
+  promptType: string;
   title?: string;
   msg: string;
   children?: FunctionComponent;
@@ -16,6 +17,7 @@ export interface DialogType {
 
 export interface DialogComponentPropsType {
   title?: boolean;
+  promptType?: string;
   msg: string;
   children?: FunctionComponent;
   value?: string | number;

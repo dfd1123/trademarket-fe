@@ -6,9 +6,18 @@ import { useTypedSelector } from '@/store';
 import coinList from '@/data/coinList';
 import { resetSpecificState } from '@/store/asyncData/asyncData';
 import useUserData from '@/hooks/useUserData';
-import { AssetData, CurrentCoinInfo, WalletHistoryData } from './types/Wallet';
+import {
+  AssetData,
+  CurrentCoinInfo,
+  WalletFutureTradeHistoryData,
+  WalletHistoryData,
+} from './types/Wallet';
 import { dateFormat } from '@/utils/dateUtils';
-import { translateSzPoCode, translateOrderType } from '@/utils/translateUtils';
+import {
+  translateSzPoCode,
+  translateOrderType,
+  translateAccountingCode,
+} from '@/utils/translateUtils';
 
 class WalletService {
   #ws;
@@ -60,7 +69,8 @@ class WalletService {
   getMyAsset() {
     const { szAccNo } = useUserData();
     const myAssetData = useTypedSelector(
-      (state) => state.asyncData['t372C']?.Output2 || [], (a,b) => !a.length
+      (state) => state.asyncData['t372C']?.Output2 || [],
+      (a, b) => !a.length
     );
 
     const input: TransactionInputType = {
@@ -183,6 +193,63 @@ class WalletService {
         Number(walletHistoryData.Output1?.szCnt ?? 0) === 0,
       walletHistory: parseData(walletHistoryData),
       getWalletHistory,
+    };
+  }
+
+  getFutureTradeHistory() {
+    const { szAccNo } = useUserData();
+    const futureTradeHistoryData = useTypedSelector(
+      (state) => state.asyncData['t2500']
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't2500',
+      },
+      Input1: {
+        szAccNo: szAccNo,
+        nFromDate: '',
+        nToDate: '',
+        con_key: '',
+      },
+    };
+
+    const { fetchData } = useAsyncData(input);
+
+    const getFutureTradeHistory = (startDate: Date, endDate: Date) => {
+      input.Input1.nFromDate = dateFormat(startDate, 'YMMdd');
+      input.Input1.nToDate = dateFormat(endDate, 'YMMdd');
+
+      fetchData({ ...input });
+    };
+
+    const parseData = (output): WalletFutureTradeHistoryData[] => {
+      const outputData = output?.Output2 || [];
+      return outputData.map((row) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
+        const result: WalletFutureTradeHistoryData = {
+          date: dateFormat(new Date(newD[5].trim())),
+          no: newD[0],
+          accountingCode: translateAccountingCode(newD[2].trim()),
+          point: newD[3],
+          pointCurrentBal: newD[4],
+          excutionNo: newD[7].trim(),
+        };
+        return result;
+      });
+    };
+
+    return {
+      loading: !Boolean(futureTradeHistoryData),
+      noData:
+        Boolean(futureTradeHistoryData) &&
+        Number(futureTradeHistoryData.Output1?.szCnt ?? 0) === 0,
+      futureTradeHistory: parseData(futureTradeHistoryData),
+      getFutureTradeHistory,
     };
   }
 }

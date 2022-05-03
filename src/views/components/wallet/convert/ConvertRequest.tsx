@@ -6,13 +6,16 @@ import { LightSelectBox } from '@/views/components/common/input/SelectBox';
 import TextInput from '@/views/components/common/input/TextInput';
 import useService from '@/hooks/useService';
 import { MOBILE_SIZE } from '@/assets/styles/responsiveBreakPoint';
+import useDialog from '@/hooks/useDialog';
 
 const ConvertRequest = () => {
   const services = useService();
+  const {prompt} = useDialog();
 
   const { myAssetData, getMyAsset } = services.wallet.getMyAsset();
 
   const [tabIndex, setTabIndex] = useState(0);
+  const [reqAmount, setReqAmount] = useState(0);
 
   const coinList = useMemo(
     () =>
@@ -22,6 +25,17 @@ const ConvertRequest = () => {
       })),
     [myAssetData]
   );
+
+  const reqConvert = async () => {
+    const password = await prompt('Password', {title: 'Enter your password', promptType: 'password'});
+
+    if(reqAmount === 0){
+      alert('Please enter a quantity of 0 or more');
+      return;
+    }else if(!password) return;
+
+    
+  }
 
   useEffect(() => {
     getMyAsset();
@@ -93,7 +107,7 @@ const ConvertRequest = () => {
         </div>
       </div>
       <div className="btn-cont">
-        <BasicButton className="btn-req">Request</BasicButton>
+        <BasicButton className="btn-req" onClick={reqConvert}>Request</BasicButton>
       </div>
     </ConvertRequestStyle>
   );

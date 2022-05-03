@@ -18,6 +18,7 @@ let gnbList: GnbMenuType[] = [
       { id: "walletHistory", name: "History", path: "/wallet/history" },
       { id: "walletConvert", name: "Convert", path: "/wallet/convert" },
       { id: "depositWithdraw", name: "Deposit / Withdraw", path: "/" },
+      { id: "futureTrade", name: "Future Trade", path: "/wallet/future-trade" },
     ],
   },
   {

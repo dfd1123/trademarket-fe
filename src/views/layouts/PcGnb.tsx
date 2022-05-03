@@ -77,7 +77,7 @@ const StyledPcGnb = styled.div`
 
       &:hover {
         .drop-menu {
-          max-height: 150px;
+          max-height: 175px;
         }
       }
 

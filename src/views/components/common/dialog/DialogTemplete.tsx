@@ -40,35 +40,39 @@ const DialogTempleteStyle = styled.div`
 
       > strong {
         display: block;
-        padding-left: 56px;
-        padding-right: 16px;
-        font-size: 18px;
-        font-weight: 500;
-        color: #fff;
-        line-height: 56px;
+        padding: 18px 20px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #777;
+        text-align: center;
+        background-color: #fff;
         letter-spacing: -1px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        background-color: #1574bd;
-        background-image: url(${icoAlertSuccess});
-        background-repeat: no-repeat;
-        background-position: 17px center;
       }
 
       .body {
-        padding: 0 16px;
+        padding: 0 20px;
         background-color: #fff;
         .msg {
-          padding: 32px 0;
-          font-size: 14px;
+          padding-bottom: 20px;
+          font-size: 12px;
           color: #353535;
-          line-height: 20px;
+          text-align: center;
+        }
+        .inp{
+          >div{ 
+            width:100%;
+            height: 40px;
+           }
         }
       }
+
+
       .btn-holder {
-          padding: 8px 16px;
-          text-align: right;
+          padding: 16px 16px 20px;
+          text-align: center;
           background-color: #fff;
 
           ${BasicButton} {
@@ -76,13 +80,14 @@ const DialogTempleteStyle = styled.div`
             min-height: 32px;
             font-size: 14px;
             color: #1574bd;
-            border: none;
+            border: 1px solid #1574bd;
             border-radius: 3px;
             background-color: #fff;
 
             &:nth-child(2) {
               color: #fff;
               background-color: #1574bd;
+              margin-left: 5px;
             }
           }
         }
