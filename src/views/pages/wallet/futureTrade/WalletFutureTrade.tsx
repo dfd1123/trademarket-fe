@@ -36,19 +36,12 @@ const WalletFutureTrade = () => {
   const { loading, noData, futureTradeHistory, getFutureTradeHistory } =
     services.wallet.getFutureTradeHistory();
 
-  const list = useMemo(
-    () => futureTradeHistory.map((info, id) => ({ ...info, id })),
-    [futureTradeHistory]
-  );
-
   useEffect(() => {
     const startDate = new Date(dateRange[0]);
     const endDate = new Date(dateRange[1]);
 
     getFutureTradeHistory(startDate, endDate);
   }, [coin, dateRange]);
-
-  console.log(futureTradeHistory);
 
   return (
     <WalletFutureTradeStyle>
@@ -58,7 +51,7 @@ const WalletFutureTrade = () => {
         <div style={{ height: 800, width: '100%' }}>
           {!loading && (
             <DataGrid
-              rows={list}
+              rows={futureTradeHistory}
               columns={columns}
               pageSize={25}
               // rowsPerPageOptions={[5]}

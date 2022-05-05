@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useOutletContext } from 'react-router';
 import Tab from '@/views/components/common/tab/Tab';
@@ -8,63 +8,128 @@ import TextInput from '@/views/components/common/input/TextInput';
 import BasicButton from '@/views/components/common/Button';
 import ConvertRequest from '@/views/components/wallet/convert/ConvertRequest';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import useService from '@/hooks/useService';
+import { dateFormat } from '@/utils/dateUtils';
+import { TABLET_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
+const futureColumns: GridColDef[] = [
+  { field: 'no', headerName: 'No', type: 'number', width: 80 },
+  { field: 'date', headerName: 'Date', width: 130 },
+  { field: 'accountingCode', headerName: 'Accounting Code', width: 200 },
   {
-    field: 'age',
-    headerName: 'Age',
+    field: 'point',
+    headerName: 'Point',
     type: 'number',
-    width: 90,
+    width: 100,
   },
   {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+    field: 'pointCurrentBal',
+    headerName: 'Point Current Bal.',
+    type: 'number',
+    width: 180,
   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+const exchangeColumns: GridColDef[] = [
+  { width: 80, field: 'currency', headerName: 'Currency' },
+  { width: 80, field: 'code', headerName: 'Code' },
+  { width: 120, field: 'rate', headerName: 'Rate' },
+  { width: 120, field: 'cryptoAmt', headerName: 'Crypto Amt.' },
+  { width: 180, field: 'datetime', headerName: 'Date-Time' },
+];
+
+const dailyRateColumns: GridColDef[] = [
+  { field: 'id', hide: true },
+  { width: 240, field: 'time', headerName: 'Time' },
+  { width: 180, field: 'buy', headerName: 'Buy' },
+  { width: 180, field: 'sell', headerName: 'Sell' },
+  { width: 360, field: 'exchange', headerName: 'Exchange Rate' },
 ];
 
 const WalletConvert = () => {
-  const list = [
-    { name: 'BTC', value: 'BTC' },
-    { name: 'ETH', value: 'ETH' },
-    { name: 'USDT', value: 'USDT' },
-    { name: 'XRP', value: 'XRP' },
-  ];
-
+  const services = useService();
   const { coin, dateRange } = useOutletContext<WalletOutletContext>();
+
+  const { spotConvert } = services.wallet.reqSpotConvert();
+  const { futureConvert } = services.wallet.reqFutureConvert();
+  const { futureTradeHistory, getFutureTradeHistory } =
+    services.wallet.getFutureTradeHistory();
+  const { exchangeHistory, getExchangeHistory } =
+    services.wallet.getExchangeHistory();
+  const { tradeHistoryArr, tradeHistoryFetchData } =
+    services.trade.getTradeHistory(`BIN_${coin}`, 1, 3, 2000);
+
+  const [tabIndex, setTabIndex] = useState(0);
+
+  console.log(tradeHistoryArr);
+
+  const dailyRatesRows = useMemo(
+    () =>
+      tradeHistoryArr.reverse().map((row, index) => ({
+        id: index,
+        time: dateFormat(new Date(row.time)),
+        buy: `${row.close * (1 + 0.0003)}`,
+        sell: `${row.close * (1 - 0.0003)}`,
+        exchange: `${row.close}`,
+      })),
+    [tradeHistoryArr]
+  );
+
+  useEffect(() => {
+    const startDate = new Date(dateRange[0]);
+    const endDate = new Date(dateRange[1]);
+
+    if (tabIndex === 0) {
+      getFutureTradeHistory(startDate, endDate);
+      getExchangeHistory(coin, startDate, endDate);
+    } else {
+      tradeHistoryFetchData({
+        newSymbol: `BIN_${coin}`,
+        nMinTerm: 1,
+        cTermDiv: 3,
+        nReqCnt: 2000,
+      });
+    }
+  }, [coin, dateRange, tabIndex]);
 
   return (
     <WalletConvertStyle>
       <h4 className="sub-tit">Convert to Spot Wallet</h4>
+      <ConvertRequest />
       <div className="box-cont">
-        <ConvertRequest />
-        <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        // pageSize={5}
-        // rowsPerPageOptions={[5]}
-      />
-    </div>
+        <Tab
+          list={['Exchange History', 'Daily rates']}
+          ripple={false}
+          onChange={setTabIndex}
+        />
+        <div className="table-cont">
+          {tabIndex === 0 ? (
+            <>
+              <DataGrid
+                rows={futureTradeHistory}
+                columns={futureColumns}
+                pageSize={25}
+                // pageSize={5}
+                // rowsPerPageOptions={[5]}
+              />
+              <DataGrid
+                rows={exchangeHistory}
+                columns={exchangeColumns}
+                pageSize={25}
+                // pageSize={5}
+                // rowsPerPageOptions={[5]}
+              />
+            </>
+          ) : (
+            <DataGrid
+              rows={dailyRatesRows}
+              columns={dailyRateColumns}
+              pageSize={25}
+              // pageSize={5}
+              // rowsPerPageOptions={[5]}
+            />
+          )}
+        </div>
       </div>
     </WalletConvertStyle>
   );
@@ -72,7 +137,39 @@ const WalletConvert = () => {
 
 const WalletConvertStyle = styled.div`
   .box-cont {
+    margin-top: 40px;
+    border-top: 1px solid rgb(225, 225, 225);
+  }
+  .table-cont {
+    display: flex;
 
+    > div {
+      width: 100%;
+      height: 400px;
+    }
+
+    .css-1xy1myn-MuiDataGrid-root
+      .MuiDataGrid-columnHeader--alignRight
+      .MuiDataGrid-columnHeaderDraggableContainer,
+    .css-1xy1myn-MuiDataGrid-root
+      .MuiDataGrid-columnHeader--alignRight
+      .MuiDataGrid-columnHeaderTitleContainer {
+      flex-direction: row;
+    }
+    .css-1xy1myn-MuiDataGrid-root .MuiDataGrid-cell--textRight {
+      justify-content: flex-start;
+    }
+  }
+
+  @media (max-width: ${TABLET_SIZE}) {
+    .table-cont {
+      display:block;
+      > div {
+        margin-bottom: 20px;
+        width: 100%;
+        height: 400px;
+      }
+    }
   }
 `;
 

@@ -60,7 +60,7 @@ const SmallGraph = ({ coinInfo }: PropsType) => {
   }, [realTimeCoinInfo]);
 
   useEffect(() => {
-    tradeHistoryFetchData(1, 3, 300);
+    tradeHistoryFetchData({newSymbol: coinInfo.CUR_NO, nMinTerm: 1, cTermDiv:3, nReqCnt:300});
   }, []);
 
   const data = {

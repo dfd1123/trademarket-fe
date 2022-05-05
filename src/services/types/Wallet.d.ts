@@ -30,10 +30,20 @@ export interface WalletHistoryData {
 }
 
 export interface WalletFutureTradeHistoryData {
+  id: number;
   date: string;
   no: number;
   accountingCode: string;
   point: number;
   pointCurrentBal: number;
   excutionNo: string;
+}
+
+export interface WalletExchangeHistoryData {
+  id: number;
+  currency: string;
+  code: string;
+  rate: number | string;
+  cryptoAmt: number | string;
+  datetime: string;
 }

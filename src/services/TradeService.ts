@@ -68,8 +68,10 @@ class TradeService {
     cTermDiv: string | number,
     nReqCnt: string | number = 500
   ) {
+    if (symbol && !symbol.includes('USDT'))
+      symbol = `${symbol.trim().toUpperCase()}USDT`.trim();
     const tradeHistory = useTypedSelector(
-      (state) => state.asyncData[`t9731_${symbol}`]
+      (state) => state.asyncData[`t9731_${symbol.replace('BIN_', '')}`]
     );
     nReqCnt = nReqCnt.toString();
     nMinTerm = nMinTerm.toString();
@@ -96,11 +98,17 @@ class TradeService {
 
     const { fetchData } = useAsyncData(input);
 
-    const tradeHistoryFetchData = (
-      nMinTerm: string | number,
-      cTermDiv: string | number,
-      nReqCnt: string | number = 500
-    ) => {
+    const tradeHistoryFetchData = ({
+      newSymbol,
+      nMinTerm,
+      cTermDiv,
+      nReqCnt = 500,
+    }: {newSymbol?: string, nMinTerm: string | number, cTermDiv: string | number, nReqCnt?: string | number }) => {
+      if(!newSymbol) newSymbol = symbol;
+      if (!newSymbol.includes('USDT'))
+      newSymbol = `${newSymbol.trim().toUpperCase()}USDT`.trim();
+
+      input.Input1.szCurNo = newSymbol;
       input.Input1.nReqCnt = nReqCnt.toString();
       input.Input1.nMinTerm = nMinTerm.toString();
       input.Input1.cTermDiv = cTermDiv.toString();

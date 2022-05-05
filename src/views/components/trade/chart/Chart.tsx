@@ -31,7 +31,7 @@ const Chart = ({
   const [chartInterval, setChartInterval] = useState('1');
 
   useEffect(() => {
-    tradeHistoryFetchData(1, 2, 500);
+    tradeHistoryFetchData({newSymbol: selectedSymbol as string, nMinTerm: 1, cTermDiv: 2, nReqCnt: 500});
   }, [selectedSymbol]);
 
   useEffect(() => {
@@ -110,11 +110,11 @@ const Chart = ({
             else if (interval === '1W') nMinTerm = '7';
             else if (interval === '1M') nMinTerm = '30';
 
-            tradeHistoryFetchData(nMinTerm, 3);
+            tradeHistoryFetchData({newSymbol: selectedSymbol as string, nMinTerm, cTermDiv: 3});
           } else {
             setChartInterval(interval);
             nMinTerm = interval;
-            tradeHistoryFetchData(nMinTerm, 2);
+            tradeHistoryFetchData({newSymbol: selectedSymbol as string, nMinTerm, cTermDiv: 2});
           }
         });
     });
