@@ -61,8 +61,6 @@ const WalletConvert = () => {
 
   const [tabIndex, setTabIndex] = useState(0);
 
-  console.log(tradeHistoryArr);
-
   const dailyRatesRows = useMemo(
     () =>
       tradeHistoryArr.reverse().map((row, index) => ({
