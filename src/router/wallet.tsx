@@ -5,6 +5,7 @@ import MyAsset from '@/views/pages/wallet/myAsset/MyAsset';
 import WalletHistory from '@/views/pages/wallet/history/WalletHistory';
 import WalletConvert from '@/views/pages/wallet/convert/WalletConvert';
 import WalletFutureTrade from '@/views/pages/wallet/futureTrade/WalletFutureTrade';
+import DepositWithdraw from '@/views/pages/wallet/depositWithdraw/DepositWithdraw';
 
 const user: Route[] = [
   {
@@ -15,6 +16,7 @@ const user: Route[] = [
         {path: 'asset', element: <MyAsset />, meta:{theme: 'blue'}},
         {path: 'history', element: <WalletHistory />, meta:{theme: 'blue'}},
         {path: 'convert', element: <WalletConvert />, meta:{theme: 'blue'}},
+        {path: 'depositWithdraw', element: <DepositWithdraw />, meta:{theme: 'blue'}},
         {path: 'future-trade', element: <WalletFutureTrade />, meta:{theme: 'blue'}},
     ]
   },

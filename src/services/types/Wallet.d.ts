@@ -47,3 +47,19 @@ export interface WalletExchangeHistoryData {
   cryptoAmt: number | string;
   datetime: string;
 }
+
+export interface WalletInfo {
+  szCoin_Amt: string;
+  szDest_Tag: string;
+  szRet_CD: string;
+  szWallet_Addr: string;
+}
+
+export interface DepositHistoryData {
+  id: number;
+  date: string;
+  coin: string;
+  amount: string;
+  tx: string;
+  condition: string;
+}

@@ -1008,6 +1008,13 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.5.tgz#75a2a8e7d8ab4b230414505d92335d1dcb53a6df"
   integrity sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ==
 
+"@types/qrcode.react@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@types/qrcode.react/-/qrcode.react-1.0.2.tgz#f892432cc41b5dac52e3ca8873b717c8bfea6002"
+  integrity sha512-I9Oq5Cjlkgy3Tw7krCnCXLw2/zMhizkTere49OOcta23tkvH0xBTP0yInimTh0gstLRtb8Ki9NZVujE5UI6ffQ==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-calendar@^3.4.5":
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/@types/react-calendar/-/react-calendar-3.4.5.tgz#bf156c2bfac37b5b201a212d321317d9f3f50aaf"
@@ -2772,6 +2779,16 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=
 
+qr-image-color@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/qr-image-color/-/qr-image-color-3.2.1.tgz#9d40e31edd85e71aef4ed6f13d2d57fff0391483"
+  integrity sha512-3KcE4rGaYy9I6loQQlrHugNWIlOk31obcq11hmGQKhPIwCPs78xm0vXBh5dAsAwhDcxRpiMx5TzhW1BDtvbwzQ==
+
+qr.js@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/qr.js/-/qr.js-0.0.0.tgz#cace86386f59a0db8050fa90d9b6b0e88a1e364f"
+  integrity sha1-ys6GOG9ZoNuAUPqQ2baw6IoeNk8=
+
 query-string@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.1.1.tgz#754620669db978625a90f635f12617c271a088e1"
@@ -2865,6 +2882,21 @@ react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.0:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+
+react-qr-code@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/react-qr-code/-/react-qr-code-2.0.7.tgz#508304e031e82426a044f5e9490aca87d7c3de38"
+  integrity sha512-NpknL80p7dWbLdHfBSIxQIqLCu3+kBlyzYD692rO0UnVwfCSziIxc1xn/p3JhPEv1RV1lRD8j0w+hR3L7tawTQ==
+  dependencies:
+    prop-types "^15.7.2"
+    qr.js "0.0.0"
+
+react-qr-image@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-qr-image/-/react-qr-image-1.0.2.tgz#fd4383b143a235b22472968b85e9fa9a2bee510e"
+  integrity sha512-MTag9VAsDxvimx1xUAJ2qsM9B7TAFplNOuDbkp1Eu3GyYJ5WOC6imVy6EP3usse/66MjfA2mYsk9JuF/x/EBww==
+  dependencies:
+    qr-image-color "^3.2.1"
 
 react-range@^1.8.12:
   version "1.8.12"

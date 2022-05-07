@@ -162,7 +162,7 @@ const ConvertRequest = () => {
             </div>
             <div className="pannel">
               <div className="info">
-                <span className="label">BTC: previous balance</span>
+                <span className="label">{inputs.coin}: previous balance</span>
                 <span className="value">{coinAmount}</span>
               </div>
               <div className="info">
