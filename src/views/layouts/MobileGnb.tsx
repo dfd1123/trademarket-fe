@@ -1,10 +1,25 @@
 import styled from 'styled-components';
+import useUserData from '@/hooks/useUserData';
+import useService from '@/hooks/useService';
+import { useNavigate } from 'react-router';
 import { ModalComponentPropsType } from '@/store/modal/types/modal';
-import { NoBorderButton, YellowButton } from '@/views/components/common/Button';
+import BasicButton, {
+  NoBorderButton,
+  YellowButton,
+} from '@/views/components/common/Button';
 import { FullScreenModalStyle } from '@/views/components/common/modal/ModalTemplate';
 import Gnb from '@/views/layouts/Gnb';
 
 const MobileGnb = ({ close, className }: ModalComponentPropsType) => {
+  const { isLoggedIn } = useUserData();
+  const navigate = useNavigate();
+  const services = useService();
+
+  const logout = () => {
+    services.user.logout();
+    navigate('/login');
+  }
+
   return (
     <StyledMobileGnb>
       <FullScreenModalStyle close={close} className="mobile-gnb">
@@ -21,8 +36,18 @@ const MobileGnb = ({ close, className }: ModalComponentPropsType) => {
             <Gnb className="mobile-gnb" />
           </div>
           <div className="btn-cont">
-            <NoBorderButton className="btn-login">Login</NoBorderButton>
-            <YellowButton className="btn-register">Register</YellowButton>
+            {isLoggedIn ? (
+              <BasicButton onClick={logout}>Logout</BasicButton>
+            ) : (
+              <>
+                <NoBorderButton className="btn-login" to="/login">
+                  Login
+                </NoBorderButton>
+                <YellowButton className="btn-register" to="/register">
+                  Register
+                </YellowButton>
+              </>
+            )}
           </div>
         </div>
       </FullScreenModalStyle>
@@ -49,64 +74,64 @@ export const StyledMobileGnb = styled.div`
         .close-btn {
           margin: 12px;
         }
-        .mobile-gnb{
-            &.gnb-menu {
-                > li {
-                  position: relative;
-                  border-bottom: 1px solid #203c57;
-      
-                  .react-ripples {
-                    display: block;
-                    width: 100%;
-      
-                    > a {
-                      display: block;
-                      width: 100%;
-                      padding: 16px;
-                      color: #fff;
-                      font-size: 15px;
-                      line-height: 17px;
-                    }
-      
-                    .arrow {
-                      position: absolute;
-                      top: 18px;
-                      right: 10px;
-                      z-index: 1;
-                      width: 13px;
-                      transform: rotate(0deg);
-                      transition: transform 0.2s;
-                    }
-                  }
-      
-                  .drop-menu {
-                    overflow: hidden;
-                    max-height: 0px;
-                    background-color: #33353b;
-                    transition: max-height 0.2s;
-      
-                    ul {
-                      padding: 10px 0;
-                      margin-left: 15px;
-                      li {
-                        padding: 8px 16px;
-                        font-size: 15px;
-                        line-height: 22px;
-                        color: #fff;
-                      }
-                    }
-                  }
-      
-                  &.on {
-                    .drop-menu {
-                      max-height: 190px;
-                    }
-                    .arrow {
-                      transform: rotate(180deg);
-                    }
+        .mobile-gnb {
+          &.gnb-menu {
+            > li {
+              position: relative;
+              border-bottom: 1px solid #203c57;
+
+              .react-ripples {
+                display: block;
+                width: 100%;
+
+                > a {
+                  display: block;
+                  width: 100%;
+                  padding: 16px;
+                  color: #fff;
+                  font-size: 15px;
+                  line-height: 17px;
+                }
+
+                .arrow {
+                  position: absolute;
+                  top: 18px;
+                  right: 10px;
+                  z-index: 1;
+                  width: 13px;
+                  transform: rotate(0deg);
+                  transition: transform 0.2s;
+                }
+              }
+
+              .drop-menu {
+                overflow: hidden;
+                max-height: 0px;
+                background-color: #33353b;
+                transition: max-height 0.2s;
+
+                ul {
+                  padding: 10px 0;
+                  margin-left: 15px;
+                  li {
+                    padding: 8px 16px;
+                    font-size: 15px;
+                    line-height: 22px;
+                    color: #fff;
                   }
                 }
               }
+
+              &.on {
+                .drop-menu {
+                  max-height: 190px;
+                }
+                .arrow {
+                  transform: rotate(180deg);
+                }
+              }
+            }
+          }
         }
       }
 

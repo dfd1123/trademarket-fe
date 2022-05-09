@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router';
 import { TradeInfoContext } from '@/provider/TradeInfoProvider';
 import { ButtonCheckBox } from '@/views/components/common/input/CheckBox';
 import { YellowButton } from '@/views/components/common/Button';
@@ -10,10 +11,11 @@ import LeverageSetModal from '@/views/components/trade/modal/LeverageSetModal';
 const ChangeMarginType = () => {
   const context = useContext(TradeInfoContext);
   const { marginType, setMarginType, leverage, setLeverage } = context;
+  const {symbol} = useParams();
   const {openModal} = useModal();
 
   const openLeverage = async () => {
-    const newLeverage = await openModal(LeverageSetModal, {props:{leverage}});
+    const newLeverage = await openModal(LeverageSetModal, {props:{leverage, symbol}});
     setLeverage(newLeverage);
   }
 

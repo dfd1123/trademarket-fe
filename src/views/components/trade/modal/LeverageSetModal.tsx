@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useTypedSelector } from '@/store';
 import { ModalStyle } from '@/views/components/common/modal/ModalTemplate';
 import { ModalComponentPropsType } from '@/store/modal/types/modal';
 import { BasicInput } from '@/views/components/common/input/TextInput';
@@ -10,22 +11,37 @@ import { MOBILE_SIZE } from '@/assets/styles/responsiveBreakPoint';
 
 interface PropsType extends ModalComponentPropsType {
   leverage?: number;
+  symbol?: string;
 }
 
 const LeverageSetModal = ({
   leverage,
+  symbol,
   nonModal,
   close,
   resolve,
 }: PropsType) => {
   const min = 0;
-  const max = 100;
   const radioCheckList = [1, 5, 10, 25, 50, 75, 100];
-  const [newLeverage, setNewLeverage] = useState(leverage ?? min);
+  const [newLeverage, setNewLeverage] = useState(min);
+  const { MAX_LEVERAGE } = useTypedSelector(
+    (state) => state.coinInfoSlice.symbols[symbol as string]
+  );
+
+  const [max, setMax] = useState(100);
 
   const submitLeverage = () => {
     resolve && resolve(newLeverage);
   };
+
+  useEffect(() => {
+    if(MAX_LEVERAGE) setMax(Number(MAX_LEVERAGE));
+  }, [MAX_LEVERAGE]);
+
+  useEffect(() => {
+    if(!leverage) leverage = 0;
+    setNewLeverage(leverage);
+  }, [])
 
   return (
     <LeverageSetModalStyle close={close} nonModal={nonModal}>
@@ -65,6 +81,7 @@ const LeverageSetModal = ({
             label={`x ${radio}`}
             value={radio}
             data={newLeverage}
+            disabled={radio > max}
             onChange={setNewLeverage}
           />
         ))}
@@ -127,6 +144,11 @@ const LeverageSetModalStyle = styled(ModalStyle)`
           &:checked {
             ~ label {
               border: 1px solid #ffab2e;
+            }
+          }
+          &:disabled{
+            ~ label {
+              opacity: 0.3;
             }
           }
         }

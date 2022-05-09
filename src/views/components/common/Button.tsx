@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Ripples from "react-ripples";
+import { useNavigate } from "react-router";
 
 interface PropTypes extends React.HTMLAttributes<HTMLButtonElement | HTMLElement> {
   children: React.ReactNode;
@@ -8,19 +9,27 @@ interface PropTypes extends React.HTMLAttributes<HTMLButtonElement | HTMLElement
   color?: string;
   during?: number;
   className?: string;
+  to?: string;
   disabled?: boolean;
 }
 
-const Button = ({ children, ripple = true, color, during, className, onClick, disabled}: PropTypes) => {
+const Button = ({ children, to, ripple = true, color, during, className, onClick, disabled}: PropTypes) => {
   color = color ?? "rgba(255,255,255,0.3)";
   during = during ?? 900;
 
+  const navigate = useNavigate();
+
+  const handleClick = (e: any) => {
+    if(to) navigate(to);
+    else onClick && onClick(e);
+  }
+
   return ripple ? (
-    <Ripples className={`btn ${className} ${disabled && 'disabled'}`} color={color} during={during} onClick={onClick}>
+    <Ripples className={`btn ${className} ${disabled && 'disabled'}`} color={color} during={during} onClick={handleClick}>
       <button disabled={disabled}>{children}</button>
     </Ripples>
   ) : (
-    <button className={`btn ${className}`} onClick={onClick} disabled={disabled}>{children}</button>
+    <button className={`btn ${className}`} onClick={handleClick} disabled={disabled}>{children}</button>
   );
 };
 
