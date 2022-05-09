@@ -1,18 +1,21 @@
 import useService from '@/hooks/useService';
 import useUserData from '@/hooks/useUserData';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
 
 const LogoutTimer = () => {
+  const limitTime = 1800;
+
+  const {pathname} = useLocation();
   const navigate = useNavigate();
   const services = useService();
   const [intervalId, setIntervalId] = useState<number>(0);
-  const [countdown, setCountdown] = useState<number>(1800);
+  const [countdown, setCountdown] = useState<number>(limitTime);
   const { email, exp, szAccNo, isLoggedIn } = useUserData();
 
   useEffect(() => {
-    if (!exp || email === 'block02@mexdaq.com') return;
+    if (email === 'block02@mexdaq.com') return;
     setCountdown(Math.floor(countdown));
     window.clearInterval(intervalId);
     const interval = setInterval(() => {
@@ -33,6 +36,10 @@ const LogoutTimer = () => {
     }
   }, [countdown]);
 
+  useEffect(() => {
+    resetTimer();
+  }, [pathname]);
+
   const timeFormat = (time: number) => {
     const m = Math.floor(time / 60).toString();
     let s = (time % 60).toString();
@@ -42,7 +49,7 @@ const LogoutTimer = () => {
 
   const resetTimer = () => {
     setCountdown(() => {
-      return 1800;
+      return limitTime;
     });
   };
 
