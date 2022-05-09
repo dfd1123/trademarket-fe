@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Tab from "@/views/components/common/tab/Tab";
-import { LightSelectBox } from "@/views/components/common/input/SelectBox";
-import TextInput from "@/views/components/common/input/TextInput";
-import DepositRequest from "@/views/components/wallet/depositWithdraw/DepositRequest";
-import DepositTable from "@/views/components/wallet/depositWithdraw/DepositTable";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Tab from '@/views/components/common/tab/Tab';
+import { LightSelectBox } from '@/views/components/common/input/SelectBox';
+import TextInput from '@/views/components/common/input/TextInput';
+import DepositRequest from '@/views/components/wallet/depositWithdraw/DepositRequest';
+import DepositTable from '@/views/components/wallet/depositWithdraw/DepositTable';
+import WithdrawRequest from '@/views/components/wallet/depositWithdraw/WithdrawRequest';
+import WithdrawTable from '@/views/components/wallet/depositWithdraw/WithdrawTable';
 
 const DepositWithdraw = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -13,7 +15,7 @@ const DepositWithdraw = () => {
     <DepositWithdrawStyle>
       <h4 className="sub-tit">Deposit / Withdraw</h4>
       <Tab
-        list={["Deposit", "Withdraw"]}
+        list={['Deposit', 'Withdraw']}
         ripple={false}
         onChange={setTabIndex}
       />
@@ -23,7 +25,10 @@ const DepositWithdraw = () => {
           <DepositTable />
         </>
       ) : (
-        <></>
+        <>
+          <WithdrawRequest />
+          <WithdrawTable />
+        </>
       )}
     </DepositWithdrawStyle>
   );
