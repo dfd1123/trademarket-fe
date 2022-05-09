@@ -1,27 +1,29 @@
-import { useContext, useEffect, useState } from "react";
-import { ConstructorParamsType } from "./types/Service";
-import { TransactionInputType } from "@/types/TransactionType";
-import useAsyncData from "@/hooks/useAsyncData";
-import { useTypedSelector } from "@/store";
-import coinList from "@/data/coinList";
-import { resetSpecificState } from "@/store/asyncData/asyncData";
-import useUserData from "@/hooks/useUserData";
+import { useContext, useEffect, useState } from 'react';
+import { ConstructorParamsType } from './types/Service';
+import { TransactionInputType } from '@/types/TransactionType';
+import useAsyncData from '@/hooks/useAsyncData';
+import { useTypedSelector } from '@/store';
+import coinList from '@/data/coinList';
+import { resetSpecificState } from '@/store/asyncData/asyncData';
+import useUserData from '@/hooks/useUserData';
 import {
   AssetData,
   CurrentCoinInfo,
   DepositHistoryData,
+  RequestWithdrawParams,
   WalletExchangeHistoryData,
   WalletFutureTradeHistoryData,
   WalletHistoryData,
   WalletInfo,
-} from "./types/Wallet";
-import { dateFormat } from "@/utils/dateUtils";
+  WithdrawHistoryData,
+} from './types/Wallet';
+import { dateFormat } from '@/utils/dateUtils';
 import {
   translateSzPoCode,
   translateOrderType,
   translateAccountingCode,
-} from "@/utils/translateUtils";
-import { unformatNumber } from "@/utils/numberUtils";
+} from '@/utils/translateUtils';
+import { unformatNumber } from '@/utils/numberUtils';
 
 class WalletService {
   #ws;
@@ -37,7 +39,7 @@ class WalletService {
   }
 
   getCoinCurrentInfo(symbol?: string) {
-    if (symbol && !symbol.includes("USDT"))
+    if (symbol && !symbol.includes('USDT'))
       symbol = `${symbol.trim().toUpperCase()}USDT`.trim();
 
     const currentCoinInfo: CurrentCoinInfo | null = useTypedSelector(
@@ -46,9 +48,9 @@ class WalletService {
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t9732",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't9732',
       },
       Input1: {
         szCurNo: symbol,
@@ -58,7 +60,7 @@ class WalletService {
     const { fetchData } = useAsyncData(input);
 
     const getCoinCurrentInfo = (newSymbol?: string) => {
-      if (newSymbol && !newSymbol.includes("USDT")) {
+      if (newSymbol && !newSymbol.includes('USDT')) {
         newSymbol = `${newSymbol.trim().toUpperCase()}USDT`.trim();
         input.Input1.szCurNo = newSymbol;
       }
@@ -78,15 +80,15 @@ class WalletService {
   getMyAsset() {
     const { szAccNo } = useUserData();
     const myAssetData = useTypedSelector(
-      (state) => state.asyncData["t372C"]?.Output2 || [],
+      (state) => state.asyncData['t372C']?.Output2 || [],
       (a, b) => !a.length
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t372C",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't372C',
       },
       Input1: {
         szAccNo,
@@ -111,14 +113,14 @@ class WalletService {
   getUnrealProfitNLoss() {
     const { szAccNo } = useUserData();
     const unrealProfitNLoss = useTypedSelector(
-      (state) => state.asyncData["t3608"]?.Output2 || []
+      (state) => state.asyncData['t3608']?.Output2 || []
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t3608",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3608',
       },
       Input1: {
         szAccNo,
@@ -143,14 +145,14 @@ class WalletService {
   getAvailableAmount(symbol: string) {
     const { szAccNo } = useUserData();
     const availableAmount = useTypedSelector(
-      (state) => state.asyncData["t3621"]?.Output1?.avail_trf ?? 0
+      (state) => state.asyncData['t3621']?.Output1?.avail_trf ?? 0
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t3621",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3621',
       },
       Input1: {
         accno: szAccNo,
@@ -178,21 +180,21 @@ class WalletService {
   getWalletHistory() {
     const { szAccNo } = useUserData();
     const walletHistoryData = useTypedSelector(
-      (state) => state.asyncData["t3626"]
+      (state) => state.asyncData['t3626']
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t3626",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3626',
       },
       Input1: {
         accno: szAccNo,
-        cur_no: "",
-        from_dt: "",
-        to_dt: "",
-        po_code: "",
+        cur_no: '',
+        from_dt: '',
+        to_dt: '',
+        po_code: '',
       },
     };
 
@@ -204,8 +206,8 @@ class WalletService {
       endDate: Date
     ) => {
       input.Input1.cur_no = symbol;
-      input.Input1.from_dt = dateFormat(startDate, "YMMdd");
-      input.Input1.to_dt = dateFormat(endDate, "YMMdd");
+      input.Input1.from_dt = dateFormat(startDate, 'YMMdd');
+      input.Input1.to_dt = dateFormat(endDate, 'YMMdd');
 
       fetchData({ ...input });
     };
@@ -214,7 +216,7 @@ class WalletService {
       const outputData = output?.Output2 || [];
       return outputData.map((row) => {
         const newD = [...row].map((data) =>
-          typeof data === "string" ? data.toString().trim() : data
+          typeof data === 'string' ? data.toString().trim() : data
         );
         const result: WalletHistoryData = {
           txId: newD[0],
@@ -242,32 +244,32 @@ class WalletService {
 
   reqSpotConvert() {
     const { szAccNo } = useUserData();
-    const spotConvert = useTypedSelector((state) => state.asyncData["t365J"]);
+    const spotConvert = useTypedSelector((state) => state.asyncData['t365J']);
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t365J",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't365J',
       },
       Input1: {
         szAccNo: szAccNo,
-        szPasswd: "",
-        szCurNo: "",
-        fOrderSu: "",
-        fExePrice: "",
-        fCashOutM: "",
+        szPasswd: '',
+        szCurNo: '',
+        fOrderSu: '',
+        fExePrice: '',
+        fCashOutM: '',
       },
     };
 
     const { fetchData } = useAsyncData(input);
 
     const reqSpotConvert = ({ password, symbol, coinRate, reqAmount }) => {
-      reqAmount = unformatNumber(reqAmount || "0");
-      coinRate = unformatNumber(coinRate || "0");
+      reqAmount = unformatNumber(reqAmount || '0');
+      coinRate = unformatNumber(coinRate || '0');
 
       if (reqAmount === 0) {
-        alert("Please enter a quantity of 0 or more");
+        alert('Please enter a quantity of 0 or more');
         return;
       } else if (!password) return;
 
@@ -285,32 +287,32 @@ class WalletService {
 
   reqFutureConvert() {
     const { szAccNo } = useUserData();
-    const futureConvert = useTypedSelector((state) => state.asyncData["t365K"]);
+    const futureConvert = useTypedSelector((state) => state.asyncData['t365K']);
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t365K",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't365K',
       },
       Input1: {
         szAccNo: szAccNo,
-        szPasswd: "",
-        szCurNo: "",
-        fOrderSu: "",
-        fExePrice: "",
-        fMoney: "",
+        szPasswd: '',
+        szCurNo: '',
+        fOrderSu: '',
+        fExePrice: '',
+        fMoney: '',
       },
     };
 
     const { fetchData } = useAsyncData(input);
 
     const reqFutureConvert = ({ password, symbol, coinRate, reqAmount }) => {
-      reqAmount = unformatNumber(reqAmount || "0");
-      coinRate = unformatNumber(coinRate || "0");
+      reqAmount = unformatNumber(reqAmount || '0');
+      coinRate = unformatNumber(coinRate || '0');
 
       if (reqAmount === 0) {
-        alert("Please enter a quantity of 0 or more");
+        alert('Please enter a quantity of 0 or more');
         return;
       } else if (!password) return;
 
@@ -329,21 +331,21 @@ class WalletService {
   getExchangeHistory() {
     const { szAccNo } = useUserData();
     const exchangeHistoryData = useTypedSelector(
-      (state) => state.asyncData["t3615"]
+      (state) => state.asyncData['t3615']
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t3615",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3615',
       },
       Input1: {
         accno: szAccNo,
-        cur_no: "",
-        from_dt: "",
-        to_dt: "",
-        po_code: "",
+        cur_no: '',
+        from_dt: '',
+        to_dt: '',
+        po_code: '',
       },
     };
 
@@ -355,8 +357,8 @@ class WalletService {
       endDate: Date
     ) => {
       input.Input1.cur_no = symbol;
-      input.Input1.from_dt = dateFormat(startDate, "YMMdd");
-      input.Input1.to_dt = dateFormat(endDate, "YMMdd");
+      input.Input1.from_dt = dateFormat(startDate, 'YMMdd');
+      input.Input1.to_dt = dateFormat(endDate, 'YMMdd');
 
       fetchData({ ...input });
     };
@@ -365,7 +367,7 @@ class WalletService {
       const outputData = output?.Output2 || [];
       return outputData.map((row, index) => {
         const newD = [...row].map((data) =>
-          typeof data === "string" ? data.toString().trim() : data
+          typeof data === 'string' ? data.toString().trim() : data
         );
         const result: WalletExchangeHistoryData = {
           id: index,
@@ -390,8 +392,8 @@ class WalletService {
   }
 
   getCoinWalletInfo(symbol: string) {
-    let tempSymbol = "";
-    if (symbol && !symbol.includes("USDT"))
+    let tempSymbol = '';
+    if (symbol && !symbol.includes('USDT'))
       tempSymbol = `${symbol.trim().toUpperCase()}USDT`.trim();
 
     const { szAccNo } = useUserData();
@@ -401,10 +403,10 @@ class WalletService {
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t0231",
-        trid: "1",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't0231',
+        trid: '1',
       },
       Input1: {
         szAccNo: szAccNo,
@@ -415,8 +417,8 @@ class WalletService {
     const { fetchData } = useAsyncData(input);
 
     const getCoinWalletInfo = (newSymbol: string) => {
-      let tempSymbol = "";
-      if (symbol && !symbol.includes("USDT"))
+      let tempSymbol = '';
+      if (symbol && !symbol.includes('USDT'))
         tempSymbol = `${symbol.trim().toUpperCase()}USDT`.trim();
 
       const index = coinList.findIndex((coin) => tempSymbol === coin) ?? 0;
@@ -436,21 +438,21 @@ class WalletService {
   getDepositHistory() {
     const { szAccNo } = useUserData();
     const depositHistoryData = useTypedSelector(
-      (state) => state.asyncData["t3625"]
+      (state) => state.asyncData['t3625']
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t3625",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3625',
       },
       Input1: {
         accno: szAccNo,
-        cur_no: "",
-        from_dt: "",
-        to_dt: "",
-        treat_stat: "",
+        cur_no: '',
+        from_dt: '',
+        to_dt: '',
+        treat_stat: '',
       },
     };
 
@@ -462,8 +464,8 @@ class WalletService {
       endDate: Date
     ) => {
       input.Input1.cur_no = symbol;
-      input.Input1.from_dt = dateFormat(startDate, "YMMdd");
-      input.Input1.to_dt = dateFormat(endDate, "YMMdd");
+      input.Input1.from_dt = dateFormat(startDate, 'YMMdd');
+      input.Input1.to_dt = dateFormat(endDate, 'YMMdd');
 
       fetchData({ ...input });
     };
@@ -472,7 +474,7 @@ class WalletService {
       const outputData = output?.Output2 || [];
       return outputData.map((row, index) => {
         const newD = [...row].map((data) =>
-          typeof data === "string" ? data.toString().trim() : data
+          typeof data === 'string' ? data.toString().trim() : data
         );
         const result: DepositHistoryData = {
           id: index,
@@ -496,31 +498,164 @@ class WalletService {
     };
   }
 
-  getFutureTradeHistory() {
+  getWithdrawHistory() {
     const { szAccNo } = useUserData();
-    const futureTradeHistoryData = useTypedSelector(
-      (state) => state.asyncData["t2500"]
+    const withdrawHistoryData = useTypedSelector(
+      (state) => state.asyncData['t3616']
     );
 
     const input: TransactionInputType = {
       Header: {
-        function: "D",
-        termtype: "HTS",
-        trcode: "t2500",
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3616',
+      },
+      Input1: {
+        accno: szAccNo,
+        cur_no: '',
+        from_dt: '',
+        to_dt: '',
+        treat_stat: '',
+      },
+    };
+
+    const { fetchData } = useAsyncData(input);
+
+    const getWithdrawHistory = (
+      symbol: string,
+      startDate: Date,
+      endDate: Date
+    ) => {
+      input.Input1.cur_no = symbol;
+      input.Input1.from_dt = dateFormat(startDate, 'YMMdd');
+      input.Input1.to_dt = dateFormat(endDate, 'YMMdd');
+
+      fetchData({ ...input });
+    };
+
+    const parseData = (output): WithdrawHistoryData[] => {
+      const outputData = output?.Output2 || [];
+      return outputData.map((row, index) => {
+        const newD = [...row].map((data) =>
+          typeof data === 'string' ? data.toString().trim() : data
+        );
+        const result: WithdrawHistoryData = {
+          id: index,
+          date: newD[0],
+          no: newD[1],
+          accountNo: newD[2],
+          datetime: newD[3],
+          walletAddress: newD[4],
+          amount: Number(newD[6]),
+          symbol: newD[7],
+          price: newD[8],
+          treatStat: newD[9] === '0' ? 'Request' : 'Complete',
+          treatTime: newD[10],
+          memo: newD[12],
+          addressTag: newD[5],
+          txid: newD[11],
+        };
+        return result;
+      });
+    };
+
+    return {
+      loading: !Boolean(withdrawHistoryData),
+      noData:
+        Boolean(withdrawHistoryData) &&
+        Number(withdrawHistoryData.Output1?.szCnt ?? 0) === 0,
+      withdrawHistory: parseData(withdrawHistoryData),
+      getWithdrawHistory,
+    };
+  }
+
+  requestWitdraw() {
+    const { szAccNo } = useUserData();
+    const reqWithdrawData = useTypedSelector(
+      (state) => state.asyncData['t3620']
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't3620',
+      },
+      Input1: {
+        accno: szAccNo,
+        cur_no: '',
+        target_addr: '',
+        target_extr: '',
+        amount: '',
+        amt_prc: '',
+        pswd: '',
+        treat_stat: '',
+      },
+    };
+
+    const { fetchData } = useAsyncData(input);
+
+    const requestWitdraw = ({
+      symbol,
+      address,
+      extr,
+      amount,
+      closePrice,
+      password
+    } : RequestWithdrawParams) => {
+      amount = unformatNumber(amount as string);
+      if (address === '' || password === '' || amount === 0 || (symbol === 'XRP' && extr === '')) {
+        alert('Please enter the information');
+        return;
+      }
+      input.Input1.cur_no = symbol;
+      input.Input1.target_addr = address;
+      input.Input1.target_extr = extr;
+      input.Input1.amount = amount;
+      input.Input1.amt_prc = closePrice;
+      input.Input1.pswd = password;
+
+      fetchData({ ...input });
+    };
+
+    useEffect(() => {
+      if (reqWithdrawData && reqWithdrawData.Message.flag === 'E') {
+        alert(reqWithdrawData.Message.data);
+        this.#dispatch(resetSpecificState({ trcode: `t3620` }));
+      } else if (reqWithdrawData && reqWithdrawData.Message.flag === '0') {
+        alert(reqWithdrawData.Message.data);
+        this.#dispatch(resetSpecificState({ trcode: `t3620` }));
+      }
+    }, [reqWithdrawData]);
+
+    return { reqWithdrawData, requestWitdraw };
+  }
+
+  getFutureTradeHistory() {
+    const { szAccNo } = useUserData();
+    const futureTradeHistoryData = useTypedSelector(
+      (state) => state.asyncData['t2500']
+    );
+
+    const input: TransactionInputType = {
+      Header: {
+        function: 'D',
+        termtype: 'HTS',
+        trcode: 't2500',
       },
       Input1: {
         szAccNo: szAccNo,
-        nFromDate: "",
-        nToDate: "",
-        con_key: "",
+        nFromDate: '',
+        nToDate: '',
+        con_key: '',
       },
     };
 
     const { fetchData } = useAsyncData(input);
 
     const getFutureTradeHistory = (startDate: Date, endDate: Date) => {
-      input.Input1.nFromDate = dateFormat(startDate, "YMMdd");
-      input.Input1.nToDate = dateFormat(endDate, "YMMdd");
+      input.Input1.nFromDate = dateFormat(startDate, 'YMMdd');
+      input.Input1.nToDate = dateFormat(endDate, 'YMMdd');
 
       fetchData({ ...input });
     };
@@ -529,7 +664,7 @@ class WalletService {
       const outputData = output?.Output2 || [];
       return outputData.map((row, index) => {
         const newD = [...row].map((data) =>
-          typeof data === "string" ? data.toString().trim() : data
+          typeof data === 'string' ? data.toString().trim() : data
         );
         const result: WalletFutureTradeHistoryData = {
           id: index,

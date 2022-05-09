@@ -140,10 +140,10 @@ class UserService {
     return { loginRes, loginFetchData };
   }
 
-  register(params: RegisterInput) {
+  register() {
     const input: TransactionInputType = {
       Header: { function: 'D', termtype: 'HTS', trcode: 't113B' },
-      Input1: params,
+      Input1: {},
     };
 
     const { resultKey: registerTrCode, fetchData } = useAsyncData(input);
@@ -155,6 +155,7 @@ class UserService {
       params: RegisterInput | undefined = undefined
     ) => {
       if (params) input.Input1 = params;
+      else return;
       fetchData(input);
     };
 

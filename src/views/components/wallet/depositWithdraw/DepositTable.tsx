@@ -30,7 +30,7 @@ const DepositTable = () => {
   return (
     <DepositTableStyle>
       <div className="box">
-        <span className="label">QR Code</span>
+        <span className="label">Deposit History</span>
         <div className="table-cont">
           <DataGrid
             rows={depositHistory}

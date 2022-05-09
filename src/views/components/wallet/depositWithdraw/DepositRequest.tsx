@@ -11,8 +11,7 @@ const DepositRequest = () => {
   const services = useService();
   const { coin, dateRange } = useOutletContext<WalletOutletContext>();
 
-  const { walletInfo, getCoinWalletInfo } =
-    services.wallet.getCoinWalletInfo(coin);
+  const { walletInfo, getCoinWalletInfo } = services.wallet.getCoinWalletInfo(coin);
 
   const walletAddress = useMemo(
     () => walletInfo?.szWallet_Addr || "",
@@ -67,9 +66,6 @@ const DepositRequest = () => {
             </p>
           </div>
         </div>
-      </div>
-      <div className="box">
-      <span className="label">Deposit History</span>
       </div>
     </DepositRequestStyle>
   );

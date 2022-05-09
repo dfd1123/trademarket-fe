@@ -29,6 +29,8 @@ const RegisterForm = () => {
   const [correct, setCorrect] = useState(false);
   const [validate, setValidate] = useState(false);
 
+  const {registerRes, registerFetchData} = services.user.register();
+
   const checkValidate = () => {
     let check = Object.values(inputs).every((input) => Boolean(input));
     check = inputs.szPasswd.length >= 8 && inputs.szPasswd.length <= 20;
@@ -39,15 +41,8 @@ const RegisterForm = () => {
     setInputs({ ...inputs, [name]: value });
   };
 
-  const submitHandler = async () => {
-    // const result = await services.user.register(inputs);
-    // if (result.access_token) {
-    //   dispatch(setAuth(result));
-    //   toast('회원가입이 완료되었습니다. 관리자 승인 후 이용 가능하십니다.', {
-    //     type: 'success',
-    //   });
-    //   navigate('/mypage');
-    // }
+  const submitHandler = () => {
+    registerFetchData({...inputs});
   };
 
   useEffect(() => {
@@ -57,6 +52,14 @@ const RegisterForm = () => {
         Boolean(inputs.szPasswd && inputs.szPasswd1)
     );
   }, [inputs]);
+
+  useEffect(() => {
+    if (registerRes) {
+      if (registerRes.Message.flag === '0') {
+        navigate('/');
+      }
+    }
+  }, [registerRes]);
 
   return (
     <RegisterFormStyle>
@@ -121,7 +124,6 @@ const RegisterForm = () => {
           type="text"
           name="szTelNo2"
           label={t('_.phoneNumber')}
-          number
           reset
           onChange={handleInputChange}
         />

@@ -15,12 +15,12 @@ export interface WalletOutletContext {
 
 const Wallet = () => {
   const today = new Date();
-  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+  const fromDay = new Date(new Date().setDate(new Date().getDate() - 30));
 
   const [coin, setCoin] = useState('BTC');
   const [date, setDate] = useState(dateFormat(today));
   const [dateRange, setDateRange] = useState<string[]>([
-    dateFormat(yesterday),
+    dateFormat(fromDay),
     dateFormat(today),
   ]);
 

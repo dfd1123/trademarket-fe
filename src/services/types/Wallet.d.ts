@@ -63,3 +63,29 @@ export interface DepositHistoryData {
   tx: string;
   condition: string;
 }
+
+export interface WithdrawHistoryData {
+  id: number;
+  date: string;
+  no: string | number;
+  accountNo: string;
+  datetime: string;
+  walletAddress: string;
+  amount: number;
+  symbol: string;
+  price: string | number;
+  treatStat: string;
+  treatTime: string;
+  memo: string;
+  addressTag: string;
+  txid: string;
+}
+
+export interface RequestWithdrawParams {
+  symbol: string;
+  address: string;
+  extr: string;
+  amount: string | number;
+  closePrice: string | number;
+  password: string;
+}
