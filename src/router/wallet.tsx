@@ -11,13 +11,13 @@ const user: Route[] = [
   {
     path: '/wallet',
     element: <Wallet />, 
-    meta:{theme: 'blue'},
+    meta:{theme: 'blue', isAuth: true},
     children: [
-        {path: 'asset', element: <MyAsset />, meta:{theme: 'blue'}},
-        {path: 'history', element: <WalletHistory />, meta:{theme: 'blue'}},
-        {path: 'convert', element: <WalletConvert />, meta:{theme: 'blue'}},
-        {path: 'depositWithdraw', element: <DepositWithdraw />, meta:{theme: 'blue'}},
-        {path: 'future-trade', element: <WalletFutureTrade />, meta:{theme: 'blue'}},
+        {path: 'asset', element: <MyAsset />, meta:{theme: 'blue', isAuth: true}},
+        {path: 'history', element: <WalletHistory />, meta:{theme: 'blue', isAuth: true}},
+        {path: 'convert', element: <WalletConvert />, meta:{theme: 'blue', isAuth: true}},
+        {path: 'depositWithdraw', element: <DepositWithdraw />, meta:{theme: 'blue', isAuth: true}},
+        {path: 'future-trade', element: <WalletFutureTrade />, meta:{theme: 'blue', isAuth: true}},
     ]
   },
 ];

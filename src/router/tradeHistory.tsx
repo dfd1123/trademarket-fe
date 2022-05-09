@@ -9,11 +9,11 @@ const user: Route[] = [
   {
     path: '/history',
     element: <History />, 
-    meta:{theme: 'blue'},
+    meta:{theme: 'blue', isAuth: true},
     children: [
-        {path: 'execution-list', element: <ExecutionHistory />, meta:{theme: 'blue'}},
-        {path: 'order-execution-list', element: <OrderDetailHistory />, meta:{theme: 'blue'}},
-        {path: 'close-execution-list', element: <CloseExecutionHistory />, meta:{theme: 'blue'}},
+        {path: 'execution-list', element: <ExecutionHistory />, meta:{theme: 'blue', isAuth: true}},
+        {path: 'order-execution-list', element: <OrderDetailHistory />, meta:{theme: 'blue', isAuth: true}},
+        {path: 'close-execution-list', element: <CloseExecutionHistory />, meta:{theme: 'blue', isAuth: true}},
     ]
   },
 ];

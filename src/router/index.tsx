@@ -1,5 +1,4 @@
 import common from '@/router/common';
-import test from '@/router/test';
 import auth from '@/router/auth';
 import trade from '@/router/trade';
 import wallet from '@/router/wallet';
@@ -14,7 +13,6 @@ import NotFound from '@/views/pages/NotFound';
 import useService from '@/hooks/useService';
 
 const routeList: Route[] = [
-  ...test,
   ...common,
   ...auth,
   ...trade,
