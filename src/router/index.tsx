@@ -45,11 +45,12 @@ export default function RouterView() {
           const { authSlice } = JSON.parse(
             localStorage.getItem('persist:elpist') || '{}'
           );
-          const { accessToken, user } = JSON.parse(authSlice || '{}');
+          
+          const { isLoggedIn } = JSON.parse(authSlice || '{}');
+
           if (route.meta.isAuth) {
-            if (!accessToken) newElement = <Navigate to="/login" />;
-            else if (user.status === 0 && route.path !== '/mypage')
-              newElement = <Navigate to="/mypage" />;
+            if (!isLoggedIn) newElement = <Navigate to="/login" />;
+          
           }
         }
         return { ...route, element: newElement };
